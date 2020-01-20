@@ -23,7 +23,7 @@ class Hashmap : public Object {
         Hashmap_pair **data;
         int size_;
         int capacity_;
-        //Object **key_arr;
+        
     public:
         Hashmap() {
             data = new Hashmap_pair*[4];
