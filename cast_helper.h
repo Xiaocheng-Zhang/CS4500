@@ -1,8 +1,14 @@
 #pragma once
-//#define NELEMS(x) (sizeof(x) / sizeof((x)[0]))
+#include "string.h"
+#include "list.h"
+#include "object.h"
 
 String* cast_string(Object *object) {
     return dynamic_cast<String*>(object);
+}
+
+StrList* cast_list(Object *object) {
+    return dynamic_cast<StrList*>(object);
 }
 
 String** cast_object_arr(Object **array, int size) {
