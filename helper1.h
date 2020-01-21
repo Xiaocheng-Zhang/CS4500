@@ -109,15 +109,23 @@ void read_command(Hashmap *hashmap, int argv, char** argc) {
 
 int read_file(Hashmap *command_map, Hashmap *data_map) {
 	String *file_path = cast_string(command_map->get(new String("-f")));
-	Integer *from = cast_integer(command_map->get(new String("-from")));
-	if (!from) {
-		from = new Integer(0);
+	String *from_s = cast_string(command_map->get(new String("-from")));
+	String *len_s = cast_string(command_map->get(new String("-len")));
+    Integer *from;
+    Integer *len;
+    if (from_s) {
+        from = new Integer(atoi(from_s->getValue()));
 	}
-	Integer *len = cast_integer(command_map->get(new String("-len")));
-	if (!len) {
-		len = new Integer(500);
+    else {
+        from = new Integer(0);
+    }
+	if (len_s) {
+        len = new Integer(atoi(len_s->getValue()));
 	}
-
+    else {
+        len = new Integer(500);
+    }
+    
 	FILE* opened_f;
 	opened_f = fopen(file_path->getValue(),"r");
 	fseek(opened_f, from->val_, SEEK_SET);

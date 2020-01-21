@@ -28,6 +28,7 @@ int loop_read(FILE *opened_f, Integer *len, Hashmap *data_map) {
 	bool end_of_f = false;
 	//all data_map
 	//split single line
+    //printf("%d\n", len->val_);
 	while (i < len->val_ && !end_of_f)
     {
         buffer_index = 0;
@@ -67,7 +68,7 @@ int loop_read(FILE *opened_f, Integer *len, Hashmap *data_map) {
         char* temp = strdup(buffer);
         strl->push_back(new String(temp));
         //change line
-        if (c == '\n' || end_of_f) {
+        if (c == '\n' || end_of_f || i == len->val_) {
             if (strl->size() > max_length) {
                 max_row = row;
                 max_length = strl->size();
