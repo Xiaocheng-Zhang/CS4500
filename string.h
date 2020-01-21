@@ -64,6 +64,7 @@ class String: public Object {
             for (int i = 0; i < size_; i++) {
                 hash_code += 17 * value_[i];
             }
+            //printf("hash: %s, code: %d\n", value_, hash_code);
             //hash_code = 57 * (size_t) &(value_);
             return hash_code;
         }

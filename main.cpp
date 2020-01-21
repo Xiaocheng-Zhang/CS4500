@@ -19,5 +19,6 @@ int main(int argv, char** argc) {
     //printf("%d", argv);
     read_command(command_map, argv, argc);
     //puts("P");
+    //std::cout << command_map->size();
     hashmap_print(command_map);
 }

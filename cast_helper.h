@@ -13,6 +13,7 @@ StrList* cast_list(Object *object) {
 
 String** cast_object_arr(Object **array, int size) {
     String **output = new String*[size];
+    //printf("size in cast_arr: %d\n", size);
     for (int i = 0; i < size; i++) {
         output[i] = cast_string(array[i]);
     }

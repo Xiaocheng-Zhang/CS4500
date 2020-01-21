@@ -19,6 +19,7 @@ static String *is_missing_idx = new String("-is_missing_idx");
 int array_contains(String **array, int size, String *val) {
     for (int i = 0; i < size; i++) {
         if (array[i] && array[i]->equals(val)) {
+            //printf("%s\n", array[i]->getValue());
             return true;
         }
     }
@@ -33,39 +34,6 @@ int multi_input_check(String *key) {
     return false;
 }
 
-void set_keys(Hashmap *hashmap) {
-    hashmap->put(f, nullptr);
-    hashmap->put(from, nullptr);
-    hashmap->put(len, nullptr);
-    hashmap->put(print_col_type, nullptr);
-    hashmap->put(print_col_idx, nullptr);
-    hashmap->put(is_missing_idx, nullptr);
-}
-
-void read_command(Hashmap *hashmap, int argv, char** argc) {
-    set_keys(hashmap);
-    size_t size = hashmap->size();
-    String** keys = cast_object_arr(hashmap->key_array(), size);
-    //printf("%d\n", size);
-    for (int i = 1; i < argv; i++) {
-        String *key = new String(argc[i]);
-        if (array_contains(keys, size, key)) {
-            if (multi_input_check(key)) {
-                StrList *strList = new StrList();
-                i++;
-                strList->push_back(new String(argc[i++]));
-                strList->push_back(new String(argc[i]));
-                hashmap->put(key, strList);
-            }
-            else {
-                hashmap->put(key, new String(argc[i+1]));
-                i++;
-            }
-            
-        }
-    }
-}
-
 void hashmap_print(Hashmap *hashmap) {
     size_t size = hashmap->size();
     String **print_list = cast_object_arr(hashmap->key_array(), size);
@@ -77,8 +45,43 @@ void hashmap_print(Hashmap *hashmap) {
         }
         StrList *list = cast_list(hashmap->get(cur));
         if (list) {
-            //printf("key: %s val: %s %s\n", cur->getValue(), 
-            //list->get(0)->getValue(), list->get(1)->getValue());
+            printf("key: %s val: %s %s\n", cur->getValue(), 
+            list->get(0)->getValue(), list->get(1)->getValue());
+        }
+    }
+}
+
+void set_keys(Hashmap *hashmap) {
+    hashmap->put(f, nullptr);
+    hashmap->put(from, nullptr);
+    hashmap->put(len, nullptr);
+    hashmap->put(print_col_type, nullptr);
+    hashmap->put(print_col_idx, nullptr);
+    hashmap->put(is_missing_idx, nullptr);
+    size_t size = hashmap->size();
+    String **print_list = cast_object_arr(hashmap->key_array(), size);
+    hashmap_print(hashmap);
+}
+
+void read_command(Hashmap *hashmap, int argv, char** argc) {
+    set_keys(hashmap);
+    size_t size = hashmap->size();
+    String** keys = cast_object_arr(hashmap->key_array(), size);
+
+    for (int i = 1; i < argv; i++) {
+        String *key = new String(argc[i]);
+        if (array_contains(keys, size, key)) {
+            if (multi_input_check(key)) {
+                StrList *strList = new StrList();
+                strList->push_back(new String(argc[i+1]));
+                strList->push_back(new String(argc[i+2]));
+                i = i+2;
+                hashmap->put(key, strList);
+            }
+            else {
+                hashmap->put(key, new String(argc[i+1]));
+                i++;
+            }
         }
     }
 }
