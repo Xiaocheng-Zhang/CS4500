@@ -5,6 +5,7 @@
 #include "object.h"
 #include "string.h"
 #include "cast_helper.h"
+#include "helper2.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,22 +35,43 @@ int multi_input_check(String *key) {
     return false;
 }
 
-void hashmap_print(Hashmap *hashmap) {
+void hashmap_print_command(Hashmap *hashmap) {
     size_t size = hashmap->size();
     String **print_list = cast_object_arr(hashmap->key_array(), size);
     for (int i = 0; i < size; i++) {
         String *cur = print_list[i];
         String *val = cast_string(hashmap->get(cur));
         if (val) {
-            printf("key: %s val: %s\n", cur->getValue(), val->getValue());
+            printf("key: %d val: %s\n", cur->getValue(), val->getValue());
         }
         StrList *list = cast_list(hashmap->get(cur));
         if (list) {
-            printf("key: %s val: %s %s\n", cur->getValue(), 
+            printf("key: %d val: %s %s\n", cur->getValue(), 
             list->get(0)->getValue(), list->get(1)->getValue());
         }
     }
 }
+
+void hashmap_print_file(Hashmap *hashmap) {
+    size_t size = hashmap->size();
+    Integer **print_list = cast_object_arr_Integer(hashmap->key_array(), size);
+    for (int i = 0; i < size; i++) {
+        Integer *cur = print_list[i];
+        StrList *list = cast_list(hashmap->get(cur));
+        if (list) {
+            printf("key: %d val: ", cur->val_);
+            for (int j = 0; j < list->size(); j++) {
+                if (j + 1 == list->size()) {
+                    printf("%s\n", list->get(j)->getValue());
+                }
+                else {
+                    printf("%s ", list->get(j)->getValue());
+                }
+            }
+        }
+    }
+}
+
 
 void set_keys(Hashmap *hashmap) {
     hashmap->put(f, nullptr);
@@ -60,7 +82,6 @@ void set_keys(Hashmap *hashmap) {
     hashmap->put(is_missing_idx, nullptr);
     size_t size = hashmap->size();
     String **print_list = cast_object_arr(hashmap->key_array(), size);
-    hashmap_print(hashmap);
 }
 
 void read_command(Hashmap *hashmap, int argv, char** argc) {
@@ -84,4 +105,23 @@ void read_command(Hashmap *hashmap, int argv, char** argc) {
             }
         }
     }
+}
+
+int read_file(Hashmap *command_map, Hashmap *data_map) {
+	String *file_path = cast_string(command_map->get(new String("-f")));
+	Integer *from = cast_integer(command_map->get(new String("-from")));
+	if (!from) {
+		from = new Integer(0);
+	}
+	Integer *len = cast_integer(command_map->get(new String("-len")));
+	if (!len) {
+		len = new Integer(500);
+	}
+
+	FILE* opened_f;
+	opened_f = fopen(file_path->getValue(),"r");
+	fseek(opened_f, from->val_, SEEK_SET);
+	int max_row = loop_read(opened_f, len, data_map);
+	fclose(opened_f);
+    return max_row;
 }

@@ -3,7 +3,8 @@
 #include "list.h"
 #include "object.h"
 #include "string.h"
-#include "helper.h"
+#include "helper1.h"
+#include "helper2.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,7 +19,9 @@ int main(int argv, char** argc) {
     }
     //printf("%d", argv);
     read_command(command_map, argv, argc);
-    //puts("P");
-    //std::cout << command_map->size();
-    hashmap_print(command_map);
+    Hashmap *data_map = new Hashmap();
+    int max_row = read_file(command_map, data_map);
+    hashmap_print_file(data_map);
+
+    return 0;
 }
