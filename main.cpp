@@ -21,7 +21,7 @@ int main(int argv, char** argc) {
     read_command(command_map, argv, argc);
     Hashmap *data_map = new Hashmap();
     int max_row = read_file(command_map, data_map);
-    hashmap_print_file(data_map);
-
+    //hashmap_print_file(data_map);
+    data_map->print_self();
     return 0;
 }

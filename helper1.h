@@ -119,6 +119,10 @@ int read_file(Hashmap *command_map, Hashmap *data_map) {
     else {
         from = new Integer(0);
     }
+    bool ignore_start_line = 0;
+    if (!from->equals(new Integer(0))) {
+        ignore_start_line = 1;
+    }
 	if (len_s) {
         len = new Integer(atoi(len_s->getValue()));
 	}
@@ -129,7 +133,7 @@ int read_file(Hashmap *command_map, Hashmap *data_map) {
 	FILE* opened_f;
 	opened_f = fopen(file_path->getValue(),"r");
 	fseek(opened_f, from->val_, SEEK_SET);
-	int max_row = loop_read(opened_f, len, data_map);
+	int max_row = loop_read(opened_f, len, data_map, ignore_start_line);
 	fclose(opened_f);
     return max_row;
 }

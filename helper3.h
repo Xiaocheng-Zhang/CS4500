@@ -57,7 +57,7 @@ StrList* construct_column(int max_row, Hashmap *data_map) {
 	StrList *row = cast_list(data_map->get(new Integer(max_row)));
 	for (int i = 0; i < row->size(); i++) {
 		const char* curr = row->get(i)->getValue();
-		const char* type = identify_datatype(curr);
+		const char* type = (const char*) identify_datatype(curr);
 		column_list->push_back(new String(type));
 	}
 	return column_list;

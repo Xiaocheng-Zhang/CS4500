@@ -10,10 +10,10 @@
 #include <stdlib.h>
 
 int dismiss_space(char prev, char c) {
-    return (prev == '>' && c == ' ') || (prev == '<' && c == ' ');
+    return (prev == '>' && c == ' ') || (prev == 0 && c == ' ');
 }
 
-int loop_read(FILE *opened_f, Integer *len, Hashmap *data_map) {
+int loop_read(FILE *opened_f, Integer *len, Hashmap *data_map, bool ignore_start_line) {
     size_t i = 0;
 	int ic = 0;
 	char c = 0;
@@ -51,6 +51,7 @@ int loop_read(FILE *opened_f, Integer *len, Hashmap *data_map) {
                 continue;
             }
             if (c == '\n') {
+                prev = 0;
                 i++;
                 break;
             }
@@ -71,13 +72,20 @@ int loop_read(FILE *opened_f, Integer *len, Hashmap *data_map) {
         strl->push_back(new String(temp));
         //change line
         if (c == '\n' || end_of_f || i == len->val_) {
-            if (strl->size() > max_length) {
-                max_row = row;
-                max_length = strl->size();
+            if (!ignore_start_line) {
+                if (strl->size() > max_length) {
+                    max_row = row;
+                    max_length = strl->size();
+                }
+                data_map->put(new Integer(row), strl);
+                strl = new StrList();
+                row++;
             }
-            data_map->put(new Integer(row), strl);
-            strl = new StrList();
-            row++;
+            else {
+                ignore_start_line = 0;
+                i = 0;
+                strl->clear();
+            }
         }
     }
     return max_row;

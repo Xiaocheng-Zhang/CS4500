@@ -21,9 +21,12 @@ class Object {
             return hash_code;
         }
 
-        virtual size_t hash_me() {
+        virtual void hash_me() {
             hash_code = (size_t) this;
-            return hash_code;
+        }
+
+        virtual void print_self() {
+            //print nothing
         }
     private:
         size_t hash_code;

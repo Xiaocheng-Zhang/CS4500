@@ -44,8 +44,8 @@ class String: public Object {
             return s;
         }
 
-        void print_self() {
-            printf("%s\n", value_);
+        virtual void print_self() {
+            printf("%s", value_);
         }
 
         void print_hash() {
@@ -59,14 +59,13 @@ class String: public Object {
             return hash_code;
         }
 
-        virtual size_t hash_me() {
+        virtual void hash_me() {
             hash_code = 0;
             for (int i = 0; i < size_; i++) {
                 hash_code += 17 * value_[i];
             }
             //printf("hash: %s, code: %d\n", value_, hash_code);
             //hash_code = 57 * (size_t) &(value_);
-            return hash_code;
         }
 
         virtual const char* getValue() {
