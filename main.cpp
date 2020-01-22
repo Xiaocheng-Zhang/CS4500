@@ -5,6 +5,7 @@
 #include "string.h"
 #include "helper1.h"
 #include "helper2.h"
+#include "helper3.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
