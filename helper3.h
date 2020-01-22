@@ -10,19 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-StrList construct_column(int max_row, Hashmap *data_map) {
-	StrList *column_list = new StrList();
-	StrList *row = cast_list(data_map->get(new Integer(max_row)));
-	for (int i = 0; i < row->size(); i++) {
-		char* curr = row->get(i)->getValue();
-		char* type = identify_datatype(curr);
-		column_list->push_back(new String(type));
-	}
-	return result;
-}
-
 // 1 is String, 2 is Float, 3 is Int, 4 is Bool, 0 is missing value
-char* identify_datatype(char* c) {
+char* identify_datatype(const char* c) {
 	char* result = new char[1];
 	bool dot = false;
 	bool none_one_or_zero = false;
@@ -61,4 +50,15 @@ char* identify_datatype(char* c) {
 		result[0] = '4';
 		return result;
 	}
+}
+
+StrList* construct_column(int max_row, Hashmap *data_map) {
+	StrList *column_list = new StrList();
+	StrList *row = cast_list(data_map->get(new Integer(max_row)));
+	for (int i = 0; i < row->size(); i++) {
+		const char* curr = row->get(i)->getValue();
+		const char* type = identify_datatype(curr);
+		column_list->push_back(new String(type));
+	}
+	return column_list;
 }

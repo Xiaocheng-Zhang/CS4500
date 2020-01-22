@@ -5,10 +5,13 @@
 #include "object.h"
 #include "string.h"
 #include "cast_helper.h"
-#include "helper1.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+int dismiss_space(char prev, char c) {
+    return (prev == '>' && c == ' ') || (prev == '<' && c == ' ');
+}
 
 int loop_read(FILE *opened_f, Integer *len, Hashmap *data_map) {
     size_t i = 0;
@@ -43,12 +46,11 @@ int loop_read(FILE *opened_f, Integer *len, Hashmap *data_map) {
             if (c == '>') {
                 p2 = false;
             }
-            if (prev == '>' && c == ' ') {
+            if (dismiss_space(prev, c)) {
                 i++;
                 continue;
             }
             if (c == '\n') {
-                prev = 0;
                 i++;
                 break;
             }
