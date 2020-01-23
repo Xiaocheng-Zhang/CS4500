@@ -199,15 +199,4 @@ class Hashmap : public Object {
             }
             return keys;
         }
-
-        virtual void print_self() {
-            Object **keys = key_array();
-            for (int i = 0; i < size_; i++) {
-                printf("key: ");
-                keys[i]->print_self();
-                printf(" val: ");
-                get(keys[i])->print_self();
-                printf("\n");
-            }
-        }
 };
