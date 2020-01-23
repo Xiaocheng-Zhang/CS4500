@@ -30,6 +30,12 @@ class StrList : public Object {
             delete [] list;
         }
 
+        void print_self() {
+            for (int i = 0; i < size_; i++) {
+                printf("%s\n", list[i]->getValue());
+            }
+        }
+
         void initialize(int from) {
             for (int i = from; i < capacity_; i++) {
                 list[i] = nullptr;
@@ -156,12 +162,13 @@ class StrList : public Object {
             return hash_code;
         } // Returns the hash code value for this list.
 
-        virtual void hash_me() {
+        virtual size_t hash_me() {
             hash_code = 0;
             for (int i = 0; i < size_; i++) {
                 hash_code += list[i]->hash();
                 //list[i]->print_hash();
             }
+            return hash_code;
         }
 
         size_t index_of(Object* o) {
@@ -207,13 +214,6 @@ class StrList : public Object {
         size_t size() {
             return size_;
         } // Return the number of elements in the collection
-
-        virtual void print_self() {
-            for (int i = 0; i < size_; i++) {
-                list[i]->print_self();
-                printf(" ");
-            }
-        }
 };
 
 class SortedStrList : public StrList {
