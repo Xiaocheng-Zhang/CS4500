@@ -52,7 +52,7 @@ char* identify_datatype(const char* c) {
 	}
 }
 
-StrList* construct_column(int max_row, Hashmap *data_map) {
+StrList* get_column_header(int max_row, Hashmap *data_map) {
 	StrList *column_list = new StrList();
 	StrList *row = cast_list(data_map->get(new Integer(max_row)));
 	for (int i = 0; i < row->size(); i++) {
