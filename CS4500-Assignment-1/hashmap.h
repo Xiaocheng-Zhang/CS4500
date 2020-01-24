@@ -15,6 +15,8 @@ class Hashmap_pair : public Object {
             val_ = val;
         }
         ~Hashmap_pair() {
+            delete key_;
+            delete val_;
         }
 };
 
@@ -27,7 +29,7 @@ class Hashmap : public Object {
     public:
         Hashmap() {
             data = new Hashmap_pair*[4];
-            initialize(data);
+            //initialize(data);
             size_ = 0;
             capacity_ = 4;
         }
@@ -82,7 +84,7 @@ class Hashmap : public Object {
         void expand() {
             capacity_ *= 2;
             Hashmap_pair **temp = new Hashmap_pair*[capacity_];
-            initialize(temp);
+            //initialize(temp);
             int i = 0;
             int count = 0;
             while (count < size_) {
