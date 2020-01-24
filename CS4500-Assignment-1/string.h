@@ -16,7 +16,7 @@ class String: public Object {
             hash();
         }
         ~String() {
-            delete [] value_;
+            delete value_;
         }
 
         virtual size_t get_size() {

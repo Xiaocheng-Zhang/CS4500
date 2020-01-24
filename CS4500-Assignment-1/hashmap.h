@@ -10,7 +10,6 @@ class Hashmap_pair : public Object {
     public:
         Object* key_;
         Object* val_;
-
         Hashmap_pair(Object *key, Object *val) : Object() {
             key_ = key;
             val_ = val;
@@ -28,12 +27,19 @@ class Hashmap : public Object {
     public:
         Hashmap() {
             data = new Hashmap_pair*[4];
+            initialize(data);
             size_ = 0;
             capacity_ = 4;
         }
 
         ~Hashmap() {
             delete [] data;
+        }
+
+        void initialize(Hashmap_pair **new_data) {
+            for (int i = 0; i < capacity_; i++) {
+                new_data[i] = nullptr;
+            }
         }
 
         int hash_index(Object *key) {
@@ -54,7 +60,7 @@ class Hashmap : public Object {
                         return;
                     }
                 }
-                if (!temp_data[i]) {
+                else {
                     temp_data[i] = new Hashmap_pair(key, val);
                     return;
                 }
@@ -66,7 +72,7 @@ class Hashmap : public Object {
                         return;
                     }
                 }
-                if (!temp_data[i]) {
+                else {
                     temp_data[i] = new Hashmap_pair(key, val);
                     return;
                 }
@@ -76,6 +82,7 @@ class Hashmap : public Object {
         void expand() {
             capacity_ *= 2;
             Hashmap_pair **temp = new Hashmap_pair*[capacity_];
+            initialize(temp);
             int i = 0;
             int count = 0;
             while (count < size_) {
@@ -144,7 +151,7 @@ class Hashmap : public Object {
                         return;
                     }
                 }
-                if (!data[i]) {
+                else {
                     data[i] = new Hashmap_pair(key, val);
                     size_++;
                     return;
@@ -157,7 +164,7 @@ class Hashmap : public Object {
                         return;
                     }
                 }
-                if (!data[i]) {
+                else {
                     data[i] = new Hashmap_pair(key, val);
                     size_++;
                     return;
