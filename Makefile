@@ -7,3 +7,4 @@ push:
 	git status
 	git commit -m "$(msg)"
 	git push
+	Xiaocheng-Zhang
