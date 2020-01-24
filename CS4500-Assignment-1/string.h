@@ -16,7 +16,7 @@ class String: public Object {
             hash();
         }
         ~String() {
-            delete value_;
+            delete [] value_;
         }
 
         virtual size_t get_size() {
@@ -74,6 +74,6 @@ class String: public Object {
 
     private:
         const char* value_;
-        size_t size_;
+        int size_;
         size_t hash_code;
 };

@@ -140,6 +140,7 @@ class Hashmap : public Object {
         void put(Object *key, Object *val) {
             if (size_ == capacity_) {
                 expand();
+                puts("P");
             }
             //index is the index made by hashcode mod capacity - 1
             //might exist a same, so put into next available cell.

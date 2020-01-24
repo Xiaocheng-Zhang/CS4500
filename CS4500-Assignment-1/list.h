@@ -10,8 +10,8 @@
 class StrList : public Object {
     protected:
         String **list;
-        size_t size_;
-        size_t capacity_;
+        int size_;
+        int capacity_;
         size_t hash_code;
 
     public:
@@ -165,7 +165,7 @@ class StrList : public Object {
             }
         }
 
-        size_t index_of(Object* o) {
+        int index_of(Object* o) {
             String *cast_o = dynamic_cast<String*>(o);
             if (!cast_o) {
                 return false;
@@ -205,7 +205,7 @@ class StrList : public Object {
             return temp;
         } // Replaces the element at i with e
 
-        size_t size() {
+        int size() {
             return size_;
         } // Return the number of elements in the collection
 
