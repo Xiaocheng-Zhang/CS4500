@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Hashmap_pair is a node, which is used to to store a pair of key and value.
+// Later a list of Hashmap_pair will be stored into Hashmap data structure.
+// It inherit Object class.
 class Hashmap_pair : public Object {
     public:
         Object* key_;
@@ -18,6 +21,10 @@ class Hashmap_pair : public Object {
         }
 };
 
+// Hashmap class stores a list of hashmap_pairs, which contains equal number
+// of keys and values.
+// It has size and capcity, which size is the number of key-value pairs,
+// and capcity is the physical size of hashmap.
 class Hashmap : public Object {
     private:
         Hashmap_pair **data;
@@ -25,6 +32,8 @@ class Hashmap : public Object {
         size_t capacity_; 
 
     public:
+        //constructor
+        //capcity will be initilized as 4, size is 0 by default.
         Hashmap() {
             data = new Hashmap_pair*[4];
             //initialize(data);
@@ -32,51 +41,44 @@ class Hashmap : public Object {
             capacity_ = 4;
         }
 
+        // destructor
         ~Hashmap() {
             delete [] data;
         }
 
-        void initialize(Hashmap_pair **new_data) {
-            
-        }
+        // Initialize hashmap with null pointers
+        void initialize(Hashmap_pair **new_data);
 
-        size_t hash_index(Object *key) {
-            
-        }
+        // Return hash index given the key
+        size_t hash_index(Object *key);
 
+        // copy keys and values to a new Hashmap 
+        void copy_to_new(Hashmap_pair **temp_data, Object *key, Object *val);
 
+        // Double the capacity of hashmap when needed
+        void expand();
 
-        void hashmap_put(Hashmap_pair **temp_data, Object *key, Object *val) {
-            
-        }
+        // Returns the value to which the specified key is mapped, 
+        // or null if this map contains no mapping for the key.
+        Object* get(Object *key);
 
-        void expand() {
-            
-        }
+        // Associates the specified value with the specified key in this map.
+        void put(Object *key, Object *val);
 
-        //get the exact data (not a copy) from Hashmap.
-        //return null if no key inside.
-        Object* get(Object *key) {
-            
-        }
+        // Removes the mapping for the specified key from this map if present.
+        void remove(Object *key);
 
-        void put(Object *key, Object *val) {
-            
-        }
+        // Returns the number of key-value mappings in this map.
+        size_t size();
 
-        void remove(Object *key) {
-            
-        }
+        // Returns a list view of the keys contained in this map.
+        Object** key_array();
 
-        size_t size() {
+        // Check if two Hashmaps are equal.
+        // the input hashmap is an object.
+        bool equals(Object *map);
 
-        }
-
-        Object** key_array() {
-            
-        }
-
-        virtual void print_self() {
-            
-        }
+        // Print hashmap itself, including both keys and values
+        // This will be helpful for debugging
+        void print_self();
 };
