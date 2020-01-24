@@ -10,7 +10,7 @@ class Integer : public Object {
     }
 
     virtual void print_self() {
-        printf("%d", val_);
+        printf("%zu", val_);
     }
 
     virtual bool equals(Object *object) {

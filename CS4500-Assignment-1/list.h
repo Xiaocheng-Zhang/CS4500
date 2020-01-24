@@ -214,7 +214,7 @@ class StrList : public Object {
                 list[i]->print_self();
                 printf(" ");
             }
-            printf("size: %d", size_);
+            printf("size: %zu", size_);
         }
 };
 

@@ -24,11 +24,12 @@ String** cast_object_arr(Object **array, size_t size) {
     }
     return output;
 }
- Integer** cast_object_arr_Integer(Object **array, size_t size) {
+
+Integer** cast_object_arr_Integer(Object **array, size_t size) {
      Integer **output = new Integer*[size];
     //printf("size in cast_arr: %d\n", size);
     for (size_t i = 0; i < size; i++) {
         output[i] = cast_integer(array[i]);
     }
     return output;
- }
+}
