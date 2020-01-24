@@ -37,6 +37,7 @@ void object_test() {
 	t_false(o1->equals(o2));
 	t_true(o1->equals(o1));
 	t_true(o2->equals(o2));
+	t_false(o1->hash_code == o2->hash_code);
 	OK("Object_test");
 }
 
@@ -62,6 +63,10 @@ void test_constructor() {
 		//test for method initialize(data)
 		t_true(map->data[i] == nullptr);
 	}
+	t_true(map->hash() == map2->hash());
+	map->put(a, av);
+	map->put(b, bv);
+	t_false(map->hash() == map2->hash());
 	OK("map_constructor");
 }
 
