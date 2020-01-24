@@ -23,8 +23,8 @@ class Hashmap_pair : public Object {
 class Hashmap : public Object {
     private:
         Hashmap_pair **data;
-        int size_;
-        int capacity_; 
+        size_t size_;
+        size_t capacity_; 
 
     public:
         Hashmap() {
@@ -39,12 +39,12 @@ class Hashmap : public Object {
         }
 
         void initialize(Hashmap_pair **new_data) {
-            for (int i = 0; i < capacity_; i++) {
+            for (size_t i = 0; i < capacity_; i++) {
                 new_data[i] = nullptr;
             }
         }
 
-        int hash_index(Object *key) {
+        size_t hash_index(Object *key) {
             if (key) {
                 return key->hash() & (capacity_ - 1);
             }
@@ -54,8 +54,8 @@ class Hashmap : public Object {
         void hashmap_put(Hashmap_pair **temp_data, Object *key, Object *val) {
             //index is the index made by hashcode mod capacity - 1
             //might exist a same, so put into next available cell.
-            int index = hash_index(key);
-            for (int i = index; i < capacity_; i++) {
+            size_t index = hash_index(key);
+            for (size_t i = index; i < capacity_; i++) {
                 if (temp_data[i]) {
                     if (temp_data[i]->key_->equals(key)) {
                         temp_data[i]->val_ = val;
@@ -67,7 +67,7 @@ class Hashmap : public Object {
                     return;
                 }
             }
-            for (int i = 0; i < index; i++) {
+            for (size_t i = 0; i < index; i++) {
                 if (temp_data[i]) {
                     if (temp_data[i]->key_->equals(key)) {
                         temp_data[i]->val_ = val;
@@ -85,8 +85,8 @@ class Hashmap : public Object {
             capacity_ *= 2;
             Hashmap_pair **temp = new Hashmap_pair*[capacity_];
             initialize(temp);
-            int i = 0;
-            int count = 0;
+            size_t i = 0;
+            size_t count = 0;
             while (count < size_) {
                 if (data[i]) {
                     hashmap_put(temp, data[i]->key_, data[i]->val_);
@@ -101,15 +101,15 @@ class Hashmap : public Object {
         //get the exact data (not a copy) from Hashmap.
         //return null if no key inside.
         Object* get(Object *key) {
-            int index = hash_index(key);
-            for (int i = index; i < capacity_; i++) {
+            size_t index = hash_index(key);
+            for (size_t i = index; i < capacity_; i++) {
                 if (data[i]) {
                     if (data[i]->key_->equals(key)) {
                         return data[i]->val_;
                     }
                 }
             }
-            for (int i = 0; i < index; i++) {
+            for (size_t i = 0; i < index; i++) {
                 if (data[i]) {
                     if (data[i]->key_->equals(key)) {
                         return data[i]->val_;
@@ -126,8 +126,8 @@ class Hashmap : public Object {
             }
             //index is the index made by hashcode mod capacity - 1
             //might exist a same, so put into next available cell.
-            int index = hash_index(key);
-            for (int i = index; i < capacity_; i++) {
+            size_t index = hash_index(key);
+            for (size_t i = index; i < capacity_; i++) {
                 if (data[i]) {
                     if (data[i]->key_->equals(key)) {
                         data[i]->val_ = val;
@@ -140,7 +140,7 @@ class Hashmap : public Object {
                     return;
                 }
             }
-            for (int i = 0; i < index; i++) {
+            for (size_t i = 0; i < index; i++) {
                 if (data[i]) {
                     if (data[i]->key_->equals(key)) {
                         data[i]->val_ = val;
@@ -156,15 +156,15 @@ class Hashmap : public Object {
         }
 
         void remove(Object *key) {
-            int index = hash_index(key);
-            for (int i = index; i < capacity_; i++) {
+            size_t index = hash_index(key);
+            for (size_t i = index; i < capacity_; i++) {
                 if (data[i]) {
                     if (data[i]->key_->equals(key)) {
                         data[i] = nullptr;
                     }
                 }
             }
-            for (int i = 0; i < index; i++) {
+            for (size_t i = 0; i < index; i++) {
                 if (data[i]) {
                     if (data[i]->key_->equals(key)) {
                         data[i] = nullptr;
@@ -180,8 +180,8 @@ class Hashmap : public Object {
         Object** key_array() {
             Object **keys;
             keys = new Object*[size_];
-            int key_size = 0;
-            for (int i = 0; i < capacity_; i++) {
+            size_t key_size = 0;
+            for (size_t i = 0; i < capacity_; i++) {
                 if (data[i]) {
                     keys[key_size] = data[i]->key_;
                     key_size++;
@@ -192,7 +192,7 @@ class Hashmap : public Object {
 
         virtual void print_self() {
             Object **keys = key_array();
-            for (int i = 0; i < size_; i++) {
+            for (size_t i = 0; i < size_; i++) {
                 printf("key: ");
                 keys[i]->print_self();
                 printf(" val: ");

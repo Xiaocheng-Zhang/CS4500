@@ -53,10 +53,10 @@ char* identify_datatype(const char* c) {
 	}
 }
 
-StrList* get_column_header(int max_row, Hashmap *data_map) {
+StrList* get_column_header(size_t max_row, Hashmap *data_map) {
 	StrList *column_list = new StrList();
 	StrList *row = cast_list(data_map->get(new Integer(max_row)));
-	for (int i = 0; i < row->size(); i++) {
+	for (size_t i = 0; i < row->size(); i++) {
 		const char* curr = row->get(i)->getValue();
 		char* type = identify_datatype(curr);
 		type[1] = 0;

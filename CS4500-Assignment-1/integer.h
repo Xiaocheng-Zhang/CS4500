@@ -3,8 +3,8 @@
 
 class Integer : public Object {
     public: 
-    //int val_;
-    Integer(int val) : Object() {
+    //size_t val_;
+    Integer(size_t val) : Object() {
         val_ = val;
         hash_code = 0;
     }
@@ -32,6 +32,6 @@ class Integer : public Object {
         hash_code = val_;
     }
 
-    int val_;
-    int hash_code;
+    size_t val_;
+    size_t hash_code;
 };

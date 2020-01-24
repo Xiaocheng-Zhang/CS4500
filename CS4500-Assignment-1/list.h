@@ -10,8 +10,8 @@
 class StrList : public Object {
     protected:
         String **list;
-        int size_;
-        int capacity_;
+        size_t size_;
+        size_t capacity_;
         size_t hash_code;
 
     public:
@@ -30,8 +30,8 @@ class StrList : public Object {
             delete [] list;
         }
 
-        void initialize(int from) {
-            for (int i = from; i < capacity_; i++) {
+        void initialize(size_t from) {
+            for (size_t i = from; i < capacity_; i++) {
                 list[i] = nullptr;
             }
         }
@@ -39,7 +39,7 @@ class StrList : public Object {
         void expand() {
             capacity_ *= 2;
             String **temp = new String*[capacity_];
-            for (int i = 0; i < size_; i++) {
+            for (size_t i = 0; i < size_; i++) {
                 temp[i] = list[i];
             }
             delete [] list;
@@ -66,11 +66,11 @@ class StrList : public Object {
                 return;
             }
             String **temp = new String*[capacity_];
-            for (int j = 0; j < i; j++) {
+            for (size_t j = 0; j < i; j++) {
                 temp[j] = list[j];
             }
             temp[i] = e;
-            for (int j = i; j < size_; j++) {
+            for (size_t j = i; j < size_; j++) {
                 temp[j + 1] = list[j];
             }
             size_++;
@@ -84,13 +84,13 @@ class StrList : public Object {
                 expand();
             }
             String **temp = new String*[capacity_];
-            for (int j = 0; j < i; j++) {
+            for (size_t j = 0; j < i; j++) {
                 temp[j] = list[j];
             }
-            for (int j = i; j < c->size() + i; j++) {
+            for (size_t j = i; j < c->size() + i; j++) {
                 temp[j] = c->get(j - i);
             }
-            for (int j = i + c->size(); j < size_ + c->size(); j++) {
+            for (size_t j = i + c->size(); j < size_ + c->size(); j++) {
                 temp[j] = list[j-c->size()];
             }
             size_+=c->size();
@@ -110,7 +110,7 @@ class StrList : public Object {
             if (!s) {
                 return false;
             }
-            for (int i = 0; i < size_; i++) {
+            for (size_t i = 0; i < size_; i++) {
                 if (list[i]->equals(s)) {
                     return true;
                 }
@@ -131,8 +131,8 @@ class StrList : public Object {
             }
             
             if (size_ == l->size()) {
-                int count = 0;
-                for (int i = 0; i < size_; i++) {
+                size_t count = 0;
+                for (size_t i = 0; i < size_; i++) {
                     if (contains(l->get(i))) {
                         count++;
                     }
@@ -159,19 +159,19 @@ class StrList : public Object {
 
         virtual void hash_me() {
             hash_code = 0;
-            for (int i = 0; i < size_; i++) {
+            for (size_t i = 0; i < size_; i++) {
                 hash_code += list[i]->hash();
                 //list[i]->print_hash();
             }
         }
 
-        int index_of(Object* o) {
+        size_t index_of(Object* o) {
             String *cast_o = dynamic_cast<String*>(o);
             if (!cast_o) {
                 return false;
             }
 
-            for (int i = 0; i < size_; i++) {
+            for (size_t i = 0; i < size_; i++) {
                 if (list[i]->equals(cast_o)) {
                     return i;
                 }
@@ -184,11 +184,11 @@ class StrList : public Object {
             String **temp = new String*[capacity_];
             String *cur;
             cur = temp[i];
-            for (int j = 0; j < i; j++) {
+            for (size_t j = 0; j < i; j++) {
                 //puts(list[j]->getValue());
                 temp[j] = list[j];
             }
-            for (int j = i + 1; j < size_; j++) {
+            for (size_t j = i + 1; j < size_; j++) {
                 //puts(list[j]->getValue());
                 temp[j-1] = list[j];
             }
@@ -205,12 +205,12 @@ class StrList : public Object {
             return temp;
         } // Replaces the element at i with e
 
-        int size() {
+        size_t size() {
             return size_;
         } // Return the number of elements in the collection
 
         virtual void print_self() {
-            for (int i = 0; i < size_; i++) {
+            for (size_t i = 0; i < size_; i++) {
                 list[i]->print_self();
                 printf(" ");
             }
@@ -226,8 +226,8 @@ class SortedStrList : public StrList {
             delete [] list;
         }
 
-        void merge(String **list_, int l, int m, int r) {
-            int n1, n2, i, j, k;
+        void merge(String **list_, size_t l, size_t m, size_t r) {
+            size_t n1, n2, i, j, k;
             n1 = m - l + 1;
             n2 = r - m;
             String **la, **ra;
@@ -241,8 +241,8 @@ class SortedStrList : public StrList {
             i = 0;
             j = 0;
             for (k = l; i < n1 && j < n2; k++) {
-                int a = la[i]->getValue()[0];
-                int b = ra[j]->getValue()[0];
+                size_t a = la[i]->getValue()[0];
+                size_t b = ra[j]->getValue()[0];
                 //set lower and higher the same
                 if (islower(a)) a-=32;
                 if (islower(b)) b-=32;
@@ -264,9 +264,9 @@ class SortedStrList : public StrList {
                 list_[k++] = ra[j++];
             }
         }
-        //int are index
-        void merge_sort(int l, int r) {
-            int m;
+        //size_t are index
+        void merge_sort(size_t l, size_t r) {
+            size_t m;
             if (l < r) {
                 m = (l + r)/2;
                 //sort left
@@ -284,10 +284,10 @@ class SortedStrList : public StrList {
             }
             String* o = new String(t->getValue());
             //merge_sort(0, size_ - 1);
-            int pre = 0;
-            for (int i = 0; i < size_; i++) {
-                int cur = list[i]->getValue()[0];
-                int os = o->getValue()[0];
+            size_t pre = 0;
+            for (size_t i = 0; i < size_; i++) {
+                size_t cur = list[i]->getValue()[0];
+                size_t os = o->getValue()[0];
                 if (islower(cur)) cur-=26;
                 if (islower(os)) os-=26;
                 //ignore the catipal letter

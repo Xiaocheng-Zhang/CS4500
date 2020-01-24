@@ -16,18 +16,18 @@ Integer* cast_integer(Object* object) {
 	return dynamic_cast<Integer*>(object);
 }
 
-String** cast_object_arr(Object **array, int size) {
+String** cast_object_arr(Object **array, size_t size) {
     String **output = new String*[size];
     //printf("size in cast_arr: %d\n", size);
-    for (int i = 0; i < size; i++) {
+    for (size_t i = 0; i < size; i++) {
         output[i] = cast_string(array[i]);
     }
     return output;
 }
- Integer** cast_object_arr_Integer(Object **array, int size) {
+ Integer** cast_object_arr_Integer(Object **array, size_t size) {
      Integer **output = new Integer*[size];
     //printf("size in cast_arr: %d\n", size);
-    for (int i = 0; i < size; i++) {
+    for (size_t i = 0; i < size; i++) {
         output[i] = cast_integer(array[i]);
     }
     return output;

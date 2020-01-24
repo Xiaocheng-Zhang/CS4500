@@ -62,24 +62,24 @@ char* string_filter(char* raw_string) {
     return temp;
 }
 
-int string_equal(const char* c1, const char* c2) {
+size_t string_equal(const char* c1, const char* c2) {
     return !strcmp(c1, c2);
 }
 
-int dismiss_space(char prev, char c) {
+size_t dismiss_space(char prev, char c) {
     return (prev == '>' && c == ' ') || (prev == 0 && c == ' ');
 }
 
-int loop_read(FILE *opened_f, Integer *len, Hashmap *data_map, bool ignore_start_line) {
+size_t loop_read(FILE *opened_f, Integer *len, Hashmap *data_map, bool ignore_start_line) {
     size_t i = 0;
-	int ic = 0;
+	size_t ic = 0;
 	char c = 0;
 	char prev = 0;
 	char buffer[255];
-	int buffer_index = 0;
+	size_t buffer_index = 0;
 	StrList *strl = new StrList();
-	int max_length = 0;
-	int max_row = 0;
+	size_t max_length = 0;
+	size_t max_row = 0;
 	size_t row = 0;
 	bool p1 = true;
 	bool p2 = true;
