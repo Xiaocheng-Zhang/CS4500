@@ -26,6 +26,7 @@ class Object {
         }
 
         virtual void print_self() {
+            printf("empty object");
             //print nothing
         }
     private:

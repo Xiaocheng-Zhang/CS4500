@@ -16,12 +16,14 @@ char* identify_datatype(const char* c) {
 	bool dot = false;
 	bool none_one_or_zero = false;
 	bool one_or_zero = false;
+	//puts(c);
 	for (int i = 0; i < strlen(c); i++) {
 		if (c[i] == '<' || c[i] == '>' || c[i] == ' ') {
 			continue;
 		}
 		if (c[i] == '"') {
 			result[0] = '1';
+
 			return result;
 		}
 		if (!isdigit(c[i]) && c[i] != '+' && c[i] != '-' && c[i] != '.') {
@@ -57,7 +59,8 @@ StrList* get_column_header(int max_row, Hashmap *data_map) {
 	StrList *row = cast_list(data_map->get(new Integer(max_row)));
 	for (int i = 0; i < row->size(); i++) {
 		const char* curr = row->get(i)->getValue();
-		const char* type = (const char*) identify_datatype(curr);
+		char* type = identify_datatype(curr);
+		type[1] = '\0';
 		column_list->push_back(new String(type));
 	}
 	return column_list;

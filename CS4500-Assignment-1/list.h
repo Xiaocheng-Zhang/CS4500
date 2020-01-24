@@ -101,6 +101,7 @@ class StrList : public Object {
         void clear() {
             delete [] list;
             list = new String*[capacity_];
+            initialize(0);
             size_ = 0;
         }// Removes all of elements from this list
 
@@ -213,6 +214,7 @@ class StrList : public Object {
                 list[i]->print_self();
                 printf(" ");
             }
+            printf("size: %d", size_);
         }
 };
 

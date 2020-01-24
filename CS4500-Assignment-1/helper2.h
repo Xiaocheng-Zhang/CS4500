@@ -69,7 +69,9 @@ int loop_read(FILE *opened_f, Integer *len, Hashmap *data_map, bool ignore_start
         p1 = true;
         p2 = true;
         char* temp = strdup(buffer);
-        strl->push_back(new String(temp));
+        if (strcmp(temp, "") != 0) {
+            strl->push_back(new String(temp));
+        }
         //change line
         if (c == '\n' || end_of_f || i == len->val_) {
             if (!ignore_start_line) {

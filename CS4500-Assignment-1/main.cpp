@@ -10,8 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static Hashmap *command_map = new Hashmap();
-static Hashmap *data_map = new Hashmap();
+Hashmap *command_map = new Hashmap();
+Hashmap *data_map = new Hashmap();
 
 int main(int argv, char** argc) {
     if (argv == 1) {
@@ -25,8 +25,9 @@ int main(int argv, char** argc) {
     //hashmap_print_file(data_map);
     data_map->print_self();
 
-    printf("%d", max_row);
+    //printf("%d", max_row);
     StrList *header_type = get_column_header(max_row, data_map);
     header_type->print_self();
+    //puts("1");
     return 0;
 }
