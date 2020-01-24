@@ -61,7 +61,7 @@ class String: public Object {
 
         virtual void hash_me() {
             hash_code = 0;
-            for (int i = 0; i < size_; i++) {
+            for (size_t i = 0; i < size_; i++) {
                 hash_code += 17 * value_[i];
             }
             //printf("hash: %s, code: %d\n", value_, hash_code);
@@ -74,6 +74,6 @@ class String: public Object {
 
     private:
         const char* value_;
-        int size_;
+        size_t size_;
         size_t hash_code;
 };

@@ -29,6 +29,10 @@ class Object {
             printf("empty object");
             //print nothing
         }
+
+        virtual void print_follow_schema(Object *schema, size_t col) {
+            printf("empty object");
+        }
     private:
         size_t hash_code;
 };

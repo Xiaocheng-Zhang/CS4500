@@ -145,7 +145,7 @@ class StrList : public Object {
             return false;
         }// Compares o with this list for equality.
 
-        virtual String*  get(size_t index) {
+        String* get(size_t index) {
             assert(index < size_ && index >= 0);
             return list[index];
         }// Returns the element at index
