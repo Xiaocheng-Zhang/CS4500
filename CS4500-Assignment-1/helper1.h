@@ -9,6 +9,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 String *f = new String("-f");
 String *from = new String("-from");
@@ -130,6 +131,7 @@ int read_file(Hashmap *command_map, Hashmap *data_map) {
     
 	FILE* opened_f;
 	opened_f = fopen(file_path->getValue(),"r");
+    assert(opened_f != 0);
 	fseek(opened_f, from->val_, SEEK_SET);
 	int max_row = loop_read(opened_f, len, data_map, ignore_start_line);
 	fclose(opened_f);

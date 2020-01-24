@@ -22,10 +22,6 @@ int main(int argv, char** argc) {
     int max_row = read_file(command_map, data_map);
     //hashmap_print_file(data_map);
     data_map->print_self();
-
-    //printf("%d", max_row);
     StrList *header_type = get_column_header(max_row, data_map);
-    header_type->print_self();
-    //puts("1");
     return 0;
 }

@@ -29,7 +29,7 @@ class Hashmap : public Object {
     public:
         Hashmap() {
             data = new Hashmap_pair*[4];
-            //initialize(data);
+            initialize(data);
             size_ = 0;
             capacity_ = 4;
         }
@@ -84,7 +84,7 @@ class Hashmap : public Object {
         void expand() {
             capacity_ *= 2;
             Hashmap_pair **temp = new Hashmap_pair*[capacity_];
-            //initialize(temp);
+            initialize(temp);
             int i = 0;
             int count = 0;
             while (count < size_) {
@@ -96,26 +96,6 @@ class Hashmap : public Object {
             }
             delete [] data;
             data = temp;
-        }
-
-        //check does the map has that key.
-        int has(Object *key) {
-            int index = hash_index(key);
-            for (int i = index; i < capacity_; i++) {
-                if (data[i]) {
-                    if (data[i]->key_->equals(key)) {
-                        return true;
-                    }
-                }
-            }
-            for (int i = 0; i < index; i++) {
-                if (data[i]) {
-                    if (data[i]->key_->equals(key)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
 
         //get the exact data (not a copy) from Hashmap.
@@ -142,7 +122,7 @@ class Hashmap : public Object {
         void put(Object *key, Object *val) {
             if (size_ == capacity_) {
                 expand();
-                puts("P");
+                //puts("P");
             }
             //index is the index made by hashcode mod capacity - 1
             //might exist a same, so put into next available cell.

@@ -5,7 +5,6 @@
 #include "object.h"
 #include "string.h"
 #include "cast_helper.h"
-#include "helper1.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,7 +16,7 @@ char* identify_datatype(const char* c) {
 	bool none_one_or_zero = false;
 	bool one_or_zero = false;
 	//puts(c);
-	for (int i = 0; i < strlen(c); i++) {
+	for (size_t i = 0; i < strlen(c); i++) {
 		if (c[i] == '<' || c[i] == '>' || c[i] == ' ') {
 			continue;
 		}
@@ -65,3 +64,4 @@ StrList* get_column_header(int max_row, Hashmap *data_map) {
 	}
 	return column_list;
 }
+

@@ -9,6 +9,63 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+char* string_filter(char* raw_string) {
+    size_t size = strlen(raw_string);
+    size_t buf_index = 0;
+    char buf[size];
+    char prev = 0;
+    bool q_1 = false;
+    bool q_2 = false;
+    char* temp;
+    for (size_t i = 0; i < size; i++) {
+        char c = raw_string[i];
+        if (c == ' ') {
+            if (!(q_1 && !q_2)) {
+                if (i < size - 1 && raw_string[i + 1] != ' ') {
+                    if (raw_string[i + 1] == '>') {
+                        buf[buf_index++] = '>';
+                        buf[buf_index] = 0;
+                        temp = strdup(buf);
+                        return temp;
+                    }
+                    if (prev == '<') {
+                        continue;
+                    }
+                    temp = (char*)"<>";
+                    return temp;
+                }
+                continue;
+            }
+        }
+        if (c == '"') {
+            if (q_1) {
+                q_2 = true;
+                buf[buf_index++] = c;
+                prev = c;
+            }
+            else {
+                q_1 = true;
+                buf[buf_index++] = c;
+                prev = c;
+            }
+            continue;
+        }
+        buf[buf_index++] = c;
+        prev = c;
+    }
+    if (q_1 && !q_2) {
+        temp = (char*)"<>";
+        return temp;
+    }
+    buf[buf_index] = 0;
+    temp = strdup(buf);
+    return temp;
+}
+
+int string_equal(const char* c1, const char* c2) {
+    return !strcmp(c1, c2);
+}
+
 int dismiss_space(char prev, char c) {
     return (prev == '>' && c == ' ') || (prev == 0 && c == ' ');
 }
@@ -69,8 +126,9 @@ int loop_read(FILE *opened_f, Integer *len, Hashmap *data_map, bool ignore_start
         p1 = true;
         p2 = true;
         char* temp = strdup(buffer);
-        if (strcmp(temp, "") != 0) {
-            strl->push_back(new String(temp));
+        if (!string_equal(temp, "")) {
+            char* new_temp = string_filter(temp);
+            strl->push_back(new String(new_temp));
         }
         //change line
         if (c == '\n' || end_of_f || i == len->val_) {
