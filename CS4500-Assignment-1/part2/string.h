@@ -37,12 +37,6 @@ class String: public Object {
         // This String will be in the front
         String* concat(String *o);
 
-        // Print this String one char by one char
-        virtual void print_self();
-
-        // Print out the hash code
-        void print_hash();
-
         // Return field hash_code if hash code is not zero.
         // Otherwise go to hash_me function.
         virtual size_t hash();

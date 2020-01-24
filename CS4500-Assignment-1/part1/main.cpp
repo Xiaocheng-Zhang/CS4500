@@ -14,6 +14,7 @@
 void print_follow_schema(StrList *schema, Object *object, size_t col) {
     String *temp = cast_string(object);
     size_t type = atoi(schema->get(col)->getValue());
+    size_t val_type = atoi(identify_datatype(temp->getValue()));
     size_t size_ = temp->get_size();
     const char *value_ = temp->getValue();
     char buf[size_];
@@ -24,7 +25,7 @@ void print_follow_schema(StrList *schema, Object *object, size_t col) {
         }
         buf[size_-2] = 0;
     }
-    if (type == 1) {
+    if (type == 1 && val_type == 1) {
         if (buf[0] == '"') {
             printf("%s", buf);
         }
@@ -32,12 +33,12 @@ void print_follow_schema(StrList *schema, Object *object, size_t col) {
             printf("\"%s\"", buf);
         }
     }
-    else if (type == 5) {
-        printf("Missing Value");
-    }
-    else {
+    else if (type == val_type) {
         printf("%s", buf);
-    }            
+    }    
+    else {
+        printf("Missing Value");
+    }        
 }
 
 int main(int argv, char** argc) {

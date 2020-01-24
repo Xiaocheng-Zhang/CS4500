@@ -23,7 +23,4 @@ class Object {
 
         // Make the hash code valid
         virtual void hash_me();
-
-        // print out this obejct
-        virtual void print_self();
 };

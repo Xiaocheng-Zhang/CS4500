@@ -26,17 +26,14 @@ class Hashmap_pair : public Object {
 // It has size and capcity, which size is the number of key-value pairs,
 // and capcity is the physical size of hashmap.
 class Hashmap : public Object {
-    private:
+    public:
         Hashmap_pair **data;
         size_t size_;
         size_t capacity_; 
-
-    public:
         //constructor
         //capcity will be initilized as 4, size is 0 by default.
         Hashmap() {
             data = new Hashmap_pair*[4];
-            //initialize(data);
             size_ = 0;
             capacity_ = 4;
         }
@@ -45,15 +42,6 @@ class Hashmap : public Object {
         ~Hashmap() {
             delete [] data;
         }
-
-        // Initialize hashmap with null pointers
-        void initialize(Hashmap_pair **new_data);
-
-        // Return hash index given the key
-        size_t hash_index(Object *key);
-
-        // copy keys and values to a new Hashmap 
-        void copy_to_new(Hashmap_pair **temp_data, Object *key, Object *val);
 
         // Double the capacity of hashmap when needed
         void expand();
@@ -77,8 +65,4 @@ class Hashmap : public Object {
         // Check if two Hashmaps are equal.
         // the input hashmap is an object.
         bool equals(Object *map);
-
-        // Print hashmap itself, including both keys and values
-        // This will be helpful for debugging
-        void print_self();
 };
