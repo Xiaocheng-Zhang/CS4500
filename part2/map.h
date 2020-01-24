@@ -74,6 +74,10 @@ class Hashmap : public Object {
         // Returns a list view of the keys contained in this map.
         Object** key_array();
 
+        // Check if two Hashmaps are equal.
+        // the input hashmap is an object.
+        bool equals(Object *map);
+
         // Print hashmap itself, including both keys and values
         // This will be helpful for debugging
         void print_self();
