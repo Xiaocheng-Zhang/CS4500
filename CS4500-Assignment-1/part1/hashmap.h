@@ -29,9 +29,9 @@ class Hashmap : public Object {
     public:
         Hashmap() {
             data = new Hashmap_pair*[4];
+            capacity_ = 4;
             initialize(data);
             size_ = 0;
-            capacity_ = 4;
         }
 
         ~Hashmap() {
