@@ -1,33 +1,31 @@
 #pragma once
-#include "object.h"
 #include "node.h"
+#include "object.h"
 #include <assert.h>
 
 class Map {
 public:
-  //Size of the current map
+  // Size of the current map
   size_t len_;
   size_t capacity_;
-  //Array of Node pointers in the map
-  Node** elems_;
+  // Array of Node pointers in the map
+  Node **elems_;
 
-  //Constructor
-  Map(){
+  // Constructor
+  Map() {
     elems_ = NULL;
     capacity_ = 10;
     len_ = 0;
-    elems_ = new Node*[capacity_];
+    elems_ = new Node *[capacity_];
     initialize(elems_);
   }
 
-  ~Map() {
-    delete [] elems_;
-  }
+  ~Map() { delete[] elems_; }
 
   /** initialize the map*/
   void initialize(Node **temp) {
     for (int i = 0; i < capacity_; i++) {
-        temp[i] = nullptr;
+      temp[i] = nullptr;
     }
   }
 
@@ -56,13 +54,13 @@ public:
   }
 
   /** return all keys as one array*/
-  Object** key_array() {
-    Object **keys = new Object*[len_];
+  Object **key_array() {
+    Object **keys = new Object *[len_];
     for (size_t i = 0, j = 0; i < capacity_; i++) {
       assert(j <= len_);
       if (elems_[i]) {
         keys[j] = elems_[i]->getKey();
-        j++; 
+        j++;
       }
     }
     return keys;
@@ -72,16 +70,15 @@ public:
   void hash_put(Node **temp_elems, Object *key, Object *val) {
     size_t index = hash_index(key);
     assert(index != -1);
-    for (size_t i = index, count = 0;
-    index_check(i, index, count); i = index_grow(i), count++) {
+    for (size_t i = index, count = 0; index_check(i, index, count);
+         i = index_grow(i), count++) {
       if (!temp_elems[i]) {
         temp_elems[i] = new Node(key, val);
         len_++;
         return;
-      }
-      else if (temp_elems[i]->key_->equals(key)) {
-            temp_elems[i]->value_ = val;
-            return;
+      } else if (temp_elems[i]->key_->equals(key)) {
+        temp_elems[i]->value_ = val;
+        return;
       }
     }
   }
@@ -91,26 +88,25 @@ public:
     capacity_ *= 2;
     size_t prev_len_ = len_;
     len_ = 0;
-    Node **new_elems = new Node*[capacity_];
+    Node **new_elems = new Node *[capacity_];
     initialize(new_elems);
-    for (size_t i = 0, count = 0; count < prev_len_ && i < capacity_/2; i++) {
+    for (size_t i = 0, count = 0; count < prev_len_ && i < capacity_ / 2; i++) {
       if (elems_[i]) {
         hash_put(new_elems, elems_[i]->key_, elems_[i]->value_);
         count++;
       }
     }
-    delete [] elems_;
+    delete[] elems_;
     elems_ = new_elems;
   }
 
-  //Adds an element to the map as a node pair
-  void addElement(Node* elem) {
-    Node** nodeArr = new Node* [len_ +1];
-    if(elems_ == NULL) {
+  // Adds an element to the map as a node pair
+  void addElement(Node *elem) {
+    Node **nodeArr = new Node *[len_ + 1];
+    if (elems_ == NULL) {
       nodeArr[len_] = elem;
-    }
-    else {
-      for(size_t i = 0; i < len_; i++) {
+    } else {
+      for (size_t i = 0; i < len_; i++) {
         nodeArr[i] = elems_[i];
       }
       nodeArr[len_] = elem;
@@ -127,11 +123,11 @@ public:
     hash_put(elems_, key, value);
   }
 
-  //Removed the given key from the map
-  void removeElement(Object* key) {
+  // Removed the given key from the map
+  void removeElement(Object *key) {
     size_t index = hash_index(key);
-    for (size_t i = index, count = 0; 
-    index_check(i, index, count); i = index_grow(i), count++) {
+    for (size_t i = index, count = 0; index_check(i, index, count);
+         i = index_grow(i), count++) {
       if (elems_[i]) {
         if (elems_[i]->key_->equals(key)) {
           elems_[i] = nullptr;
@@ -141,15 +137,14 @@ public:
     }
   }
 
-
-  //Gets the value of the key
-  void getValue(Object* key);
+  // Gets the value of the key
+  void getValue(Object *key);
 
   /** Gets the value of the key*/
-  Object* get(Object* key) {
+  Object *get(Object *key) {
     size_t index = hash_index(key);
-    for (size_t i = index, count = 0;
-    index_check(i, index, count); i = index_grow(i), count++) {
+    for (size_t i = index, count = 0; index_check(i, index, count);
+         i = index_grow(i), count++) {
       Node *cur = elems_[i];
       if (cur) {
         if (cur->key_->equals(key)) {
@@ -160,17 +155,14 @@ public:
     return nullptr;
   }
 
-  //Gets the length of the map
-  void getLength() {
-  }
+  // Gets the length of the map
+  void getLength() {}
 
   /** get the length of the map*/
-  size_t size() {
-    return len_;
-  }
+  size_t size() { return len_; }
 
-  //Checks is the key is in the map
-  bool isKeyIn(Object* e) {
+  // Checks is the key is in the map
+  bool isKeyIn(Object *e) {
     for (size_t i = 0; i < capacity_; i++) {
       if (elems_[i] && elems_[i]->key_->equals(e)) {
         return true;

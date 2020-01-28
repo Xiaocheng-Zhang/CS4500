@@ -46,6 +46,7 @@ public:
     next_ = next;
   }
 
+  /** equals help to check two node are the same*/
   bool equals(Node  *node) {
     if (!node) {
       return false;
