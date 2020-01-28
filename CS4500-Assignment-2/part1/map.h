@@ -14,9 +14,10 @@ public:
   //Constructor
   Map(){
     elems_ = NULL;
-    capacity_ = 4;
+    capacity_ = 10;
     len_ = 0;
-    initialize();
+    elems_ = new Node*[capacity_];
+    initialize(elems_);
   }
 
   ~Map() {
@@ -24,14 +25,9 @@ public:
   }
 
   /** initialize the map*/
-  void initialize() {
-    if (!elems_) {
-      elems_ = new Node*[capacity_];
-    }
+  void initialize(Node **temp) {
     for (int i = 0; i < capacity_; i++) {
-      if (!elems_) {
-        elems_[i] = nullptr;
-      }
+        temp[i] = nullptr;
     }
   }
 
@@ -96,6 +92,7 @@ public:
     size_t prev_len_ = len_;
     len_ = 0;
     Node **new_elems = new Node*[capacity_];
+    initialize(new_elems);
     for (size_t i = 0, count = 0; count < prev_len_ && i < capacity_/2; i++) {
       if (elems_[i]) {
         hash_put(new_elems, elems_[i]->key_, elems_[i]->value_);
