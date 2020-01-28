@@ -11,7 +11,7 @@ class Queue : public Object {
         Queue() : Object() {
             size_ = 0;
             capacity_ = 2;
-            q = new Queue*[capacity_];
+            q = new Object*[capacity_];
             hash();
         }
 
@@ -23,7 +23,7 @@ class Queue : public Object {
 
         void enlargeSize() {
             capacity_ = capacity_ * 2;
-            Object** tmp = new Queue*[capacity_];
+            Object** tmp = new Object*[capacity_];
             for (int i = 0; i < size_; i++) {
                 tmp[i] = q[i];
             }
@@ -37,15 +37,11 @@ class Queue : public Object {
         *  adds an object to the end of this queue
         */
         void enqueue(Object* o) {
-            if (size_ != capacity_) {
-                strList[size_] = o;
-                size_++;
-            }
-            else {
+            if (size_ == capacity_) {
                 enlargeSize();
-                strList[size_] = o;
-                size_++;
             }
+            q[size_] = o;
+            size_++;
         }
 
         /**
@@ -99,7 +95,7 @@ class Queue : public Object {
             }
             if (size_ == oq->size()) {
                 for (int i = 0; i < size_; i++) {
-                    if (!q[i]->equals(oq[i])) {
+                    if (!q[i]->equals(oq->q[i])) {
                         return false;
                     }
                 }
@@ -107,8 +103,9 @@ class Queue : public Object {
             return true;
         }       
 
-        const char* to_string() {
-            return "";
-        }
+        // const char* to_string() {
+        //     return "";
+        // }
 
 };
+
