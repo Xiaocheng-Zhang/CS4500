@@ -1,24 +1,26 @@
+#pragma once
+#include "object.h"
 //Node class to implement a map
 class Node {
 public:
-  String* key_;
+  Object* key_;
   Object* value_;
   Node* next_;
 
   Node() {
-    key_ = new String();
+    key_ = new Object();
     value_ = new Object();
     next_ = NULL;
   }
   //Node contructor
-  Node(String* key, Object* value) {
+  Node(Object* key, Object* value) {
     key_ = key;
     value_ = value;
     next_ = NULL;
   }
   //Gets the key of this node
   //Returns: String*
-  String* getKey() {
+  Object* getKey() {
     return key_;
   }
 
@@ -42,5 +44,15 @@ public:
   //Sets the next node to be linked
   void setNext(Node* next) {
     next_ = next;
+  }
+
+  bool equals(Node  *node) {
+    if (!node) {
+      return false;
+    }
+    if (key_->equals(node->key_) && value_->equals(node->value_)) {
+      return true;
+    }
+    return false;
   }
 };
