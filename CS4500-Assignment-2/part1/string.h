@@ -116,5 +116,21 @@ public:
   /**
    * Checks if this String contains the given String.
    */
-  bool contains(String *sub) { return 0; }
+  /**
+   * Checks if this String contains the given String.
+   */
+  bool contains(String *sub) { 
+    for (size_t i = 0; i < size_ - sub->size_; i++) {
+      size_t j;
+      for (j = 0; j < sub->size_; j++) {
+        if (val_[i+j] != sub->val_[j]) {
+          break;
+        }
+      }
+      if (j == sub->size_) {
+          return true;
+      }
+    }
+    return false;
+  }
 };
