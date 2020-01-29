@@ -9,23 +9,22 @@ void t_true(bool p) { if (!p) FAIL(); }
 void t_false(bool p) { if (p) FAIL(); }
 
 //tests strings
-// void test1() {
-//   String * s = new String("Hello");
-//   String * t = new String("World");
-//   String * s1 = new String(" Hello ");
-//   String * s2 = new String("He");
-//   String * u = s->concat(t);
-//   t_true(s->equals(s));
-//   t_false(s->equals(t));
-//   t_false(s->equals(u));
-//   t_true(s->compare(s) == 0);
-//   t_false(s->compare(t) != 0);
-//   t_false(s->equals(s1));
-//   t_true(s->equals(s1->trim()));
-//   t_true(s->contains(s2));
-  
-//   OK("1");
-// }
+void test1() {
+  String * s = new String("Hello");
+  String * t = new String("World");
+  String * s1 = new String(" Hello ");
+  String * s2 = new String("He");
+  String * u = s->concat(t);
+  t_true(s->equals(s));
+  t_false(s->equals(t));
+  t_false(s->equals(u));
+  //t_true(s->compare(s) == 0);
+  //t_false(s->compare(t) != 0);
+  s1->trim();
+  t_true(s->equals(s1));
+  //t_true(s->contains(s2));
+  OK("1");
+}
 
 //tests queues
 void test2() {
@@ -51,7 +50,7 @@ void test2() {
 }
 
 int main() {
-  //test1();
-  test2();
+  test1();
+  //test2();
   return 0;
 }

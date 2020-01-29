@@ -1,3 +1,4 @@
+#pragma once
 #include "object.h"
 
 class Queue : public Object {
@@ -99,7 +100,5 @@ public:
     return true;
   }
 
-  // const char* to_string() {
-  //     return "";
-  // }
+  //const char *to_string() { return ""; }
 };

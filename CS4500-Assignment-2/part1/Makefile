@@ -11,7 +11,7 @@ $(a):
 	g++ -o $(a) -g -std=c++11 test-array.cpp
 
 $(q):
-	g++ -o $(a) -g -std=c++11 test-queue.cpp
+	g++ -o $(q) -g -std=c++11 test-queue.cpp
 
 clean:
 	rm -f $(m)

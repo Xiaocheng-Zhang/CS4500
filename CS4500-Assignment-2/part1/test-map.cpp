@@ -69,7 +69,6 @@ void none_spec_test2() {
   test_map->put(d, dv);
   test_map->put(a, av);
   t_true(test_map->size() == 4);
-  //t_true(test_map->capacity_ == 8);
   t_true(test_map->isKeyIn(a));
   test_map->put(dv, d);
   test_map->put(cv, c);
