@@ -13,8 +13,6 @@ take in Object and String is a child of object. The essential methods such as
 enqueue, dequeue, peek have been implemented and examined by both spec tests 
 and our own tests
 
-
-
 The critique of design and test:
 
 	a) Array:
