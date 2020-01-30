@@ -101,22 +101,7 @@ public:
   }
 
   // Adds an element to the map as a node pair
-  void addElement(Node *elem) {
-    Node **nodeArr = new Node *[len_ + 1];
-    if (elems_ == NULL) {
-      nodeArr[len_] = elem;
-    } else {
-      for (size_t i = 0; i < len_; i++) {
-        nodeArr[i] = elems_[i];
-      }
-      nodeArr[len_] = elem;
-    }
-    len_++;
-    elems_ = nodeArr;
-  }
-
-  /** put the key and value into the elems_*/
-  void put(Object *key, Object *value) {
+  void addElement(Object *key, Object *value) {
     if (len_ == capacity_) {
       expand();
     }
@@ -138,10 +123,7 @@ public:
   }
 
   // Gets the value of the key
-  void getValue(Object *key);
-
-  /** Gets the value of the key*/
-  Object *get(Object *key) {
+  Object* getValue(Object *key) {
     size_t index = hash_index(key);
     for (size_t i = index, count = 0; index_check(i, index, count);
          i = index_grow(i), count++) {
@@ -156,10 +138,7 @@ public:
   }
 
   // Gets the length of the map
-  void getLength() {}
-
-  /** get the length of the map*/
-  size_t size() { return len_; }
+  size_t getLength() { return len_; }
 
   // Checks is the key is in the map
   bool isKeyIn(Object *e) {
