@@ -1,34 +1,45 @@
 Implementation explanation:
 
 In our implementation of array, we created four classes to support int, float, 
-bool, and String data type. For Map, we designed one extra class which pair 
-each key and value together in the map. For Queue, we have one class that 
-supports both String and Object. All the methods have been implemented as 
-required from the management team.
+bool, and String data types. Some functions such as add, remove, clear are 
+similar with what we designed for StringList. 
+
+For Map, we designed one extra class which pairs each key and value together 
+in the map. Map is basically a list of key-value pairs. All essential methods 
+such as put, get, isKeyIn have been implemented by us and all tests can be passed.
+
+For Queue, we are able to support both String and Object because all functions 
+take in Object and String is a child of object. The essential methods such as 
+enqueue, dequeue, peek have been implemented and examined by both spec tests 
+and our own tests
 
 
 
 The critique of design and test:
 
 	a) Array:
-		Documentations of each method and test contained duplicated information 
+		1)Documentations of each method and test contained duplicated information 
 		from method signatures. 
-		The management team is very irresponsive. We, developer, have not heard
+		2)The management team is very unresponsive. We, developer, have not heard
 		any response from them via either Github or email for a week after we 
-		post issue. 
-		The tests given to us do not help at all. They have syntax issue and 
-		whole design issue. We have to write whole tests by ourselves.
+		post issue. Possibly we won't hear any from them even though we have 
+		submitted the assignment. So we have decided to change the design and 
+		test to meet those required functionalities.
+		3)The tests given to us do not help at all. They have syntax issue everywhere. 
+		Thus, we have to write whole tests by ourselves. We have edited the test with
+		our own test cases in our Makefile.
 
 	b) Map:
-		Documentations are mostly in one line, which we as developers have to 
+		1)Documentations are mostly in one line, which we as developers have to 
 		guess what the management wants.
-		The management team will reponse an issue within a day. The communication
-		between us has been be going well.
-		Test quality has been improved by them after our request. The newest 
+		2)The management team could response an issue within a day. The communication
+		between us has been going well.
+		3)Test quality has been improved by them after our request. The newest 
 		version has been pretty comprehensive.
 
 	c) Queue:
-		Documentation is understandable in terms of methods' functionality.
-		We can get their resposne in 1 or 2 days in average. 
-		The amount of test is not sufficient. After we request more tests from 
-		them, we have not heard any update.
+		1)Documentation is understandable in terms of methods' functionality.
+		2)We can get their response in 1 or 2 days on average. 
+		3)The amount of test is not sufficient. After we request more tests from 
+		them, we have not heard any updates. They only have one test and our code 
+		has passed that. Additionally, we also include our own test in Makefile. 
