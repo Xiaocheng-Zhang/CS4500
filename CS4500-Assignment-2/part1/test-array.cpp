@@ -51,8 +51,8 @@ void test_array1() {
     array1->append(o1);
     t_true(array1->size() == 1);
     t_true(array1->contains(o1));
-    array1->remove(o1);
-    //t_false(array1->contains(o1));
+    array1->remove(0);
+    t_false(array1->contains(o1));
 }
 
 void test_array2() {

@@ -12,6 +12,7 @@ public:
   size_t size_;
   size_t capacity_;
   size_t hash_code;
+  void* list;
 
   Array() {
 	  size_ = 0;
