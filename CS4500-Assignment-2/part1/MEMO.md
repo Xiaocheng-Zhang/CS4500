@@ -9,6 +9,7 @@ required from the management team.
 
 
 The critique of design and test:
+
 	a) Array:
 		Documentations of each method and test contained duplicated information 
 		from method signatures. 
