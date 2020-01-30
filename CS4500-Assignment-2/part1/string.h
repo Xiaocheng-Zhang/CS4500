@@ -109,14 +109,6 @@ public:
   }
 
   /**
-   * Returns a list of Strings split at the given separator.
-   */
-  String **split(char *separator) { return nullptr; }
-
-  /**
-   * Checks if this String contains the given String.
-   */
-  /**
    * Checks if this String contains the given String.
    */
   bool contains(String *sub) { 

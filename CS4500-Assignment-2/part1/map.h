@@ -10,6 +10,7 @@ public:
   size_t capacity_;
   // Array of Node pointers in the map
   Node **elems_;
+  size_t hash_code;
 
   // Constructor
   Map() {
@@ -18,6 +19,7 @@ public:
     len_ = 0;
     elems_ = new Node *[capacity_];
     initialize(elems_);
+    hash_code = 0;
   }
 
   ~Map() { delete[] elems_; }
@@ -123,7 +125,7 @@ public:
   }
 
   // Gets the value of the key
-  Object* getValue(Object *key) {
+  Object *getValue(Object *key) {
     size_t index = hash_index(key);
     for (size_t i = index, count = 0; index_check(i, index, count);
          i = index_grow(i), count++) {
@@ -176,7 +178,19 @@ public:
       }
       return true;
     }
-
     return false;
+  }
+
+  void hash_me() {
+    hash_code = 0;
+    for (size_t i = 0; i < capacity_; i++) {
+      hash_code +=
+          elems_[i]->key_->hash() * 57 + elems_[i]->value_->hash() * 13;
+    }
+  }
+
+  size_t hash() {
+    hash_me();
+    return hash_code;
   }
 };

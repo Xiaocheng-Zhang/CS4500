@@ -1,73 +1,36 @@
 #pragma once
 #include "object.h"
-#include <stdlib.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 /**
  * @brief Represents an array-structured list
- * 
+ *
  */
 class Array {
 public:
+  size_t size_;
+  size_t capacity_;
+  size_t hash_code;
 
-	/**
-	 * @brief pushes the given object onto array
-	 * 
-	 * @param o the given object to be added
-	 */
-	void append(Object o);
+  Array() {
+	  size_ = 0;
+	  capacity_ = 4;
+	  hash_code = 0;
+  }
 
-	/**
-	 * @brief removes all elements from array
-	 * 
-	 */
-	void clear();
+  virtual void clear() {
+	  size_ = 0;
+  }
 
-	/**
-	 * @brief checks if the given object is in array
-	 * 
-	 * @param o object to be checked
-	 * @return true if object in array
-	 * @return false if object not in array
-	 */
-	bool contains(Object o);
+  virtual size_t size() { return size_; }
 
-	/**
-	 * @brief duplicates array with all elements
-	 * 
-	 * @return Array cloned array
-	 */
-	Array copy();
+  virtual size_t hash() {
+    if (hash_code == 0) {
+      hash_me();
+    }
+    return hash_code;
+  } // Returns the hash code value for this list.
 
-	/**
-	 * @brief retrieves the object at given position
-	 * 
-	 * @param idx index position
-	 * @return Object object located at given index inside array
-	 */
-	Object get(size_t idx);
-
-	/**
-	 * @brief adds the given object to array at given position
-	 * 
-	 * @param o given object
-	 * @param idx index position
-	 */
-	void insert(Object o, size_t idx);
-
-	/**
-	 * @brief deletes the given object from array
-	 * 
-	 * @param o object to be deleted
-	 * @return Object removed object, now unlinked from array
-	 */
-	Object remove(Object o);
-
-	/**
-	 * @brief computes the length of array
-	 * 
-	 * @return size_t number of elements in array
-	 */
-	size_t size();
-
+  virtual void hash_me() { hash_code = (size_t)this; }
 };

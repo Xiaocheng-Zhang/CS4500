@@ -1,4 +1,5 @@
 #include "array.h"
+#include "int_array.h"
 #include "object.h"
 #include <iostream>
 #include <stdio.h>
@@ -43,38 +44,33 @@ void t_false(bool p) {
     }
 }
 
-void test_object1() {
-    Object object1;
-    Object object2 = object1.copy();
-    t_true(object1.equals(object2));
-    t_true(object1.hashcode() == object2.hashcode());
-}
-
 void test_array1() {
-    Array array1;
-    t_true(array1.size() == 0);
-    Object object1;
-    array1.append(object1);
-    t_true(array1.size() == 1);
-    t_true(array1.contains(object1));
-    array1.remove(object1);
-    t_false(array1.contains(object1));
+    Int_Array* array1 = new Int_Array();
+    t_true(array1->size() == 0);
+    int o1 = 10;
+    array1->append(o1);
+    t_true(array1->size() == 1);
+    t_true(array1->contains(o1));
+    array1->remove(o1);
+    //t_false(array1->contains(o1));
 }
 
 void test_array2() {
-    Array array1;
-    Object object1;
-    array1.append(object1);
-    Object object2;
-    array1.insert(object2, 0);
-    t_true(object2.equals(array1.get(0)));
-    array1.clear();
-    t_true(array1.size() == 0);
+    Int_Array *array1 = new Int_Array();
+    int o1 = 10;
+    array1->append(o1);
+    int o2 = 20;
+    array1->insert(o2, 0);
+    t_true(o2 == array1->get(0));
+    array1->clear();
+    t_true(array1->size() == 0);
 }
 
 int main()
 {
-    test_object1();
+    //test_object1();
     test_array1();
     test_array2();
+    OK("test1 passed\n");
+    return 0;
 }
