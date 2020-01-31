@@ -73,7 +73,7 @@ void none_spec_test1() {
   int i = 10;
   Int_Array *int_array = new Int_Array();
   int_array->append(i);
-  t_true(array->get(0) == 10);
+  t_true(int_array->get(0) == 10);
   OK("none_spec_test1");
 }
 
