@@ -36,26 +36,70 @@ void test1() {
 
 // tests queues
 void test2() {
-  Queue *a = new Queue();
-  Queue *b = new Queue();
-  Object *s = new String("Hello");
-  Object *t = new String("World");
-  Object *s1 = new String("Hello");
-  Object *s2 = new String("He");
+  Queue * a = new Queue();
+  Queue * b = new Queue();
+  Queue * c = new Queue();
+  Object * s = new String("Hello");
+  Object * t = new String("World");
+  Object * s1 = new String("Hello");
+  Object * s2 = new String("He");
   a->enqueue(s);
   a->enqueue(t);
   a->enqueue(s1);
   b->enqueue(s1);
   b->enqueue(s2);
   b->enqueue(s2);
+  c->enqueue(t);
+  c->enqueue(s1);
+  /*
+    a - "Hello", "World", "Hello"
+    b - "Hello", "He", "He"
+    c - "World", "Hello"
+  */
 
   t_true((a->peek())->equals(b->peek()));
+  t_false(a->equals(c));
+
   t_true((a->dequeue())->equals(b->dequeue()));
+  t_true(a->equals(c));
+  t_false(b->equals(c));
+  /*
+    a - "World", "Hello"
+    b - "He", "He"
+    c - "World", "Hello"
+  */
+
   t_false((a->dequeue())->equals(b->dequeue()));
   t_false((a->peek())->equals(b->peek()));
+  t_false(a->equals(c));
+  t_false(a->equals(b));
   t_true((a->size()) == b->size());
+  t_false((a->size()) == (c->size()));
+  /*
+    a - "Hello"
+    b - "He"
+    c - "World", "Hello"
+  */
+
   b->dequeue();
   t_false((a->size()) == b->size());
+  /*
+    a - "Hello"
+    b - 
+    c - "World", "Hello"
+  */
+
+  a->dequeue();
+  c->dequeue();
+  c->dequeue();
+  /*
+    a - 
+    b - 
+    c - 
+  */
+
+  t_true(a->equals(c));
+  t_true(b->equals(c));
   OK("test2 passed");
 }
 
