@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdlib.h>
 
+// Helper function to print out testing messages
 void FAIL() { exit(1); }
 void OK(const char *m) { std::cout << m << "\n"; }
 void t_true(bool p) {
@@ -14,7 +15,7 @@ void t_false(bool p) {
     FAIL();
 }
 
-// tests strings
+// tests constructors and methods of String Class
 void test1() {
   String *s = new String("Hello");
   String *t = new String("World");
@@ -34,7 +35,9 @@ void test1() {
   OK("test1 passed");
 }
 
-// tests queues
+// tests constructors and methods of Queue Class
+// Multiple obejcts, strings have been added into queue. 
+// Basic fucntionality such as enqueue, dequeue, peek and equals are ensured.
 void test2() {
   Queue * a = new Queue();
   Queue * b = new Queue();
@@ -103,6 +106,16 @@ void test2() {
   OK("test2 passed");
 }
 
+
+// --------------------------------------------------------------
+// The tests above this line is provided by management team.
+// All the tests below is created by implementers.
+// --------------------------------------------------------------
+
+
+// Multiple obejcts, strings have been added into queue. 
+// "D" "E" has been added in order, into two queues.
+// Two queues are equal.
 void none_spec_test1() {
   Queue *a = new Queue();
   Queue *b = new Queue();
@@ -122,6 +135,9 @@ void none_spec_test1() {
   OK("none_spec_test1 passed");
 }
 
+// "D" "E" has been added in order, into one queue.
+// "E" "D" has been added in order, into another.
+// Two queues are NOT equal.
 void none_spec_test2() {
   Queue *a = new Queue();
   Queue *b = new Queue();
@@ -141,9 +157,16 @@ void none_spec_test2() {
   OK("none_spec_test2 passed");
 }
 
+// Main fucntion
 int main() {
   test1();
   test2();
+
+  // --------------------------------------------------------------
+  // The tests above this line is provided by management team.
+  // All the tests below is created by implementers.
+  // --------------------------------------------------------------
+
   none_spec_test1();
   none_spec_test2();
   /** puts method help to check tests passed (made by implementor team)*/
