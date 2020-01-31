@@ -4,12 +4,20 @@
 - In our implementation of array, we created four types of array to support 
 int, float, bool, and String data types. 
 - Some functions such as add, remove, clear are similar with what we designed for StringList. 
-	* Array:
-		1. expand(): void
-		2. append(Object *object): void 
-		3. 
-	
-
+	Array:
+	1. expand(): void
+	2. append(size_t integer, Object *object: void 
+	3. clear(): void
+	4. contains(Object *object): bool
+	5. equals(Array *array): bool
+	6. get(size_t index): Object
+	7. hash(): size_t
+	8. hash_me(): void
+	9. remove(size_t integer): Object
+	10. size(): size_t
+	Int_Array, Bool_Array, Float_Array:
+	* The same methods' name, light difference in input type and return type. 
+	* Functions are same.
 
 ## Map implementation:
 - For Map, we designed one extra class which pairs each key and value together in the map.

@@ -133,11 +133,11 @@ public:
    * 
    * @return return whether two array are equal.
   */
-  bool equals(Array *object) {
-    if (size_ != object->size()) {
+  bool equals(Array *array) {
+    if (size_ != array->size()) {
       return false;
     }
-    if (hash() == object->hash()) {
+    if (hash() == array->hash()) {
       return true;
     }
     return false;
