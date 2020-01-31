@@ -5,6 +5,9 @@
 int, float, bool, and String data types. 
 - Some functions such as add, remove, clear are similar with what we designed for StringList. 
 	* Array:
+		1. expand(): void
+		2. append(Object *object): void 
+		3. 
 	
 
 

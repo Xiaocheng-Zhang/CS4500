@@ -39,8 +39,8 @@ public:
   ~Array() { delete[] list; }
 
   virtual void initialize(size_t from) {
-    for (size_t i = from; i < capacity_; i++) {
-      list[i] = nullptr;
+    for (size_t integer = from; integer < capacity_; integer++) {
+      list[integer] = nullptr;
     }
   }
 
@@ -59,43 +59,43 @@ public:
   }
 
   /** Append the object to the rest of array.
-   * @param e e is the object that needed to be put.
+   * @param object object is the object that needed to be put.
    */
-  void append(Object *e) {
+  void append(Object *object) {
     if (size_ == capacity_) {
       expand();
     }
-    list[size_] = e;
+    list[size_] = object;
     size_++;
-  } // Appends e to end
+  } // Appends object to end
 
   /**
-   *  Add the object at index i. Won't repace the element.
-   * @param i i is the destination user want to add.
-   * @param e e is the object that will be added.
+   *  Add the object at index integer. Won't repace the element.
+   * @param integer integer is the destination user want to add.
+   * @param object object is the object that will be added.
    */
-  void add(size_t i, Object *e) {
+  void add(size_t integer, Object *object) {
     // will there be a space??
-    assert(i <= size_);
+    assert(integer <= size_);
     if (size_ == capacity_) {
       expand();
     }
-    if (!list[i]) {
-      list[i] = e;
+    if (!list[integer]) {
+      list[integer] = object;
       return;
     }
     Object **temp = new Object *[capacity_];
-    for (size_t j = 0; j < i; j++) {
+    for (size_t j = 0; j < integer; j++) {
       temp[j] = list[j];
     }
-    temp[i] = e;
-    for (size_t j = i; j < size_; j++) {
+    temp[integer] = object;
+    for (size_t j = integer; j < size_; j++) {
       temp[j + 1] = list[j];
     }
     size_++;
     delete[] list;
     list = temp;
-  } // Inserts e at i
+  } // Inserts object at integer
 
   /**
    * clear the whole array elements.
@@ -109,12 +109,12 @@ public:
 
   /**
    * check whether this array contains the input object.
-   * @param o o is the object needed to be checked.
+   * @param object object is the object needed to be checked.
    * 
    * @return return true if it contains.
   */
-  bool contains(Object *o) {
-    Object *s = dynamic_cast<Object *>(o);
+  bool contains(Object *object) {
+    Object *s = dynamic_cast<Object *>(object);
     if (!s) {
       return false;
     }
@@ -129,19 +129,19 @@ public:
   /**
    * check two array equal or not.
    * use hashcode to check whether it is same or not.
-   * @param o o is the array needed to be checked.
+   * @param object object is the array needed to be checked.
    * 
    * @return return whether two array are equal.
   */
-  bool equals(Array *o) {
-    if (size_ != o->size()) {
+  bool equals(Array *object) {
+    if (size_ != object->size()) {
       return false;
     }
-    if (hash() == o->hash()) {
+    if (hash() == object->hash()) {
       return true;
     }
     return false;
-  } // Compares o with this list for equality.
+  } // Compares object with this list for equality.
 
   Object *get(size_t index) {
     assert(index < size_ && index >= 0);
@@ -159,20 +159,20 @@ public:
     hash_code = 0;
     for (size_t i = 0; i < size_; i++) {
       hash_code += list[i]->hash();
-      // list[i]->print_hash();
+      // list[integer]->print_hash();
     }
   }
 
-  Object *remove(size_t i) {
-    assert(i < size_ && i >= 0);
+  Object *remove(size_t integer) {
+    assert(integer < size_ && integer >= 0);
     Object **temp = new Object *[capacity_];
     Object *cur;
-    cur = temp[i];
-    for (size_t j = 0; j < i; j++) {
+    cur = temp[integer];
+    for (size_t j = 0; j < integer; j++) {
       // puts(list[j]->getValue());
       temp[j] = list[j];
     }
-    for (size_t j = i + 1; j < size_; j++) {
+    for (size_t j = integer + 1; j < size_; j++) {
       // puts(list[j]->getValue());
       temp[j - 1] = list[j];
     }
@@ -180,7 +180,7 @@ public:
     list = temp;
     size_--;
     return cur;
-  } // Removes the element at i
+  } // Removes the element at integer
 
   size_t size() { return size_; }
 };
@@ -218,13 +218,13 @@ public:
   /**
    * @brief pushes the given object onto array
    *
-   * @param o the given object to be added
+   * @param object the given object to be added
    */
-  void append(int i) {
+  void append(int integer) {
     if (size_ == capacity_) {
       expand();
     }
-    list[size_] = i;
+    list[size_] = integer;
     size_++;
   }
 
@@ -239,15 +239,15 @@ public:
   }
 
   /**
-   * @brief checks if the given object is in array
+   * @brief checks if the given int is in array
    *
-   * @param o object to be checked
+   * @param integer integer to be checked
    * @return true if object in array
    * @return false if object not in array
    */
-  bool contains(int i) {
+  bool contains(int integer) {
     for (size_t m = 0; m < size_; m++) {
-      if (list[m] == i) {
+      if (list[m] == integer) {
         return true;
       }
     }
@@ -268,23 +268,23 @@ public:
   /**
    * @brief adds the given object to array at given position
    *
-   * @param o given object
+   * @param object given object
    * @param idx index position
    */
-  void insert(int i, size_t idx) {
+  void insert(int integer, size_t idx) {
     assert(idx >= 0 && idx <= size_);
     if (size_ == capacity_) {
       expand();
     }
     if (!list[idx]) {
-      list[idx] = i;
+      list[idx] = integer;
       return;
     }
     int *temp = new int[capacity_];
     for (size_t j = 0; j < idx; j++) {
       temp[j] = list[j];
     }
-    temp[idx] = i;
+    temp[idx] = integer;
     for (size_t j = idx; j < size_; j++) {
       temp[j + 1] = list[j];
     }
@@ -296,18 +296,18 @@ public:
   /**
    * @brief deletes the given object from array
    *
-   * @param o object to be deleted
+   * @param object object to be deleted
    * @return Object removed object, now unlinked from array
    */
-  int remove(size_t i) {
-    assert(i < size_ && i >= 0);
+  int remove(size_t integer) {
+    assert(integer < size_ && integer >= 0);
     int *temp = new int[capacity_];
     int cur;
-    cur = temp[i];
-    for (size_t j = 0; j < i; j++) {
+    cur = temp[integer];
+    for (size_t j = 0; j < integer; j++) {
       temp[j] = list[j];
     }
-    for (size_t j = i + 1; j < size_; j++) {
+    for (size_t j = integer + 1; j < size_; j++) {
       temp[j - 1] = list[j];
     }
     delete[] list;
@@ -366,13 +366,13 @@ public:
   /**
    * @brief pushes the given object onto array
    *
-   * @param o the given object to be added
+   * @param object the given object to be added
    */
-  void append(bool i) {
+  void append(bool integer) {
     if (size_ == capacity_) {
       expand();
     }
-    list[size_] = i;
+    list[size_] = integer;
     size_++;
   }
 
@@ -389,13 +389,13 @@ public:
   /**
    * @brief checks if the given object is in array
    *
-   * @param o object to be checked
+   * @param object object to be checked
    * @return true if object in array
    * @return false if object not in array
    */
-  bool contains(bool i) {
+  bool contains(bool integer) {
     for (size_t m = 0; m < size_; m++) {
-      if (list[m] == i) {
+      if (list[m] == integer) {
         return true;
       }
     }
@@ -416,23 +416,23 @@ public:
   /**
    * @brief adds the given object to array at given position
    *
-   * @param o given object
+   * @param object given object
    * @param idx index position
    */
-  void insert(bool i, size_t idx) {
+  void insert(bool integer, size_t idx) {
     assert(idx >= 0 && idx <= size_);
     if (size_ == capacity_) {
       expand();
     }
     if (!list[idx]) {
-      list[idx] = i;
+      list[idx] = integer;
       return;
     }
     bool *temp = new bool[capacity_];
     for (size_t j = 0; j < idx; j++) {
       temp[j] = list[j];
     }
-    temp[idx] = i;
+    temp[idx] = integer;
     for (size_t j = idx; j < size_; j++) {
       temp[j + 1] = list[j];
     }
@@ -444,19 +444,19 @@ public:
   /**
    * @brief deletes the given object from array
    *
-   * @param o object to be deleted
+   * @param object object to be deleted
    * @return Object removed object, now unlinked from array
    */
-  bool remove(size_t i) {
-    assert(i < size_ && i >= 0);
+  bool remove(size_t integer) {
+    assert(integer < size_ && integer >= 0);
     bool *temp = new bool[capacity_];
     bool cur;
-    cur = temp[i];
-    for (size_t j = 0; j < i; j++) {
+    cur = temp[integer];
+    for (size_t j = 0; j < integer; j++) {
       // puts(list[j]->getValue());
       temp[j] = list[j];
     }
-    for (size_t j = i + 1; j < size_; j++) {
+    for (size_t j = integer + 1; j < size_; j++) {
       // puts(list[j]->getValue());
       temp[j - 1] = list[j];
     }
@@ -516,13 +516,13 @@ public:
   /**
    * @brief pushes the given object onto array
    *
-   * @param o the given object to be added
+   * @param object the given object to be added
    */
-  void append(float i) {
+  void append(float integer) {
     if (size_ == capacity_) {
       expand();
     }
-    list[size_] = i;
+    list[size_] = integer;
     size_++;
   }
 
@@ -539,13 +539,13 @@ public:
   /**
    * @brief checks if the given object is in array
    *
-   * @param o object to be checked
+   * @param object object to be checked
    * @return true if object in array
    * @return false if object not in array
    */
-  bool contains(float i) {
+  bool contains(float integer) {
     for (size_t m = 0; m < size_; m++) {
-      if (list[m] == i) {
+      if (list[m] == integer) {
         return true;
       }
     }
@@ -566,23 +566,23 @@ public:
   /**
    * @brief adds the given object to array at given position
    *
-   * @param o given object
+   * @param object given object
    * @param idx index position
    */
-  void insert(float i, size_t idx) {
+  void insert(float integer, size_t idx) {
     assert(idx >= 0 && idx <= size_);
     if (size_ == capacity_) {
       expand();
     }
     if (!list[idx]) {
-      list[idx] = i;
+      list[idx] = integer;
       return;
     }
     float *temp = new float[capacity_];
     for (size_t j = 0; j < idx; j++) {
       temp[j] = list[j];
     }
-    temp[idx] = i;
+    temp[idx] = integer;
     for (size_t j = idx; j < size_; j++) {
       temp[j + 1] = list[j];
     }
@@ -594,19 +594,19 @@ public:
   /**
    * @brief deletes the given object from array
    *
-   * @param o object to be deleted
+   * @param object object to be deleted
    * @return Object removed object, now unlinked from array
    */
-  float remove(size_t i) {
-    assert(i < size_ && i >= 0);
+  float remove(size_t integer) {
+    assert(integer < size_ && integer >= 0);
     float *temp = new float[capacity_];
     float cur;
-    cur = temp[i];
-    for (size_t j = 0; j < i; j++) {
+    cur = temp[integer];
+    for (size_t j = 0; j < integer; j++) {
       // puts(list[j]->getValue());
       temp[j] = list[j];
     }
-    for (size_t j = i + 1; j < size_; j++) {
+    for (size_t j = integer + 1; j < size_; j++) {
       // puts(list[j]->getValue());
       temp[j - 1] = list[j];
     }
