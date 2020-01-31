@@ -1,19 +1,22 @@
-Implementation explanation:
+# Implementation explanation:
 
-In our implementation of array, we created four classes to support int, float, 
-bool, and String data types. Some functions such as add, remove, clear are 
-similar with what we designed for StringList. 
+## Array implementation:
+- In our implementation of array, we created four types of array to support 
+- int, float, bool, and String data types. Some functions such as add, remove, 
+- clear are similar with what we designed for StringList. 
+	* Array:
+	
 
-For Map, we designed one extra class which pairs each key and value together 
-in the map. Map is basically a list of key-value pairs. All essential methods 
-such as put, get, isKeyIn have been implemented by us and all tests can be passed.
 
-For Queue, we are able to support both String and Object because all functions 
-take in Object and String is a child of object. The essential methods such as 
-enqueue, dequeue, peek have been implemented and examined by both spec tests 
-and our own tests
+## Map implementation:
+- For Map, we designed one extra class which pairs each key and value together in the map.
+- Map is basically a list of key-value pairs. All essential methods such as put, get, isKeyIn have been implemented by us and all tests can be passed.
 
-The critique of design and test:
+## Queue implementation:
+- For Queue, we are able to support both String and Object because all functions take in Object and String is a child of object. 
+- The essential methods such as enqueue, dequeue, peek have been implemented and examined by both spec tests and our own tests
+
+# The critique of design and test:
 
 	a) Array:
 		1)Documentations of each method and test contained duplicated information 
