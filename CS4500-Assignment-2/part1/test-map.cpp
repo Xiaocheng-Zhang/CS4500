@@ -6,6 +6,7 @@
 #include "object.h"
 #include "string.h"
 
+// Helper function to print out testing messages
 void FAIL() { exit(1); }
 void OK(const char *m) { printf("Passed: %s\n", m); }
 void t_true(bool p) {
@@ -16,8 +17,11 @@ void t_false(bool p) {
   if (p)
     FAIL();
 }
+
+// Helper fucntion to cast object to String type
 String *cast_string(Object *object) { return dynamic_cast<String *>(object); }
 
+// Some predefined instances, includes String, Object, Map and Node.
 String *s1 = new String("A");
 String *s2 = new String("B");
 String *s3 = new String("C");
@@ -65,6 +69,7 @@ void testAddElem() {
   t_true(m1->isKeyIn(s3) == 1);
 }
 
+// Tests to check removeElement functionality
 void testRemoveElem() {
   Map *m1 = new Map();
   m1->addElement(s1, o1);
@@ -78,6 +83,7 @@ void testRemoveElem() {
   t_true(m1->isKeyIn(s3) == 1);
 }
 
+// Tests to check getValue functionality
 void testGetValue() {
   Map *m1 = new Map();
   m1->addElement(s1, o1);
@@ -88,7 +94,14 @@ void testGetValue() {
   t_true(m1->getValue(s3) == o3);
 }
 
-/** everything in this block is created by implementor team*/
+
+// --------------------------------------------------------------
+// The tests above this line is provided by management team.
+// All the tests below is created by implementers.
+// --------------------------------------------------------------
+
+
+// To test Map's basic functionality of put, getKeyArray and getLength.
 void none_spec_test1() {
   String *a = new String("key_1");
   String *av = new String("val_1");
@@ -104,6 +117,9 @@ void none_spec_test1() {
   OK("none_spec_test1");
 }
 
+
+// Adding Strings into Map multiple times to check if the addElement is working well.
+// Also ensured isKeyIn functionality.
 void none_spec_test2() {
   String *a = new String("key_1");
   String *b = new String("key_2");
@@ -128,6 +144,10 @@ void none_spec_test2() {
   OK("none_spec_test2");
 }
 
+// More advanced test for Hashmap.
+// It involves addElement and equals functions.
+// Two Hashmap should be equivelent if they contains the same pairs of key and value.
+// no matter what sequence those pairs are added.
 void advance_none_spec_test() {
   String *a = new String("key_1");
   String *b = new String("key_2");
@@ -151,8 +171,8 @@ void advance_none_spec_test() {
   t_true(test_map->equals(test_map2));
   OK("advance_none_spec_test");
 }
-/** everything in this block is created by implementor team*/
 
+// Main function
 int main(){
   test1();
   test2();
@@ -160,7 +180,12 @@ int main(){
   testRemoveElem();
   testGetValue();
 
-  /** tests below are created by implementor team*/
+  // --------------------------------------------------------------
+  // The tests above this line is provided by management team.
+  // All the tests below is created by implementers.
+  // --------------------------------------------------------------
+
+
   none_spec_test1();
   none_spec_test2();
   advance_none_spec_test();
