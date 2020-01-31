@@ -31,7 +31,7 @@ void test1() {
   t_true(s->equals(s1));
   t_true(s->contains(s2));
 
-  OK("1");
+  OK("test1 passed");
 }
 
 // tests queues
@@ -56,12 +56,53 @@ void test2() {
   t_true((a->size()) == b->size());
   b->dequeue();
   t_false((a->size()) == b->size());
+  OK("test2 passed");
+}
+
+void none_spec_test1() {
+  Queue *a = new Queue();
+  Queue *b = new Queue();
+  Object *s = new String("ABC");
+  Object *t = new String("ABC");
+  a->enqueue(s);
+  b->enqueue(s);
+  t_true(a->equals(b));
+
+  Object *d = new String("D");
+  Object *e = new String("E");
+  a->enqueue(d);
+  a->enqueue(e);
+  b->enqueue(d);
+  b->enqueue(e);
+  t_true(a->equals(b));
+  OK("none_spec_test1 passed");
+}
+
+void none_spec_test2() {
+  Queue *a = new Queue();
+  Queue *b = new Queue();
+  Object *s = new String("ABC");
+  Object *t = new String("ABC");
+  a->enqueue(s);
+  b->enqueue(s);
+  t_true(a->equals(b));
+
+  Object *d = new String("D");
+  Object *e = new String("E");
+  a->enqueue(d);
+  a->enqueue(e);
+  b->enqueue(e);
+  b->enqueue(d);
+  t_false(a->equals(b));
+  OK("none_spec_test2 passed");
 }
 
 int main() {
   test1();
   test2();
+  none_spec_test1();
+  none_spec_test2();
   /** puts method help to check tests passed (made by implementor team)*/
-  puts("All tests in test-queue.cpp passed!");
+  //puts("All tests in test-queue.cpp passed!");
   return 0;
 }
