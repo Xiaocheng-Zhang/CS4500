@@ -4,6 +4,7 @@
 - In our implementation of array, we created four types of array to support 
 int, float, bool, and String data types. 
 - Some functions such as add, remove, clear are similar with what we designed for StringList. 
+```
 	Array:
 	1. expand(): void //An Array constructor with initialized size, capacity, hashcode and Object list.
 	2. append(size_t integer, Object *object: void //Append the object to the rest of array.
@@ -19,11 +20,13 @@ int, float, bool, and String data types.
 	Int_Array, Bool_Array, Float_Array:
 	* The same methods' name, light difference in input type and return type. 
 	* Functions are same.
+```
 
 ## Map implementation:
 - For Map, we designed one extra class which pairs each key and value together in the map.
 - Map is basically a list of key-value pairs.
 - All essential methods such as put, get, isKeyIn have been implemented by us and all tests can be passed.
+```
 	1. initialize(Node **temp): void //initialize the map
 	2. hash_index(Object *key): size_t //hash the index of keys
 	3. index_grow(size_t i): size_t //helper method to increase the index i in hash_put method
@@ -40,11 +43,12 @@ int, float, bool, and String data types.
 	14. equals(Map *map): bool //check whether two maps are equal
 	15. hash(): size_t //Return the hashcode
 	16. hash_me(): void //hash helper
-
+```
 
 ## Queue implementation:
 - For Queue, we are able to support both String and Object because all functions take in Object and String is a child of object. 
 - The essential methods such as enqueue, dequeue, peek have been implemented and examined by both spec tests and our own tests
+```
 	1. enlargeSize(): void //enlarge the size of the queue.
 	2. fillWithNullPtr(int start): void //fill the object list with nullptr.
 	3. enqueue(Object *o): void //adds an object to the end of this queue.
@@ -53,7 +57,7 @@ int, float, bool, and String data types.
 	6. size(): size_t //Returns the size of this queue.
 	7. hash(): size_t //hash and return the hashcode.
 	8. equals(Object *other): bool //check the two queue are equal.
-
+```
 
 # The critique of design and test:
 * Array:
@@ -68,8 +72,7 @@ int, float, bool, and String data types.
 	Thus, we have to write whole tests by ourselves. We have edited the test with
 	our own test cases in our Makefile.
 
-	** UPDATE: 12 hours before deadline we heard their first reponse, which was 
-	just an update on object.h and string.h. **
+	**UPDATE: 12 hours before deadline we heard their first reponse, which wasjust an update on object.h and string.h.**
 
 * Map:
 	1. Documentations are mostly in one line, which we as developers have to 
