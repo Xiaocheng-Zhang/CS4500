@@ -8,6 +8,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+/**
+ * A default Object Array support user to read and write elements.
+ * It allows Object type inputs. A String class is an Object, whcih
+ * can be handle in this Array.
+ */
 class Array {
 public:
   Object **list;
@@ -15,6 +20,10 @@ public:
   size_t capacity_;
   size_t hash_code;
 
+  /**
+   * An Array constructor with initialized size, capacity, hashcode and
+   * Object list.
+   */
   Array() {
     size_ = 0;
     capacity_ = 4;
@@ -24,6 +33,9 @@ public:
     hash();
   }
 
+  /**
+   * Deconstructor that free the memory automatically.
+   */
   ~Array() { delete[] list; }
 
   virtual void initialize(size_t from) {
@@ -32,6 +44,9 @@ public:
     }
   }
 
+  /**
+   * Expand the Object list if it is full.
+   */
   void expand() {
     capacity_ *= 2;
     Object **temp = new Object *[capacity_];
@@ -43,6 +58,9 @@ public:
     initialize(size_);
   }
 
+  /** Append the object to the rest of array.
+   * @param e e is the object that needed to be put.
+   */
   void append(Object *e) {
     if (size_ == capacity_) {
       expand();
@@ -51,6 +69,11 @@ public:
     size_++;
   } // Appends e to end
 
+  /**
+   *  Add the object at index i. Won't repace the element.
+   * @param i i is the destination user want to add.
+   * @param e e is the object that will be added.
+   */
   void add(size_t i, Object *e) {
     // will there be a space??
     assert(i <= size_);
@@ -74,13 +97,22 @@ public:
     list = temp;
   } // Inserts e at i
 
+  /**
+   * clear the whole array elements.
+  */
   void clear() {
-    delete [] list;
+    delete[] list;
     list = new Object *[capacity_];
     initialize(0);
     size_ = 0;
-  } // Removes all of elements from this list
+  }
 
+  /**
+   * check whether this array contains the input object.
+   * @param o o is the object needed to be checked.
+   * 
+   * @return return true if it contains.
+  */
   bool contains(Object *o) {
     Object *s = dynamic_cast<Object *>(o);
     if (!s) {
@@ -94,21 +126,21 @@ public:
     return false;
   }
 
-  bool equals(Object *o) {
-    if (o->hash() == hash_code) {
-      // return true;
-    }
-    Array *l = dynamic_cast<Array *>(o);
-    if (!l) {
+  /**
+   * check two array equal or not.
+   * use hashcode to check whether it is same or not.
+   * @param o o is the array needed to be checked.
+   * 
+   * @return return whether two array are equal.
+  */
+  bool equals(Array *o) {
+    if (size_ != o->size()) {
       return false;
     }
-    if (size_ != l->size()) {
-      return false;
+    if (hash() == o->hash()) {
+      return true;
     }
-	if (hash() == l->hash()) {
-		return true;
-	}
-	return false;
+    return false;
   } // Compares o with this list for equality.
 
   Object *get(size_t index) {
@@ -131,7 +163,7 @@ public:
     }
   }
 
-  virtual Object *remove(size_t i) {
+  Object *remove(size_t i) {
     assert(i < size_ && i >= 0);
     Object **temp = new Object *[capacity_];
     Object *cur;
