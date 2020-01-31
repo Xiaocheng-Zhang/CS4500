@@ -72,8 +72,8 @@ public:
       res[i] = other->val_[j];
     }
     res[size_ + other->size()] = '\0';
-    char* temp = strdup(res);
-    delete [] res;
+    char *temp = strdup(res);
+    delete[] res;
     return new String(temp);
   }
 
@@ -103,24 +103,24 @@ public:
       buf[k] = val_[i];
       k++;
     }
-    buf[j + 1] = 0; 
-    delete [] val_;
+    buf[j + 1] = 0;
+    delete[] val_;
     val_ = strdup(buf);
   }
 
   /**
    * Checks if this String contains the given String.
    */
-  bool contains(String *sub) { 
+  bool contains(String *sub) {
     for (size_t i = 0; i < size_ - sub->size_; i++) {
       size_t j;
       for (j = 0; j < sub->size_; j++) {
-        if (val_[i+j] != sub->val_[j]) {
+        if (val_[i + j] != sub->val_[j]) {
           break;
         }
       }
       if (j == sub->size_) {
-          return true;
+        return true;
       }
     }
     return false;

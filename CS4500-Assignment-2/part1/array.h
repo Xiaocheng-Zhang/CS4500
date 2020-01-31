@@ -38,7 +38,7 @@ public:
    */
   ~Array() { delete[] list; }
 
-  virtual void initialize(size_t from) {
+  void initialize(size_t from) {
     for (size_t integer = from; integer < capacity_; integer++) {
       list[integer] = nullptr;
     }
@@ -67,7 +67,7 @@ public:
     }
     list[size_] = object;
     size_++;
-  } // Appends object to end
+  }
 
   /**
    *  Add the object at index integer. Won't repace the element.
@@ -75,7 +75,6 @@ public:
    * @param object object is the object that will be added.
    */
   void add(size_t integer, Object *object) {
-    // will there be a space??
     assert(integer <= size_);
     if (size_ == capacity_) {
       expand();
@@ -95,11 +94,11 @@ public:
     size_++;
     delete[] list;
     list = temp;
-  } // Inserts object at integer
+  }
 
   /**
    * clear the whole array elements.
-  */
+   */
   void clear() {
     delete[] list;
     list = new Object *[capacity_];
@@ -110,9 +109,9 @@ public:
   /**
    * check whether this array contains the input object.
    * @param object object is the object needed to be checked.
-   * 
+   *
    * @return return true if it contains.
-  */
+   */
   bool contains(Object *object) {
     Object *s = dynamic_cast<Object *>(object);
     if (!s) {
@@ -130,9 +129,9 @@ public:
    * check two array equal or not.
    * use hashcode to check whether it is same or not.
    * @param object object is the array needed to be checked.
-   * 
+   *
    * @return return whether two array are equal.
-  */
+   */
   bool equals(Array *array) {
     if (size_ != array->size()) {
       return false;
@@ -141,32 +140,32 @@ public:
       return true;
     }
     return false;
-  } // Compares object with this list for equality.
+  }
 
   /**
    * get the element at given index
    * @param integer index is the position users want to get
-   * 
+   *
    * @return return the object at the given index.
-  */
+   */
   Object *get(size_t index) {
     assert(index < size_ && index >= 0);
     return list[index];
-  } // Returns the element at index
+  }
 
   /**
    * @return the hash code value of this array.
-  */
+   */
   size_t hash() {
     if (hash_code == 0) {
       hash_me();
     }
     return hash_code;
-  } // Returns the hash code value for this list.
+  }
 
   /**
    * @return helper funciton calculate the hash code
-  */
+   */
   void hash_me() {
     hash_code = 0;
     for (size_t i = 0; i < size_; i++) {
@@ -178,9 +177,9 @@ public:
   /**
    * remove the element at given index
    * @param integer index is the position users want to remove
-   * 
+   *
    * @return return the object removed at the given index.
-  */
+   */
   Object *remove(size_t integer) {
     assert(integer < size_ && integer >= 0);
     Object **temp = new Object *[capacity_];
@@ -204,7 +203,7 @@ public:
 };
 
 /**
- * This array is designed only for int type. A user can read and 
+ * This array is designed only for int type. A user can read and
  * write int into this array
  */
 class Int_Array {
@@ -321,9 +320,9 @@ public:
   /**
    * remove the element at given index
    * @param integer index is the position users want to remove
-   * 
+   *
    * @return return the int removed at the given index.
-  */
+   */
   int remove(size_t integer) {
     assert(integer < size_ && integer >= 0);
     int *temp = new int[capacity_];
@@ -340,10 +339,10 @@ public:
     size_--;
     return cur;
   }
-  
+
   /**
    * @return helper funciton calculate the hash code
-  */
+   */
   void hash_me() {
     hash_code = 0;
     for (size_t i = 0; i < size_; i++) {
@@ -353,7 +352,7 @@ public:
 
   /**
    * @return the hash code value of this array.
-  */
+   */
   size_t hash() {
     if (hash_code == 0) {
       hash_me();
@@ -365,7 +364,7 @@ public:
 };
 
 /**
- * This array is designed only for bool type. A user can read and 
+ * This array is designed only for bool type. A user can read and
  * write bool into this array
  */
 class Bool_Array {
@@ -376,7 +375,7 @@ public:
   size_t hash_code;
 
   /**
-   * An Bool Array constructor with initialized size, capacity, hashcode 
+   * An Bool Array constructor with initialized size, capacity, hashcode
    * and bool list.
    */
   Bool_Array() {
@@ -414,7 +413,7 @@ public:
 
   /**
    * clear the whole array elements.
-  */
+   */
   void clear() {
     delete list;
     list = new bool[capacity_];
@@ -424,9 +423,9 @@ public:
   /**
    * check whether this array contains the input bool.
    * @param bool bool is the element needed to be checked.
-   * 
+   *
    * @return return true if it contains.
-  */
+   */
   bool contains(bool b) {
     for (size_t m = 0; m < size_; m++) {
       if (list[m] == b) {
@@ -439,9 +438,9 @@ public:
   /**
    * get the element at given index
    * @param integer index is the position users want to get
-   * 
+   *
    * @return return the bool at the given index.
-  */
+   */
   bool get(size_t idx) {
     assert(idx >= 0 && idx < size_);
     return list[idx];
@@ -478,9 +477,9 @@ public:
   /**
    * remove the element at given index
    * @param integer index is the position users want to remove
-   * 
+   *
    * @return return the bool removed at the given index.
-  */
+   */
   bool remove(size_t integer) {
     assert(integer < size_ && integer >= 0);
     bool *temp = new bool[capacity_];
@@ -502,7 +501,7 @@ public:
 
   /**
    * @return helper funciton calculate the hash code
-  */
+   */
   void hash_me() {
     hash_code = 0;
     for (size_t i = 0; i < size_; i++) {
@@ -512,12 +511,12 @@ public:
 
   /**
    * @return the size of this array.
-  */
+   */
   size_t size() { return size_; }
 
   /**
    * @return the hash code value of this array.
-  */
+   */
   size_t hash() {
     if (hash_code == 0) {
       hash_me();
@@ -527,7 +526,7 @@ public:
 };
 
 /**
- * This array is designed only for float type. A user can read and 
+ * This array is designed only for float type. A user can read and
  * write float into this array
  */
 class Float_Array {
@@ -538,7 +537,7 @@ public:
   size_t hash_code;
 
   /**
-   * An Float Array constructor with initialized size, capacity, hashcode 
+   * An Float Array constructor with initialized size, capacity, hashcode
    * and float list.
    */
   Float_Array() {
@@ -576,7 +575,7 @@ public:
 
   /**
    * clear the whole array elements.
-  */
+   */
   void clear() {
     delete list;
     list = new float[capacity_];
@@ -586,9 +585,9 @@ public:
   /**
    * check whether this array contains the input float.
    * @param float float is the element needed to be checked.
-   * 
+   *
    * @return return true if it contains.
-  */
+   */
   bool contains(float f) {
     for (size_t m = 0; m < size_; m++) {
       if (list[m] == f) {
@@ -601,9 +600,9 @@ public:
   /**
    * get the element at given index
    * @param integer index is the position users want to get
-   * 
+   *
    * @return return the float at the given index.
-  */
+   */
   float get(size_t idx) {
     assert(idx >= 0 && idx < size_);
     return list[idx];
@@ -640,9 +639,9 @@ public:
   /**
    * remove the element at given index
    * @param integer index is the position users want to remove
-   * 
+   *
    * @return return the float removed at the given index.
-  */
+   */
   float remove(size_t integer) {
     assert(integer < size_ && integer >= 0);
     float *temp = new float[capacity_];
@@ -664,7 +663,7 @@ public:
 
   /**
    * @return helper funciton calculate the hash code
-  */
+   */
   void hash_me() {
     hash_code = 0;
     for (size_t i = 0; i < size_; i++) {
@@ -674,12 +673,12 @@ public:
 
   /**
    * @return the size of this array.
-  */
+   */
   size_t size() { return size_; }
 
   /**
    * @return the hash code value of this array.
-  */
+   */
   size_t hash() {
     if (hash_code == 0) {
       hash_me();

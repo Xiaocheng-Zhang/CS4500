@@ -36,16 +36,16 @@ void test1() {
 }
 
 // tests constructors and methods of Queue Class
-// Multiple obejcts, strings have been added into queue. 
+// Multiple obejcts, strings have been added into queue.
 // Basic fucntionality such as enqueue, dequeue, peek and equals are ensured.
 void test2() {
-  Queue * a = new Queue();
-  Queue * b = new Queue();
-  Queue * c = new Queue();
-  Object * s = new String("Hello");
-  Object * t = new String("World");
-  Object * s1 = new String("Hello");
-  Object * s2 = new String("He");
+  Queue *a = new Queue();
+  Queue *b = new Queue();
+  Queue *c = new Queue();
+  Object *s = new String("Hello");
+  Object *t = new String("World");
+  Object *s1 = new String("Hello");
+  Object *s2 = new String("He");
   a->enqueue(s);
   a->enqueue(t);
   a->enqueue(s1);
@@ -88,7 +88,7 @@ void test2() {
   t_false((a->size()) == b->size());
   /*
     a - "Hello"
-    b - 
+    b -
     c - "World", "Hello"
   */
 
@@ -96,9 +96,9 @@ void test2() {
   c->dequeue();
   c->dequeue();
   /*
-    a - 
-    b - 
-    c - 
+    a -
+    b -
+    c -
   */
 
   t_true(a->equals(c));
@@ -106,14 +106,12 @@ void test2() {
   OK("test2 passed");
 }
 
-
 // --------------------------------------------------------------
 // The tests above this line is provided by management team.
 // All the tests below is created by implementers.
 // --------------------------------------------------------------
 
-
-// Multiple obejcts, strings have been added into queue. 
+// Multiple obejcts, strings have been added into queue.
 // "D" "E" has been added in order, into two queues.
 // Two queues are equal.
 void none_spec_test1() {
@@ -170,6 +168,6 @@ int main() {
   none_spec_test1();
   none_spec_test2();
   /** puts method help to check tests passed (made by implementor team)*/
-  //puts("All tests in test-queue.cpp passed!");
+  // puts("All tests in test-queue.cpp passed!");
   return 0;
 }

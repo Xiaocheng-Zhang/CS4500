@@ -1,6 +1,9 @@
 #pragma once
 #include "object.h"
 
+/**
+ * Queue is a FIFO list.
+ */
 class Queue : public Object {
 public:
   // list of Objects
@@ -9,6 +12,10 @@ public:
   size_t capacity_;
   size_t hash_;
 
+  /**
+   * queue constructor with initialized size, capacity and
+   * Object list.
+   */
   Queue() : Object() {
     size_ = 0;
     capacity_ = 2;
@@ -16,12 +23,19 @@ public:
     hash();
   }
 
+  /**
+   * fill the object list with nullptr.
+   * @param start start index of the method.
+   */
   void fillWithNullPtr(int start) {
     for (int i = start; i < capacity_; i++) {
       q[i] = nullptr;
     }
   }
 
+  /**
+   * enlarge the size of the queue.
+   */
   void enlargeSize() {
     capacity_ = capacity_ * 2;
     Object **tmp = new Object *[capacity_];
@@ -35,7 +49,8 @@ public:
   }
 
   /**
-   *  adds an object to the end of this queue
+   *  adds an object to the end of this queue.
+   * @param o object that will be put into queue.
    */
   void enqueue(Object *o) {
     if (size_ == capacity_) {
@@ -47,6 +62,7 @@ public:
 
   /**
    *  Pops the first object in this queue
+   *  @return return the first element into this queue.
    */
   Object *dequeue() {
     Object *result = q[0];
@@ -62,14 +78,20 @@ public:
 
   /**
    * Returns the first object in this queue without removing.
+   * @return return first object.
    */
   Object *peek() { return q[0]; }
 
   /**
    * Returns the size of this queue.
+   * @return returns the size of this queue.
    */
   size_t size() { return size_; }
 
+  /**
+   * hash and return the hashcode.
+   * @return return the hashcode.
+   */
   size_t hash() {
     if (size_ == 0) {
       hash_ = (size_t)this;
@@ -82,6 +104,11 @@ public:
     return hash_;
   }
 
+  /**
+   * check the two queue are equal.
+   * @param other other queue needed to be checked.
+   * @return return true if they are equal.
+   */
   bool equals(Object *other) {
     Queue *oq = dynamic_cast<Queue *>(other);
     if (!oq) {
@@ -99,6 +126,4 @@ public:
     }
     return true;
   }
-
-  //const char *to_string() { return ""; }
 };

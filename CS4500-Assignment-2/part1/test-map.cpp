@@ -94,32 +94,29 @@ void testGetValue() {
   t_true(m1->getValue(s3) == o3);
 }
 
-
 // --------------------------------------------------------------
 // The tests above this line is provided by management team.
 // All the tests below is created by implementers.
 // --------------------------------------------------------------
 
-
 // To test Map's basic functionality of put, getKeyArray and getLength.
 void none_spec_test1() {
   String *a = new String("key_1");
   String *av = new String("val_1");
-  Map *test_map = new Map();  
+  Map *test_map = new Map();
 
   t_true(test_map->getLength() == 0);
   test_map->addElement(a, av);
   t_true(test_map->getLength() == 1);
 
   Object **keys = test_map->key_array();
-  //keys[0]->print();
+  // keys[0]->print();
   t_true(a->equals(keys[0]));
   OK("none_spec_test1");
 }
 
-
-// Adding Strings into Map multiple times to check if the addElement is working well.
-// Also ensured isKeyIn functionality.
+// Adding Strings into Map multiple times to check if the addElement is working
+// well. Also ensured isKeyIn functionality.
 void none_spec_test2() {
   String *a = new String("key_1");
   String *b = new String("key_2");
@@ -146,8 +143,8 @@ void none_spec_test2() {
 
 // More advanced test for Hashmap.
 // It involves addElement and equals functions.
-// Two Hashmap should be equivelent if they contains the same pairs of key and value.
-// no matter what sequence those pairs are added.
+// Two Hashmap should be equivelent if they contains the same pairs of key and
+// value. no matter what sequence those pairs are added.
 void advance_none_spec_test() {
   String *a = new String("key_1");
   String *b = new String("key_2");
@@ -173,7 +170,7 @@ void advance_none_spec_test() {
 }
 
 // Main function
-int main(){
+int main() {
   test1();
   test2();
   testAddElem();
@@ -184,7 +181,6 @@ int main(){
   // The tests above this line is provided by management team.
   // All the tests below is created by implementers.
   // --------------------------------------------------------------
-
 
   none_spec_test1();
   none_spec_test2();
