@@ -143,11 +143,20 @@ public:
     return false;
   } // Compares object with this list for equality.
 
+  /**
+   * get the element at given index
+   * @param integer index is the position users want to get
+   * 
+   * @return return the object at the given index.
+  */
   Object *get(size_t index) {
     assert(index < size_ && index >= 0);
     return list[index];
   } // Returns the element at index
 
+  /**
+   * @return the hash code value of this array.
+  */
   size_t hash() {
     if (hash_code == 0) {
       hash_me();
@@ -155,6 +164,9 @@ public:
     return hash_code;
   } // Returns the hash code value for this list.
 
+  /**
+   * @return helper funciton calculate the hash code
+  */
   void hash_me() {
     hash_code = 0;
     for (size_t i = 0; i < size_; i++) {
@@ -163,6 +175,12 @@ public:
     }
   }
 
+  /**
+   * remove the element at given index
+   * @param integer index is the position users want to remove
+   * 
+   * @return return the object removed at the given index.
+  */
   Object *remove(size_t integer) {
     assert(integer < size_ && integer >= 0);
     Object **temp = new Object *[capacity_];
@@ -186,8 +204,8 @@ public:
 };
 
 /**
- * @brief Represents an array-structured list
- *
+ * This array is designed only for int type. A user can read and 
+ * write int into this array
  */
 class Int_Array {
 public:
@@ -196,6 +214,10 @@ public:
   size_t size_;
   size_t hash_code;
 
+  /**
+   * An Int Array constructor with initialized size, capacity, hashcode and
+   * int list.
+   */
   Int_Array() {
     size_ = 0;
     capacity_ = 4;
@@ -204,6 +226,9 @@ public:
     hash();
   }
 
+  /**
+   * Expand the int list if it is full.
+   */
   void expand() {
     capacity_ *= 2;
     int *temp = new int[capacity_];
@@ -258,7 +283,7 @@ public:
    * @brief retrieves the object at given position
    *
    * @param idx index position
-   * @return Object object located at given index inside array
+   * @return int int located at given index inside array
    */
   int get(size_t idx) {
     assert(idx >= 0 && idx < size_);
@@ -294,11 +319,11 @@ public:
   }
 
   /**
-   * @brief deletes the given object from array
-   *
-   * @param object object to be deleted
-   * @return Object removed object, now unlinked from array
-   */
+   * remove the element at given index
+   * @param integer index is the position users want to remove
+   * 
+   * @return return the int removed at the given index.
+  */
   int remove(size_t integer) {
     assert(integer < size_ && integer >= 0);
     int *temp = new int[capacity_];
@@ -315,7 +340,10 @@ public:
     size_--;
     return cur;
   }
-
+  
+  /**
+   * @return helper funciton calculate the hash code
+  */
   void hash_me() {
     hash_code = 0;
     for (size_t i = 0; i < size_; i++) {
@@ -323,6 +351,9 @@ public:
     }
   }
 
+  /**
+   * @return the hash code value of this array.
+  */
   size_t hash() {
     if (hash_code == 0) {
       hash_me();
@@ -334,8 +365,8 @@ public:
 };
 
 /**
- * @brief Represents an array-structured list
- *
+ * This array is designed only for bool type. A user can read and 
+ * write bool into this array
  */
 class Bool_Array {
 public:
@@ -344,6 +375,10 @@ public:
   size_t size_;
   size_t hash_code;
 
+  /**
+   * An Bool Array constructor with initialized size, capacity, hashcode 
+   * and bool list.
+   */
   Bool_Array() {
     size_ = 0;
     capacity_ = 4;
@@ -352,6 +387,9 @@ public:
     hash();
   }
 
+  /**
+   * Expand the bool list if it is full.
+   */
   void expand() {
     capacity_ *= 2;
     bool *temp = new bool[capacity_];
@@ -363,23 +401,20 @@ public:
     // initialize(size_);
   }
 
-  /**
-   * @brief pushes the given object onto array
-   *
-   * @param object the given object to be added
+  /** Append the bool to the rest of array.
+   * @param bool bool is the element that needed to be put.
    */
-  void append(bool integer) {
+  void append(bool b) {
     if (size_ == capacity_) {
       expand();
     }
-    list[size_] = integer;
+    list[size_] = b;
     size_++;
   }
 
   /**
-   * @brief removes all elements from array
-   *
-   */
+   * clear the whole array elements.
+  */
   void clear() {
     delete list;
     list = new bool[capacity_];
@@ -387,15 +422,14 @@ public:
   }
 
   /**
-   * @brief checks if the given object is in array
-   *
-   * @param object object to be checked
-   * @return true if object in array
-   * @return false if object not in array
-   */
-  bool contains(bool integer) {
+   * check whether this array contains the input bool.
+   * @param bool bool is the element needed to be checked.
+   * 
+   * @return return true if it contains.
+  */
+  bool contains(bool b) {
     for (size_t m = 0; m < size_; m++) {
-      if (list[m] == integer) {
+      if (list[m] == b) {
         return true;
       }
     }
@@ -403,36 +437,36 @@ public:
   }
 
   /**
-   * @brief retrieves the object at given position
-   *
-   * @param idx index position
-   * @return Object object located at given index inside array
-   */
+   * get the element at given index
+   * @param integer index is the position users want to get
+   * 
+   * @return return the bool at the given index.
+  */
   bool get(size_t idx) {
     assert(idx >= 0 && idx < size_);
     return list[idx];
   }
 
   /**
-   * @brief adds the given object to array at given position
+   * @brief adds the given bool to array at given position
    *
-   * @param object given object
+   * @param bool given bool
    * @param idx index position
    */
-  void insert(bool integer, size_t idx) {
+  void insert(bool b, size_t idx) {
     assert(idx >= 0 && idx <= size_);
     if (size_ == capacity_) {
       expand();
     }
     if (!list[idx]) {
-      list[idx] = integer;
+      list[idx] = b;
       return;
     }
     bool *temp = new bool[capacity_];
     for (size_t j = 0; j < idx; j++) {
       temp[j] = list[j];
     }
-    temp[idx] = integer;
+    temp[idx] = b;
     for (size_t j = idx; j < size_; j++) {
       temp[j + 1] = list[j];
     }
@@ -442,11 +476,11 @@ public:
   }
 
   /**
-   * @brief deletes the given object from array
-   *
-   * @param object object to be deleted
-   * @return Object removed object, now unlinked from array
-   */
+   * remove the element at given index
+   * @param integer index is the position users want to remove
+   * 
+   * @return return the bool removed at the given index.
+  */
   bool remove(size_t integer) {
     assert(integer < size_ && integer >= 0);
     bool *temp = new bool[capacity_];
@@ -466,6 +500,9 @@ public:
     return cur;
   }
 
+  /**
+   * @return helper funciton calculate the hash code
+  */
   void hash_me() {
     hash_code = 0;
     for (size_t i = 0; i < size_; i++) {
@@ -473,8 +510,14 @@ public:
     }
   }
 
+  /**
+   * @return the size of this array.
+  */
   size_t size() { return size_; }
 
+  /**
+   * @return the hash code value of this array.
+  */
   size_t hash() {
     if (hash_code == 0) {
       hash_me();
@@ -484,8 +527,8 @@ public:
 };
 
 /**
- * @brief Represents an array-structured list
- *
+ * This array is designed only for float type. A user can read and 
+ * write float into this array
  */
 class Float_Array {
 public:
@@ -494,6 +537,10 @@ public:
   size_t size_;
   size_t hash_code;
 
+  /**
+   * An Float Array constructor with initialized size, capacity, hashcode 
+   * and float list.
+   */
   Float_Array() {
     size_ = 0;
     capacity_ = 4;
@@ -502,6 +549,9 @@ public:
     hash();
   }
 
+  /**
+   * Expand the float list if it is full.
+   */
   void expand() {
     capacity_ *= 2;
     float *temp = new float[capacity_];
@@ -513,23 +563,20 @@ public:
     // initialize(size_);
   }
 
-  /**
-   * @brief pushes the given object onto array
-   *
-   * @param object the given object to be added
+  /** Append the float to the rest of array.
+   * @param float float is the object that needed to be put.
    */
-  void append(float integer) {
+  void append(float f) {
     if (size_ == capacity_) {
       expand();
     }
-    list[size_] = integer;
+    list[size_] = f;
     size_++;
   }
 
   /**
-   * @brief removes all elements from array
-   *
-   */
+   * clear the whole array elements.
+  */
   void clear() {
     delete list;
     list = new float[capacity_];
@@ -537,15 +584,14 @@ public:
   }
 
   /**
-   * @brief checks if the given object is in array
-   *
-   * @param object object to be checked
-   * @return true if object in array
-   * @return false if object not in array
-   */
-  bool contains(float integer) {
+   * check whether this array contains the input float.
+   * @param float float is the element needed to be checked.
+   * 
+   * @return return true if it contains.
+  */
+  bool contains(float f) {
     for (size_t m = 0; m < size_; m++) {
-      if (list[m] == integer) {
+      if (list[m] == f) {
         return true;
       }
     }
@@ -553,20 +599,20 @@ public:
   }
 
   /**
-   * @brief retrieves the object at given position
-   *
-   * @param idx index position
-   * @return Object object located at given index inside array
-   */
+   * get the element at given index
+   * @param integer index is the position users want to get
+   * 
+   * @return return the float at the given index.
+  */
   float get(size_t idx) {
     assert(idx >= 0 && idx < size_);
     return list[idx];
   }
 
   /**
-   * @brief adds the given object to array at given position
+   * @brief adds the given float to array at given position
    *
-   * @param object given object
+   * @param float given float
    * @param idx index position
    */
   void insert(float integer, size_t idx) {
@@ -592,11 +638,11 @@ public:
   }
 
   /**
-   * @brief deletes the given object from array
-   *
-   * @param object object to be deleted
-   * @return Object removed object, now unlinked from array
-   */
+   * remove the element at given index
+   * @param integer index is the position users want to remove
+   * 
+   * @return return the float removed at the given index.
+  */
   float remove(size_t integer) {
     assert(integer < size_ && integer >= 0);
     float *temp = new float[capacity_];
@@ -616,6 +662,9 @@ public:
     return cur;
   }
 
+  /**
+   * @return helper funciton calculate the hash code
+  */
   void hash_me() {
     hash_code = 0;
     for (size_t i = 0; i < size_; i++) {
@@ -623,8 +672,14 @@ public:
     }
   }
 
+  /**
+   * @return the size of this array.
+  */
   size_t size() { return size_; }
 
+  /**
+   * @return the hash code value of this array.
+  */
   size_t hash() {
     if (hash_code == 0) {
       hash_me();
