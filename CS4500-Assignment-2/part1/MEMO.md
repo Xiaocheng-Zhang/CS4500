@@ -68,7 +68,7 @@ int, float, bool, and String data types.
 	Thus, we have to write whole tests by ourselves. We have edited the test with
 	our own test cases in our Makefile.
 
-	**UPDATE: 12 hours before deadline we heard their first reponse, which wasjust an update on object.h and string.h.**
+	**UPDATE: 12 hours before deadline we heard their first reponse, which was just an update on object.h and string.h.**
 
 * Map:
 	1. Documentations are mostly in one line, which we as developers have to 
