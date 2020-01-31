@@ -5,16 +5,17 @@
 int, float, bool, and String data types. 
 - Some functions such as add, remove, clear are similar with what we designed for StringList. 
 	Array:
-	1. expand(): void
-	2. append(size_t integer, Object *object: void 
-	3. clear(): void
-	4. contains(Object *object): bool
-	5. equals(Array *array): bool
-	6. get(size_t index): Object
-	7. hash(): size_t
-	8. hash_me(): void
-	9. remove(size_t integer): Object
-	10. size(): size_t
+	1. expand(): void //An Array constructor with initialized size, capacity, hashcode and Object list.
+	2. append(size_t integer, Object *object: void //Append the object to the rest of array.
+	3. clear(): void //clear the whole array elements.
+	4. contains(Object *object): bool //check whether this array contains the input object.
+	5. equals(Array *array): bool //check two array equal or not.
+	6. get(size_t index): Object // get the element at index
+	7. hash(): size_t //Returns the hash code value for this list.
+	8. hash_me(): void //hash helper
+	9. remove(size_t integer): Object //Removes the element at integer's index.
+	10. size(): size_t //Return size of Array.
+	11. add(size_t integer, Object *object): void //Add the object at index integer. Won't repace the element.
 	Int_Array, Bool_Array, Float_Array:
 	* The same methods' name, light difference in input type and return type. 
 	* Functions are same.
@@ -23,10 +24,36 @@ int, float, bool, and String data types.
 - For Map, we designed one extra class which pairs each key and value together in the map.
 - Map is basically a list of key-value pairs.
 - All essential methods such as put, get, isKeyIn have been implemented by us and all tests can be passed.
+	1. initialize(Node **temp): void //initialize the map
+	2. hash_index(Object *key): size_t //hash the index of keys
+	3. index_grow(size_t i): size_t //helper method to increase the index i in hash_put method
+	4. index_check(size_t i, size_t index, size_t count): bool //check whether the loop needs end in hash_put method
+	5. key_array(): Object** //return all keys as one array
+	6. hash_put(Node **temp_elems, Object *key, Object *val): void //put key and val into temp_map
+	7. expand(): void //expand the node array size
+	8. addElement(Object *key, Object *value): void //Adds an element to the map as a node pair
+	9. removeElement(Object *key): void //Removed the given key from the map
+	10. getValue(Object *key): Object //Gets the value of the key
+	11. getLength(): size_t //Gets the length of the map
+	12. isKeyIn(Object *object) //Checks is the key is in the map
+	13. contains(Node *node): bool //check does elems_ contains this node
+	14. equals(Map *map): bool //check whether two maps are equal
+	15. hash(): size_t //Return the hashcode
+	16. hash_me(): void //hash helper
+
 
 ## Queue implementation:
 - For Queue, we are able to support both String and Object because all functions take in Object and String is a child of object. 
 - The essential methods such as enqueue, dequeue, peek have been implemented and examined by both spec tests and our own tests
+	1. enlargeSize(): void
+	2. fillWithNullPtr(int start): void
+	3. enqueue(Object *o): void
+	4. dequeue(): Object*
+	5. peek(): Object*
+	6. size(): size_t
+	7. hash(): size_t
+	8. equals(Object *other): bool
+
 
 # The critique of design and test:
 
