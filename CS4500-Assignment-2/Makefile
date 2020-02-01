@@ -1,8 +1,8 @@
-ARRAYSPECREPO = https://github.com/example/array-api.git
+ARRAYSPECREPO = https://github.com/j-Myles/NEU4500-A1-P2.git
 ARRAYSPECHASH = 53f19236cd14f1f691781558c4db45794bc635bf
-QUEUESPECREPO = https://github.com/example/queue-api.git
+QUEUESPECREPO = https://github.com/stevenarditti/cs4500-a1-pt2.git
 QUEUESPECHASH = f94340be53a497b8018464046c5de68a0b4a307d
-MAPSPECREPO = https://github.com/dxandbatista/map-api.git
+MAPSPECREPO = https://github.com/barrylyung/a1p2.git
 MAPSPECHASH = 39dc2e804ac4646c886db383a8277c36283670df
 
 run: dircheck
