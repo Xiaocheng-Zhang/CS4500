@@ -42,4 +42,22 @@ Dataframe API description:
 		Insert a column into dataframe. i is the index where column is inserted 
 		name is the name of the column. values are simply the column.
 
+	- df.drop(i)
+		Drop the ith column
+
+	- df.drop("m")
+		Drop the column whose name is "m"
+
 	- df.dtypes()
+		Return a list of data type of each column
+
+
+
+
+A Full Use Case for Each Function:
+
+	         color      milleage	automatic      price
+	Toyota   "red"		 20.3		  true		  nullptr
+	Honda    "black"	 41.0	      false			20000
+	Mazda	 "white"	 26.3		  true	 		30000
+	Subaru   "blue"	 	 17.8		  false			25000
