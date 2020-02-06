@@ -12,41 +12,34 @@ ADDRESS := /mnt/d/DOCUMENTS/CS4500/CS4500-Assignment-3/part1/
 
 team1:
 	rm -f sorer
-	cd $(BryceZhic) && make
-	mv sorer $(ADDRESS)sorer
+	cd $(BryceZhic) && make && mv sorer $(ADDRESS)sorer
 	cd $(ADDRESS)
 	
 
 team2:
 	rm -f sorer
-	cd $(nullptr) && make
-	mv sorer $(ADDRESS)sorer
+	cd $(nullptr) && make && mv sorer $(ADDRESS)sorer
 	cd $(ADDRESS)
 
 team3:
 	rm -f sorer
-	cd $(danyth) && make
-	mv sorer $(ADDRESS)sorer
+	cd $(danyth) && make && mv sorer $(ADDRESS)sorer
 	cd $(ADDRESS)
 
 team4:
 	rm -f sorer
-	cd $(b) && make
-	mv sorer $(ADDRESS)sorer
+	cd $(b) && make && mv sorer $(ADDRESS)sorer
 	cd $(ADDRESS)
 
 team5:
 	rm -f sorer
-	cd $(rotwang.ai) && make
-	mv sorer $(ADDRESS)sorer
+	cd $(rotwang.ai) && make && mv sorer $(ADDRESS)sorer
 	cd $(ADDRESS)
 
 team6:
 	rm -f sorer
-	cd $(segfault) && make
-	mv sorer $(ADDRESS)sorer
+	cd $(segfault) && make && mv sorer $(ADDRESS)sorer
 	cd $(ADDRESS)
-
 
 	
 1:
