@@ -25,7 +25,6 @@ Slow:
 real    0m3.097s
 user    0m1.297s
 sys     0m1.500s
-```
 
 - Test failed:
 ./sorer -f 2.sor -print_col_idx 2 1
@@ -34,6 +33,7 @@ sys     0m1.500s
 -0.000000002 | -2e-09
 ./sorer -f 4.sor -print_col_idx 1 2
 10000000000 | 1e+10
+```
 
 - For failed tests, they are subtle problems which are not problems. It is easy to handle these cases by update their "args.print_col_type" method with more type checker in 229 in sorer.
 - In contrast to other groups' work, this program has many advantages:
@@ -77,7 +77,6 @@ Slow:
 real    0m13.486s
 user    0m10.563s
 sys     0m7.844s
-```
 
 - Test failed:
 ./sorer -f 1.sor -print_col_idx 0 3
@@ -92,6 +91,7 @@ hi
 -0.000000002
 ./sorer -f 1.sor -from 1 -len 74 -print_col_idx 0 6
 +2.2
+```
 
 - Those failed tests are caused by *run* method in dataframe, it dose not print the data follow the schema.
 - For different data types, they need print chosen data as the format that match them.
