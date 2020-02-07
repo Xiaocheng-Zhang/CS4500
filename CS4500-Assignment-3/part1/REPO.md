@@ -92,7 +92,6 @@ Slow:
 real	2m44.017s
 user	1m11.018s
 sys		1m25.063s
-
 ```
 - Memory Usage:
 	These are data came from running *sorer* by *Valgrind*:
@@ -140,7 +139,6 @@ Slow:
 real	0m6.813s
 user	0m5.022s
 sys		0m1.616s
-
 ```
 - Memory Usage:
 	These are data came from running *sorer* by *Valgrind*:
@@ -306,7 +304,6 @@ Slow:
 real    0m11.281s
 user    0m9.031s
 sys     0m2.156s
-
 ```
 - Memory Usage:
 	These are data came from running *sorer* by *Valgrind*:
@@ -314,7 +311,6 @@ sys     0m2.156s
 ==2163== HEAP SUMMARY:
 ==2163==     in use at exit: 73 bytes in 5 blocks
 ==2163==   total heap usage: 17 allocs, 12 frees, 94,437 bytes allocated
-
 ```
 - Test failed:
 ```
