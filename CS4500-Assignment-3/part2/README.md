@@ -1,6 +1,6 @@
 # Dataframe API description:
 	Our dataframe supports int, float, bool, String Columns and potentially other types of data in column list format.
-
+    *All these types should be an Object type*
 	The functions and its use cases are listed at following:
 
 - Dataframe df = new Dataframe(a,b,c,...)
