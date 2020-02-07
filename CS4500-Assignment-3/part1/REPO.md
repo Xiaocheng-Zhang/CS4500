@@ -129,3 +129,10 @@ hi
   - Two memory lost happen in *parse* method in file datafram.h:94.
   - Vector in Token class wasn't freed.
 - The Memory Usage of this program is *7 level* out of 10.
+
+  - product: AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx
+  - vendor: Advanced Micro Devices [AMD]
+  - physical id: 1
+  - bus info: cpu@0
+  - capacity: 2100MHz
+  - width: 64 bits
