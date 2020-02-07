@@ -55,7 +55,7 @@
 ```
 Dataframe df
 
-	         color       milleage	  automatic  price
+	         color       milleage	  automatic        price
 	Toyota   "red"		 20.3		  true		 nullptr
 	Honda    "black"	 41.0	      false		 20000
 	Mazda	 "white"	 26.3		  true	 	 30000
