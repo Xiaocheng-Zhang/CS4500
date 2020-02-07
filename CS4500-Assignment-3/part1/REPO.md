@@ -1,58 +1,140 @@
-1. Nullptr: 3.sor very slow √
-2. the segfault in our stars:  √
+## Team 4:	
+### Name: SnowySong
+
+#### Introdution:
+This team used Python to implement this Assignment.
+They did saved data as column and call methods to get from the dest column.
+No more redundant code, the structure is compressed and useful.
+The whole program was implemented by one class with enums.
+
+Their SoR types are defined by enums called "SoRTypes"
+Class "SorInterpreter" is the main Object function that provided most methods to read and save data.
+
+#### Description of the analysis performed:
+Their code runs fast and go through these steps:
+1. Set the initial status for reading at first: Method: "__init__" in "class SorInterpreter" in 31 line.
+2. Read the data by lines, get the schema during reading. Method: "__get_column_schema" in 101 line in sorer. "__itemize_sor_row" is the main method read the data in line 136.
+3. Call parser to parse the required data follow the schema.
+
+- Run time: 
 ```
-./sorer -f 0.sor -print_col_type 0  
-BOOL
-./sorer -f 0.sor -is_missing_idx 0 0
-1
-./sorer -f 1.sor -print_col_type 0  
-STRING
-./sorer -f 1.sor -is_missing_idx 0 1
-0
+Fast:
+real    0m2.885s
+user    0m1.313s
+sys     0m1.281s
+
+Slow:
+real    0m3.097s
+user    0m1.297s
+sys     0m1.500s
+```
+
+- Test failed:
+./sorer -f 2.sor -print_col_idx 2 1
+-.2 | -0.2
+./sorer -f 4.sor -print_col_idx 1 1
+-0.000000002 | -2e-09
+./sorer -f 4.sor -print_col_idx 1 2
+10000000000 | 1e+10
+
+- For failed tests, they are subtle problems which are not problems. It is easy to handle these cases by update their "args.print_col_type" method with more type checker in 229 in sorer.
+- In contrast to other groups' work, this program has many advantages:
+  - It has simplified methods, which reduced redundant code.
+  - Has many comments that help readers understand the whole program.
+- However, they used python. They don't need to handle most problems.
+- This program is ran on Windows subsystem Linux system:
+  
+  - product: AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx
+  - vendor: Advanced Micro Devices [AMD]
+  - physical id: 1
+  - bus info: cpu@0
+  - capacity: 2100MHz
+  - width: 64 bits
+
+
+## Team 5: 	
+### Name: rotwang.ai
+
+- Test failed:
 ./sorer -f 1.sor -print_col_idx 0 3
 +1
-./sorer -f 2.sor -print_col_type 0
-BOOL
-./sorer -f 2.sor -print_col_type 1
-INT
-./sorer -f 2.sor -print_col_type 2
-FLOAT
-./sorer -f 2.sor -print_col_type 3
-STRING
-./sorer -f 2.sor -is_missing_idx 1 0
-1
-./sorer -f 2.sor -is_missing_idx 1 1
-0
 ./sorer -f 2.sor -print_col_idx 3 0
 hi
-./sorer -f 2.sor -print_col_idx 3 1
-ho ho ho
-./sorer -f 2.sor -print_col_idx 2 0
-1.2
-./sorer -f 2.sor -print_col_idx 2 1
--0.2
-./sorer -f 3.sor -print_col_type 4
-BOOL
 ./sorer -f 3.sor -print_col_idx 2 10
-1.2
-./sorer -f 3.sor -print_col_idx 2 384200
-1.2
++1.2
 ./sorer -f 4.sor -print_col_idx 0 1
-2147483647
-./sorer -f 4.sor -print_col_idx 0 2
--2147483648
++2147483647
 ./sorer -f 4.sor -print_col_idx 1 1
--2e-09
-./sorer -f 4.sor -print_col_idx 1 2
-1e+10
-./sorer -f 1.sor -from 1 -len 74 -print_col_type 0
-STRING
-./sorer -f 1.sor -from 1 -len 74 -is_missing_idx 0 0
-0
+-0.000000002
 ./sorer -f 1.sor -from 1 -len 74 -print_col_idx 0 6
 +2.2
+
+- Run time:
 ```
-3. ";<b>null</b>:
-4. danyth:
-5. rotwang.ai: 
-6. BryceZhic: √ 没存
+Fast:
+real    0m12.731s
+user    0m10.344s
+sys     0m7.484s
+
+Slow:
+real    0m13.486s
+user    0m10.563s
+sys     0m7.844s
+```
+Memory:
+==2066== HEAP SUMMARY:
+==2066==     in use at exit: 48 bytes in 2 blocks
+==2066==   total heap usage: 39 allocs, 37 frees, 1,082,374 bytes allocated
+	==2066== 24 bytes in 1 blocks are definitely lost in loss record 1 of 2
+
+	==2066== LEAK SUMMARY:
+==2066==    definitely lost: 48 bytes in 2 blocks
+==2066==    indirectly lost: 0 bytes in 0 blocks
+==2066==      possibly lost: 0 bytes in 0 blocks
+==2066==    still reachable: 0 bytes in 0 blocks
+==2066==         suppressed: 0 bytes in 0 blocks
+
+	==2066== 24 bytes in 1 blocks are definitely lost in loss record 1 of 2
+==2066==    at 0x4835DEF: operator new(unsigned long) (vg_replace_malloc.c:334)
+==2066==    by 0x10C23D: analyze_tokens_for_schema (schema.h:54)
+==2066==    by 0x10C23D: analyze_for_schema (dataframe.h:229)
+==2066==    by 0x10C23D: DataFrame::parse() (dataframe.h:122)
+==2066==    by 0x10A38E: main (main.cpp:27)
+
+==2066== 24 bytes in 1 blocks are definitely lost in loss record 2 of 2
+==2066==    at 0x4835DEF: operator new(unsigned long) (vg_replace_malloc.c:334)
+==2066==    by 0x10AF7A: Token::tokenize_line(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*) (token.h:214)
+==2066==    by 0x10C966: process (dataframe.h:94)
+==2066==    by 0x10C966: DataFrame::parse() (dataframe.h:158)
+==2066==    by 0x10A38E: main (main.cpp:27)
+
+
+Team 6:
+	Test failed:
+	./sorer -f 1.sor -print_col_idx 0 3	
++1
+./sorer -f 2.sor -print_col_idx 3 0
+Hi
+./sorer -f 2.sor -print_col_idx 3 1
+ho ho ho
+./sorer -f 1.sor -from 1 -len 74 -print_col_idx 0 6
++2.2
+
+	Run time:
+	real    0m11.319s
+user    0m9.156s
+sys     0m1.969s
+	
+	real    0m11.319s
+user    0m9.156s
+sys     0m1.969s
+	
+	real    0m11.281s
+user    0m9.031s
+sys     0m2.156s
+
+
+	Memory:
+	==2163== HEAP SUMMARY:
+==2163==     in use at exit: 73 bytes in 5 blocks
+==2163==   total heap usage: 17 allocs, 12 frees, 94,437 bytes allocated
