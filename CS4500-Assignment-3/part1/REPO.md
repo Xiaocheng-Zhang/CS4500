@@ -1,3 +1,18 @@
+# Introduction
+	Throughout this report, we have evaluated 6 sets of data adaptors that read 
+	sor files and store information in a columnar representation. Due to that 
+	the management team have to deal with large sor files, our team hence tested 
+	each data adaptor's performance in terms of running time and memory usage. 
+	Different hardware and software infrastructures have been utilized for 
+	performance assessment so that the accuracy and stability is ensured.
+	In addition to performance, our team also takes a closer look at the code 
+	quality and documentation in order to ensure that this data adaptor can be 
+	used in the long run. In the end of this report, we will give our recommendation 
+	that consists of a list of the projects in order of preference, and a rationale 
+	for our top choice.
+
+
+
 ## Team 4:	
 ### Name: SnowySong
 
