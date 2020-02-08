@@ -1,10 +1,10 @@
 # Introduction
 Throughout this report, we have evaluated 6 sets of data adaptors that read 
-sor files and store information in a columnar representation. Due to that 
-the management team have to deal with large sor files, our team hence tested 
+sor files and store information in a columnar representation. Due to the reason that 
+the management team has to deal with large sor files, our team hence tested 
 each data adaptor's performance in terms of running time and memory usage. 
 Different hardware and software infrastructures have been utilized for 
-performance assessment so that the accurancy and stability is ensured.
+performance assessment so that the accurancy and stability are ensured.
 In addition to performance, our team also takes a closer look at the code 
 quality and documentation in order to ensure that this data adaptor can be 
 used in the long run. In the end of this report, we will give our recommendation 
@@ -28,7 +28,7 @@ categorized into three types: real, user, and sys.
 
 4) We will then check the memory usage.
 
-5) According to standard format, main function should be short and clean and the 
+5) According to standard format, main function should be short and clean, and the 
 task should be well distributed into helper function to be completed. If there are 
 too much code in one function, we think the format can be improved by having more 
 sub functions.
@@ -165,7 +165,7 @@ HEAP SUMMARY:
 ### Name: SnowySong
 
 This team used Python to implement this Assignment.
-They did saved data as column and call methods to get from the dest column.
+They did save data as column and call methods to get from the dest column.
 No more redundant code, the structure is compressed and useful.
 The whole program was implemented by one class with enums.
 
@@ -199,7 +199,7 @@ sys     0m1.500s
 ```
 
 - For failed tests, they are subtle problems which are not problems. It is easy to handle these cases by update their "args.print_col_type" method with more type checker in 229 in sorer.
-- In contrast to other groups' work, this program has many advantages:
+- In contrasts to other groups' work, this program has many advantages:
   - It has simplified methods, which reduced redundant code.
   - Has many comments that help readers understand the whole program.
 - However, they used python. They don't need to handle most problems.
@@ -209,17 +209,17 @@ sys     0m1.500s
 ### Name: rotwang.ai
 
 This team used C++ to implement this Assignment.
-They designed six different header files, which forms a dataframe that help to write and read data.
-Their code is clear in main.cpp file. Names of methods are readable. Total processes of this program are logical and readable. Each method has a comment that helped reader to understand. 
+They designed six different header files, which form a dataframe that helps to write and read data.
+Their code is clear in main.cpp file. Names of methods are readable. Total processes of this program are logical and readable. Each method has a comment that helped readers to understand. 
 
 SoR types are saved as *enum* in *token.h* file
 
-Code speed is median (tend to fast) and goes these steps:
-1. Create a Configuration class that takes argc and argv, automatically parse the command and saved.
+Code speed is median (to fast) and followes these steps:
+1. Create a Configuration class that takes argc and argv, automatically parse the command, and save configuration.
 2. Create a dataframe class within saved configuration, generate the schema and save all data. If it cannot find a valid schema, the program will quit with error message.
    1. They saved all data by "vector<vector<Datatype>>", a 2D Array that saved data into inner array as one column.
-   2. Their method "parse" will  able to push parsed data into their dataframe.
-3. They will call *run* method in dataframe to print the data follow the configuration which saved commands in previous steps.
+   2. Their method "parse" will be able to push parsed data into their dataframe.
+3. They will call *run* method in dataframe to print the data that follows the configuration which saved commands in previous steps.
 
 - Run time:
 ```
@@ -249,7 +249,7 @@ hi
 ```
 
 - Those failed tests are caused by *run* method in dataframe, it dose not print the data follow the schema.
-- For different data types, they need print chosen data as the format that match them.
+- For different data types, they need to print chosen data as the format that matches them.
 
 - Memory Usage:
 	These are data came from running *sorer* by *Valgrind*:
