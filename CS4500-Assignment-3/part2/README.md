@@ -1,6 +1,6 @@
 # Dataframe API description:
 	Our dataframe supports int, float, bool, String Columns and potentially other types of data in column list format.
-    *All these types should be an Object type*
+
 	The functions and its use cases are listed at following:
 
 - Dataframe df = new Dataframe(a,b,c,...)
@@ -55,11 +55,11 @@
 ```
 Dataframe df
 
-	         color       milleage	  automatic  price
-	Toyota   "red"		 20.3		  true		 nullptr
-	Honda    "black"	 41.0	      false		 20000
-	Mazda	 "white"	 26.3		  true	 	 30000
-	Subaru   "blue"	 	 17.8		  false		 25000
+	         color      milleage	automatic      price
+	Toyota   "red"		 20.3		  true		  nullptr
+	Honda    "black"	 41.0	      false			20000
+	Mazda	 "white"	 26.3		  true	 		30000
+	Subaru   "blue"	 	 17.8		  false			25000
 
 	df.get(0,1)
 	-->  "black"
@@ -73,42 +73,42 @@ Dataframe df
 	df.ncol()
 	-->  4
 
-	df.notnull()
-	-->          color       milleage	  automatic    price
-		Toyota   true		 true		  true		   false
-		Honda    true	 	 true	      true		   true
-		Mazda	 true	 	 true		  true	 	   true
-		Subaru   true	 	 true		  true		   true
-
 	df.isnull()
-	-->          color       milleage	  automatic    price
-		Toyota   false		 false		  false		   true
-		Honda    false	 	 false	      false	       false
-		Mazda	 false	 	 false		  false	       false
-		Subaru   false	 	 false		  false	       false
+	-->          color      milleage	automatic      price
+		Toyota   true		 true		  true		   false
+		Honda    true	 	 true	      true		    true
+		Mazda	 true	 	 true		  true	 		true
+		Subaru   true	 	 true		  true			true
+
+	df.notnull()
+	-->          color      milleage	automatic      price
+		Toyota   false		 false		  false		    true
+		Honda    false	 	 false	      false		    false
+		Mazda	 false	 	 false		  false	 		false
+		Subaru   false	 	 false		  false			false
 
 	df.dropna()
-	-->          color     	 milleage	  automatic    price
-		Honda    "black"	 41.0	      false	       20000
-		Mazda	 "white"	 26.3		  true	       30000
-		Subaru   "blue"	 	 17.8		  false	       25000
+	-->          color      milleage	automatic      price
+		Honda    "black"	 41.0	      false			20000
+		Mazda	 "white"	 26.3		  true	 		30000
+		Subaru   "blue"	 	 17.8		  false			25000
 
 	df.insert(3, "engine", [1,0,0,1])
-	-->          color      milleage	automatic    engine price
-		Toyota   "red"		20.3		true	     1      nullptr
-		Honda    "black"	41.0	    false	     0      20000
-		Mazda	 "white"	26.3		true	     0      30000
-		Subaru   "blue"	 	17.8		false	     1      25000
+	-->          color      milleage	automatic    engine   price
+		Toyota   "red"		 20.3		  true		   1      nullptr
+		Honda    "black"	 41.0	      false		   0      20000
+		Mazda	 "white"	 26.3		  true	 	   0      30000
+		Subaru   "blue"	 	 17.8		  false		   1      25000
 
 	df.drop(3)
-	--> 		 color       milleage	  automatic      
+	--> 		 color      milleage	automatic      
 		Toyota   "red"		 20.3		  true		  
 		Honda    "black"	 41.0	      false			
 		Mazda	 "white"	 26.3		  true	 		
 		Subaru   "blue"	 	 17.8		  false	
 
 	df.drop("price")
-	--> 		 color       milleage	  automatic      
+	--> 		 color      milleage	automatic      
 		Toyota   "red"		 20.3		  true		  
 		Honda    "black"	 41.0	      false			
 		Mazda	 "white"	 26.3		  true	 		
