@@ -26,6 +26,30 @@
 
         NEXT : 2/4/2020 WVH Lab102
 
+        
+        date/time: 2/4/2020
+
+        place: WVH Lab 102
+
+        goal: work as far as we can
+
+        duration: 6h
+
+        NEXT : 2/6/2020 WVH Lab102
+
+
+        date/time: 2/6/2020
+
+        place: Library 2nd floor && WVH lab102
+
+        goal: 
+
+        finish part1
+
+        duration: 6h
+
+        NEXT : 2/7/2020 WVH Lab102
+
 
         actual time needed: 
 
