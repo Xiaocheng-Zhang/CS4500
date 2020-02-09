@@ -55,7 +55,7 @@
 ```
 Dataframe df
 
-	         color       milleage	  automatic        price
+	         color       milleage	  automatic  price
 	Toyota   "red"		 20.3		  true		 nullptr
 	Honda    "black"	 41.0	      false		 20000
 	Mazda	 "white"	 26.3		  true	 	 30000
@@ -73,14 +73,14 @@ Dataframe df
 	df.ncol()
 	-->  4
 
-	df.isnull()
+	df.notnull()
 	-->          color       milleage	  automatic    price
 		Toyota   true		 true		  true		   false
 		Honda    true	 	 true	      true		   true
 		Mazda	 true	 	 true		  true	 	   true
 		Subaru   true	 	 true		  true		   true
 
-	df.notnull()
+	df.isnull()
 	-->          color       milleage	  automatic    price
 		Toyota   false		 false		  false		   true
 		Honda    false	 	 false	      false	       false
