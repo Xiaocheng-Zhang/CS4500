@@ -7,50 +7,122 @@
  */
 class Schema : public Object {
  public:
+  Cvec type_vec;
+  Svec col_name_vec;
+  Svec row_name_vec;
+
  
   /** Copying constructor */
-  Schema(Schema& from)
+  Schema(Schema& from) {
+    type_vec = from->type_vec;
+    col_name_vec = from->col_name_vec;
+    row_name_vec = from->row_name_vec;
+  }
  
   /** Create an empty schema **/
-  Schema()
+  Schema() {
+    type_vec = new Cvec();
+    col_name_vec = new Svec();
+    row_name_vec = new Svec();
+  }
  
   /** Create a schema from a string of types. A string that contains
     * characters other than those identifying the four type results in
     * undefined behavior. The argument is external, a nullptr argument is
     * undefined. **/
-  Schema(const char* types)
+  Schema(const char* types) {
+    if (types == nullptr) {
+      std::cout << "The variable should not be null" << std::endl;
+      exit();
+    }
+    type_vec = new Cvec();
+    col_name_vec = new Svec();
+    row_name_vec = new Svec();
+    for (size_t i = 0; i < strlen(types); i++) {
+      if (types[i] == 'I') {
+        type_vec->append('I');
+        col_name_vec->append(nullptr);
+      }
+      else if (types[i] == 'B') {
+        type_vec->append('B');
+        col_name_vec->append(nullptr);
+      }
+      else if (types[i] == 'F') {
+        type_vec->append('F');
+        col_name_vec->append(nullptr);
+      }
+      else if (types[i] == 'S') {
+        type_vec->append('S');
+        col_name_vec->append(nullptr);
+      }
+      else {
+        std::cout << "The variable should not contain other than four identifying type" << std::endl;
+        exit();
+      }
+    }
+  }
+
+  bool type_check(char c) {
+    return c == 'I' || c == 'B' || c == 'F' || c == 'S';
+  }
  
   /** Add a column of the given type and name (can be nullptr), name
     * is external. Names are expectd to be unique, duplicates result
     * in undefined behavior. */
-  void add_column(char typ, String* name)
+  void add_column(char typ, String* name) {
+    assert(typ != nullptr);
+    assert(type_check(typ));
+    assert(!col_name_vec->contains(name));
+    type_vec->append(typ);
+    col_name_vec->append(name);
+  }
  
   /** Add a row with a name (possibly nullptr), name is external.  Names are
    *  expectd to be unique, duplicates result in undefined behavior. */
-  void add_row(String* name)
+  void add_row(String* name) {
+    assert(!row_name_vec->contains(name));
+    row_name_vec->append(name);
+  }
  
   /** Return name of row at idx; nullptr indicates no name. An idx >= width
     * is undefined. */
-  String* row_name(size_t idx)
+  String* row_name(size_t idx) {
+    assert(idx < row_name_vec.size_);
+    return row_name_vec.get(idx);
+  }
  
   /** Return name of column at idx; nullptr indicates no name given.
     *  An idx >= width is undefined.*/
-  String* col_name(size_t idx)
+  String* col_name(size_t idx) {
+    assert(idx < col_name_vec.size_);
+    return col_name_vec.get(idx);
+  }
  
   /** Return type of column at idx. An idx >= width is undefined. */
-  char col_type(size_t idx)
+  char col_type(size_t idx) {
+    assert(idx < type_vec.size_);
+    return type_vec.get(idx);
+  }
  
   /** Given a column name return its index, or -1. */
-  int col_idx(const char* name)
+  int col_idx(const char* name) {
+    return col_name_vec.indexAt(name);
+  }
  
   /** Given a row name return its index, or -1. */
-  int row_idx(const char* name)
+  int row_idx(const char* name) {
+    return row_name_vec.indexAt(name);
+  }
  
   /** The number of columns */
-  size_t width()
+  size_t width() {
+    return col_name_vec.size_;
+  }
  
   /** The number of rows */
-  size_t length()
+  size_t length() {
+    return row_name_vec.size_;
+  }
 };
  
 /*****************************************************************************

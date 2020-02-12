@@ -77,13 +77,13 @@ class IntColumn : public Column {
     va_start(vl,n);
     for (int i = 0; i < n; i++) {
       val=va_arg(vl,int);
-      val_.append(val);
+      val_->append(val);
     }
     va_end(vl);
   }
 
   int get(size_t idx) {
-    return val_.get(idx);
+    return val_->get(idx);
   }
 
   IntColumn* as_int() {
@@ -91,12 +91,12 @@ class IntColumn : public Column {
   }
   /** Set value at idx. An out of bound idx is undefined.  */
   void set(size_t idx, int val) {
-    val_.remove(idx);
-    val_.insert(val, idx);
+    val_->remove(idx);
+    val_->insert(val, idx);
   }
 
   size_t size() {
-    return val_.size_;
+    return val_->size_;
   }
   char get_type() {
     return 'I';
@@ -120,14 +120,14 @@ class BoolColumn : public Column {
     va_start(vl,n);
     for (int i = 0; i < n; i++) {
       val=va_arg(vl,bool);
-      val_.append(val);
+      val_->append(val);
     }
     va_end(vl);
   }
 
 
   bool get(size_t idx) {
-    return val_.get(idx);
+    return val_->get(idx);
   }
 
   BoolColumn* as_bool() {
@@ -135,8 +135,8 @@ class BoolColumn : public Column {
   }
   /** Set value at idx. An out of bound idx is undefined.  */
   void set(size_t idx, bool val) {
-    val_.remove(idx);
-    val_.insert(val, idx);
+    val_->remove(idx);
+    val_->insert(val, idx);
   }
 
   size_t size() {
@@ -164,13 +164,13 @@ class FloatColumn : public Column {
     va_start(vl,n);
     for (int i = 0; i < n; i++) {
       val=va_arg(vl,float);
-      val_.append(val);
+      val_->append(val);
     }
     va_end(vl);
   }
 
   float get(size_t idx) {
-    return val_.get(idx);
+    return val_->get(idx);
   }
 
   FloatColumn* as_float() {
@@ -179,12 +179,12 @@ class FloatColumn : public Column {
 
   /** Set value at idx. An out of bound idx is undefined.  */
   void set(size_t idx, float val) {
-    val_.remove(idx);
-    val_.insert(val, idx);
+    val_->remove(idx);
+    val_->insert(val, idx);
   }
 
   size_t size() {
-    return val_.size_;
+    return val_->size_;
   }
 
   char get_type() {
@@ -214,7 +214,7 @@ class StringColumn : public Column {
     va_start(vl,n);
     for (int i = 0; i < n; i++) {
       val=va_arg(vl,String);
-      val_.append(val);
+      val_->append(val);
     }
     va_end(vl);
   }
@@ -226,17 +226,17 @@ class StringColumn : public Column {
 
   /** Returns the string at idx; undefined on invalid idx.*/
   String* get(size_t idx) {
-    return val_.get(idx);
+    return val_->get(idx);
   }
 
   /** Out of bound idx is undefined. */
   void set(size_t idx, String* val) {
-    val_.remove(idx);
-    val_.insert(val,idx);
+    val_->remove(idx);
+    val_->insert(val,idx);
   }
 
   size_t size() {
-    return val_.size_;
+    return val_->size_;
   }
   char get_type() {
     return 'S';

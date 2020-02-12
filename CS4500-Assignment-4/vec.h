@@ -7,7 +7,7 @@
 #include "object.h"
 #include "string.h"
 
-class vec : public Object {
+class Vec : public Object {
 public:
   virtual void append(char c) {
     std::cout << "invalid function call in vec.h: vec is an abstract class\n"
@@ -45,23 +45,23 @@ public:
   }
 };
 
-class cvec : public vec {
+class Cvec : public Vec {
 public:
   char *list_;
   size_t size_;
   size_t capacity_;
   size_t hash_;
 
-  cvec(char c...) {}
+  Cvec(char c...) {}
 
-  cvec() {
+  Cvec() {
     size_ = 0;
     capacity_ = 4;
     hash_ = 0;
     list_ = new char[capacity_];
   }
 
-  ~cvec() { delete[] list_; }
+  ~Cvec() { delete[] list_; }
 
   void expand() {
     if (size_ == capacity_) {
@@ -105,6 +105,24 @@ public:
     list_ = temp;
   }
 
+  bool contains(char c) {
+    for (size_t m = 0; m < size_; m++) {
+      if (list[m] == c) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  int indexAt(char c) {
+    for (size_t m = 0; m < size_; m++) {
+      if (list[m] == c) {
+        return m;
+      }
+    }
+    return -1;
+  }
+
   /**
    * overrite hash_me to hash the code.
    * @return return hash code.
@@ -123,16 +141,16 @@ public:
   }
 };
 
-class svec : public vec {
+class Svec : public Vec {
 public:
   String **list_;
   size_t size_;
   size_t capacity_;
   size_t hash_;
 
-  svec(String *s...) {}
+  Svec(String *s...) {}
 
-  svec() {
+  Svec() {
     size_ = 0;
     capacity_ = 4;
     hash_ = 0;
@@ -140,7 +158,7 @@ public:
     initialize(0);
   }
 
-  ~svec() { delete[] list_; }
+  ~Svec() { delete[] list_; }
 
   void initialize(size_t idx) {
     for (size_t i = idx; i < capacity_; i++) {
@@ -189,6 +207,23 @@ public:
     }
     delete[] list_;
     list_ = temp;
+  }
+  bool contains(String* s) {
+    for (size_t m = 0; m < size_; m++) {
+      if (list[m] == s) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  int indexAt(String* s) {
+    for (size_t m = 0; m < size_; m++) {
+      if (list[m] == s) {
+        return m;
+      }
+    }
+    return -1;
   }
 
   /**
