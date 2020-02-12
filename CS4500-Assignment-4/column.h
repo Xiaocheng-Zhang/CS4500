@@ -86,7 +86,10 @@ class IntColumn : public Column {
     return this;
   }
   /** Set value at idx. An out of bound idx is undefined.  */
-  void set(size_t idx, int val);
+  void set(size_t idx, int val) {
+    val_.remove(idx);
+    val_.insert(val, idx);
+  }
 
   size_t size() {
     return val_.size_;
@@ -102,14 +105,33 @@ class IntColumn : public Column {
  */
 class BoolColumn : public Column {
  public:
+  Bool_Array val_;
+
   BoolColumn();
-  BoolColumn(int n, ...);
-  bool get(size_t idx);
+  BoolColumn(int n, ...) {
+    va_list vl;
+    va_start(vl,n);
+    for (int i = 0; i < n; i++) {
+      val=va_arg(vl,bool);
+      val_.append(val);
+    }
+    va_end(vl);
+  }
+
+
+  bool get(size_t idx) {
+    return val_.get(idx);
+  }
+
   BoolColumn* as_bool() {
     return this;
   }
   /** Set value at idx. An out of bound idx is undefined.  */
-  void set(size_t idx, bool val);
+  void set(size_t idx, bool val) {
+    val_.remove(idx);
+    val_.insert(val, idx);
+  }
+
   size_t size() {
     return size;
   }
@@ -124,17 +146,37 @@ class BoolColumn : public Column {
  */
 class FloatColumn : public Column {
  public:
+  Float_Array val_;
+
   FloatColumn();
-  FloatColumn(int n, ...);
-  float get(size_t idx);
+  FloatColumn(int n, ...) {
+    va_list vl;
+    va_start(vl,n);
+    for (int i = 0; i < n; i++) {
+      val=va_arg(vl,float);
+      val_.append(val);
+    }
+    va_end(vl);
+  }
+
+  float get(size_t idx) {
+    return val_.get(idx);
+  }
+
   FloatColumn* as_float() {
     return this;
   }
+
   /** Set value at idx. An out of bound idx is undefined.  */
-  void set(size_t idx, float val);
-  size_t size() {
-    return size;
+  void set(size_t idx, float val) {
+    val_.remove(idx);
+    val_.insert(val, idx);
   }
+
+  size_t size() {
+    return val_.size_;
+  }
+  
   char get_type() {
     return 'F';
   }
@@ -151,15 +193,37 @@ class FloatColumn : public Column {
  */
 class StringColumn : public Column {
  public:
-  StringColumn()
-  StringColumn(int n, ...)
-  StringColumn* as_string()
+  Array val_;
+
+  StringColumn();
+  StringColumn(int n, ...) {
+    va_list vl;
+    va_start(vl,n);
+    for (int i = 0; i < n; i++) {
+      val=va_arg(vl,String);
+      val_.append(val);
+    }
+    va_end(vl);
+  }
+
+
+  StringColumn* as_string() {
+    return this;
+  }
+
   /** Returns the string at idx; undefined on invalid idx.*/
-  String* get(size_t idx)
+  String* get(size_t idx) {
+    return val_.get(idx);
+  }
+
   /** Out of bound idx is undefined. */
-  void set(size_t idx, String* val)
+  void set(size_t idx, String* val) {
+    val_.remove(idx);
+    val_.insert(val,idx);
+  }
+
   size_t size() {
-    return size;
+    return val_.size_;
   }
   char get_type() {
     return 'S';
