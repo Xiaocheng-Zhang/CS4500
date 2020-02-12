@@ -67,8 +67,12 @@ class IntColumn : public Column {
  public:
   Int_Array val_;
 
-  IntColumn();
+  IntColumn() {
+    val_ = new Int_Array();
+  }
+
   IntColumn(int n, ...) {
+    val_ = new Int_Array();
     va_list vl;
     va_start(vl,n);
     for (int i = 0; i < n; i++) {
@@ -107,8 +111,11 @@ class BoolColumn : public Column {
  public:
   Bool_Array val_;
 
-  BoolColumn();
+  BoolColumn() {
+    val_ = new Bool_Array();
+  }
   BoolColumn(int n, ...) {
+    val_ = new Bool_Array();
     va_list vl;
     va_start(vl,n);
     for (int i = 0; i < n; i++) {
@@ -148,8 +155,11 @@ class FloatColumn : public Column {
  public:
   Float_Array val_;
 
-  FloatColumn();
+  FloatColumn() {
+    val_ = new Float_Array();
+  }
   FloatColumn(int n, ...) {
+    val_ = new Float_Array();
     va_list vl;
     va_start(vl,n);
     for (int i = 0; i < n; i++) {
@@ -176,7 +186,7 @@ class FloatColumn : public Column {
   size_t size() {
     return val_.size_;
   }
-  
+
   char get_type() {
     return 'F';
   }
@@ -195,8 +205,11 @@ class StringColumn : public Column {
  public:
   Array val_;
 
-  StringColumn();
+  StringColumn() {
+    val_ = new Array();
+  }
   StringColumn(int n, ...) {
+    val_ = new Array();
     va_list vl;
     va_start(vl,n);
     for (int i = 0; i < n; i++) {
