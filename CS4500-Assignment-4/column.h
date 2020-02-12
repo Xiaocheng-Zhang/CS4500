@@ -1,3 +1,11 @@
+#include <iostream>
+#include <stdarg.h> 
+#include "vec.h"
+#include "object.h"
+#include "string.h"
+#include "array.h"
+
+
 /**************************************************************************
  * Column ::
  * Represents one column of a data frame which holds values of a single type.
@@ -6,9 +14,6 @@
  * equality. */
 class Column : public Object {
  public:
-  size_t size;
-
-
   /** Type converters: Return same column under its actual type, or
    *  nullptr if of the wrong type.  */
   virtual IntColumn* as_int() {
@@ -49,7 +54,9 @@ class Column : public Object {
   }
  
   /** Return the type of this column as a char: 'S', 'B', 'I' and 'F'. */
-  virtual char get_type();
+  virtual char get_type() {
+    return ' ';
+  }
 };
  
 /*************************************************************************
@@ -58,16 +65,31 @@ class Column : public Object {
  */
 class IntColumn : public Column {
  public:
+  Int_Array val_;
+
   IntColumn();
-  IntColumn(int n, ...);
-  int get(size_t idx);
+  IntColumn(int n, ...) {
+    va_list vl;
+    va_start(vl,n);
+    for (int i = 0; i < n; i++) {
+      val=va_arg(vl,int);
+      val_.append(val);
+    }
+    va_end(vl);
+  }
+
+  int get(size_t idx) {
+    return val_.get(idx);
+  }
+
   IntColumn* as_int() {
     return this;
   }
   /** Set value at idx. An out of bound idx is undefined.  */
   void set(size_t idx, int val);
+
   size_t size() {
-    return size;
+    return val_.size_;
   }
   char get_type() {
     return 'I';
@@ -81,7 +103,7 @@ class IntColumn : public Column {
 class BoolColumn : public Column {
  public:
   BoolColumn();
-  BoolColumn(bool n, ...);
+  BoolColumn(int n, ...);
   bool get(size_t idx);
   BoolColumn* as_bool() {
     return this;
@@ -103,7 +125,7 @@ class BoolColumn : public Column {
 class FloatColumn : public Column {
  public:
   FloatColumn();
-  FloatColumn(float n, ...);
+  FloatColumn(int n, ...);
   float get(size_t idx);
   FloatColumn* as_float() {
     return this;
