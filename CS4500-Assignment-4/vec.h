@@ -200,6 +200,11 @@ public:
     size_++;
   }
 
+  virtual char get(size_t index) {
+    assert(index < size_ && index >= 0);
+    return list_[index];
+  }
+
   virtual void set(size_t idx, char c) {
     expand();
     list_[idx] = c;
@@ -306,6 +311,11 @@ public:
     expand();
     list_[size_] = b;
     size_++;
+  }
+
+  virtual bool get(size_t index) {
+    assert(index < size_ && index >= 0);
+    return list_[index];
   }
 
   virtual void set(size_t idx, bool b) {
@@ -421,6 +431,11 @@ public:
     size_++;
   }
 
+  virtual float get(size_t index) {
+    assert(index < size_ && index >= 0);
+    return list_[index];
+  }
+
   virtual void set(size_t idx, float f) {
     expand();
     list_[idx] = f;
@@ -527,6 +542,11 @@ public:
     expand();
     list_[size_] = i;
     size_++;
+  }
+
+  virtual int get(size_t index) {
+    assert(index < size_ && index >= 0);
+    return list_[index];
   }
 
   virtual void set(size_t idx, int i) {
@@ -649,6 +669,11 @@ public:
     size_++;
   }
 
+  virtual String* get(size_t index) {
+    assert(index < size_ && index >= 0);
+    return list_[index];
+  }
+
   virtual void set(size_t idx, String *s) {
     expand();
     list_[idx] = new String(*s);
@@ -767,6 +792,11 @@ public:
     list_[size_] = temp;
     // memcpy(list_[size_], v, sizeof(v));
     size_++;
+  }
+
+  virtual Column* get(size_t index) {
+    assert(index < size_ && index >= 0);
+    return list_[index];
   }
 
   virtual void set(size_t idx, Column *v) {
