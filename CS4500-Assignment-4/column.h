@@ -14,6 +14,7 @@
  * equality. */
 class Column : public Object {
  public:
+ size_t size_;
   /** Type converters: Return same column under its actual type, or
    *  nullptr if of the wrong type.  */
   virtual IntColumn* as_int() {
@@ -50,7 +51,7 @@ class Column : public Object {
  
  /** Returns the number of elements in the column. */
   virtual size_t size() {
-    return size;
+    return size_;
   }
  
   /** Return the type of this column as a char: 'S', 'B', 'I' and 'F'. */
@@ -65,7 +66,7 @@ class Column : public Object {
  */
 class IntColumn : public Column {
  public:
-  Int_Array val_;
+  Int_Array *val_;
 
   IntColumn() {
     val_ = new Int_Array();
