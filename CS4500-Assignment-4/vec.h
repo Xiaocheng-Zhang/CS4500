@@ -6,6 +6,7 @@
 
 #include "object.h"
 #include "string.h"
+#include "column.h"
 
 class Vec : public Object {
 public:
@@ -20,6 +21,16 @@ public:
   virtual void append(char c) {
     std::cout << "invalid function call in vec.h: vec is an abstract class\n"
                  "crashed method: append(char c)"
+              << std::endl;
+  }
+  virtual void append(float f) {
+    std::cout << "invalid function call in vec.h: vec is an abstract class\n"
+                 "crashed method: append(float f)"
+              << std::endl;
+  }
+  virtual void append(int i) {
+    std::cout << "invalid function call in vec.h: vec is an abstract class\n"
+                 "crashed method: append(int i)"
               << std::endl;
   }
   virtual void append(String *s) {
@@ -37,6 +48,16 @@ public:
                  "crashed method: set(size_t idx, char c)"
               << std::endl;
   }
+  virtual void set(size_t idx, float f) {
+    std::cout << "invalid function call in vec.h: vec is an abstract class\n"
+                 "crashed method: set(size_t idx, float f)"
+              << std::endl;
+  }
+  virtual void set(size_t idx, int i) {
+    std::cout << "invalid function call in vec.h: vec is an abstract class\n"
+                 "crashed method: set(size_t idx, int i)"
+              << std::endl;
+  }
   virtual void set(size_t idx, String *s) {
     std::cout << "invalid function call in vec.h: vec is an abstract class\n"
                  "crashed method: set(size_t idx, String *s)"
@@ -50,6 +71,16 @@ public:
   virtual void insert(size_t idx, char c) {
     std::cout << "invalid function call in vec.h: vec is an abstract class\n"
                  "crashed method: insert(size_t idx, char c)"
+              << std::endl;
+  }
+  virtual void insert(size_t idx, float f) {
+    std::cout << "invalid function call in vec.h: vec is an abstract class\n"
+                 "crashed method: insert(size_t idx, float f)"
+              << std::endl;
+  }
+  virtual void insert(size_t idx, int i) {
+    std::cout << "invalid function call in vec.h: vec is an abstract class\n"
+                 "crashed method: insert(size_t idx, int i)"
               << std::endl;
   }
   virtual void insert(size_t idx, String *s) {
@@ -68,6 +99,18 @@ public:
               << std::endl;
     return false;
   }
+  virtual bool contains(float f) {
+    std::cout << "invalid function call in vec.h: vec is an abstract class\n"
+                 "crashed method: contains(float f)"
+              << std::endl;
+    return false;
+  }
+  virtual bool contains(int i) {
+    std::cout << "invalid function call in vec.h: vec is an abstract class\n"
+                 "crashed method: contains(int i)"
+              << std::endl;
+    return false;
+  }
   virtual bool contains(String *s) {
     std::cout << "invalid function call in vec.h: vec is an abstract class\n"
                  "crashed method: contains(String *s)"
@@ -83,6 +126,18 @@ public:
   virtual int indexAt(char c) {
     std::cout << "invalid function call in vec.h: vec is an abstract class\n"
                  "crashed method: indexAt(char c)"
+              << std::endl;
+    return -1;
+  }
+  virtual int indexAt(float f) {
+    std::cout << "invalid function call in vec.h: vec is an abstract class\n"
+                 "crashed method: indexAt(float f)"
+              << std::endl;
+    return -1;
+  }
+  virtual int indexAt(int i) {
+    std::cout << "invalid function call in vec.h: vec is an abstract class\n"
+                 "crashed method: indexAt(int i)"
               << std::endl;
     return -1;
   }
@@ -346,16 +401,16 @@ public:
   }
 };
 
-class Vvec : public Vec {
+class ColumnVec : public Vec {
 public:
-  Vec **list_;
+  Column **list_;
 
-  Vvec() : Vec() {
-    list_ = new Vec *[capacity_];
+  ColumnVec() : Vec() {
+    list_ = new Column *[capacity_];
     initialize(0);
   }
 
-  ~Vvec() {
+  ~ColumnVec() {
     delete [] list_;
   }
 
@@ -368,7 +423,7 @@ public:
   void expand() {
     if (size_ == capacity_) {
       capacity_ *= 2;
-      Vec **temp = new Vec *[capacity_];
+      Column **temp = new Column *[capacity_];
       for (size_t i = 0; i < size_; i++) {
         temp[i] = list_[i];
       }
@@ -379,28 +434,28 @@ public:
     assert(size_ < capacity_);
   }
 
-  virtual void append(Vec *v) {
+  virtual void append(Column *v) {
     expand();
-    Vec *temp = v->copy();
+    Column *temp = v;//v->copy();
     list_[size_] = temp;
     // memcpy(list_[size_], v, sizeof(v));
     size_++;
   }
 
-  virtual void set(size_t idx, Vec *v) {
+  virtual void set(size_t idx, Column *v) {
     expand();
-    list_[idx] = v->copy();
+    list_[idx] = v;//v->copy();
   }
 
-  virtual void insert(size_t idx, Vec *v) {
+  virtual void insert(size_t idx, Column *v) {
     expand();
-    Vec **temp = new Vec *[capacity_];
+    Column **temp = new Column *[capacity_];
     size_++;
     for (size_t i = 0, j = idx; i < size_; i++) {
       if (i < j) {
         temp[i] = list_[i];
       } else if (i == j) {
-        temp[i] = v->copy();
+        temp[i] = v;//v->copy();
       } else {
         temp[i] = list_[j];
         j++;
@@ -409,7 +464,7 @@ public:
     delete[] list_;
     list_ = temp;
   }
-  virtual bool contains(Vec *v) {
+  virtual bool contains(Column *v) {
     for (size_t m = 0; m < size_; m++) {
       if (list_[m]->equals(v)) {
         return true;
@@ -418,7 +473,7 @@ public:
     return false;
   }
 
-  virtual int indexAt(Vec *v) {
+  virtual int indexAt(Column *v) {
     for (size_t m = 0; m < size_; m++) {
       if (list_[m]->equals(v)) {
         return m;
@@ -427,7 +482,7 @@ public:
     return -1;
   }
   virtual void del(size_t idx) {
-    Vec **temp = new Vec *[capacity_];
+    Column **temp = new Column *[capacity_];
     for (size_t i = 0, j = idx; i < size_; i++) {
       if (i < j) {
         temp[i] = list_[i];
@@ -441,9 +496,9 @@ public:
     list_ = temp;
   }
   virtual Vec *copy() {
-    Vec *temp = new Vvec();
+    Vec *temp = new ColumnVec();
     for (size_t i = 0; i < size_; i++) {
-      temp->append(list_[i]);
+      //temp->append(list_[i]);
     }
     return temp;
   }
@@ -458,12 +513,12 @@ public:
     return hash_;
   }
 
-  virtual void print_self() {
-    for (size_t i = 0; i < size_; i++) {
-      if (list_[i]) {
-        list_[i]->print_self();
-        puts("");
-      }
-    }
-  }
+  // virtual void print_self() {
+  //   for (size_t i = 0; i < size_; i++) {
+  //     if (list_[i]) {
+  //       list_[i]->print_self();
+  //       puts("");
+  //     }
+  //   }
+  // }
 };
