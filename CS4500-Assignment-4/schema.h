@@ -18,9 +18,9 @@ public:
 
   /** Copying constructor */
   Schema(Schema &from) {
-    type_vec = from->type_vec;
-    col_name_vec = from->col_name_vec;
-    row_name_vec = from->row_name_vec;
+    type_vec = from.type_vec;
+    col_name_vec = from.col_name_vec;
+    row_name_vec = from.row_name_vec;
   }
 
   /** Create an empty schema **/
@@ -64,15 +64,13 @@ public:
     }
   }
 
-  bool type_check(char c) {
-    return c == 'I' || c == 'B' || c == 'F' || c == 'S';
-  }
+  bool type_check(char c) { return c == 'I' || c == 'B' || c == 'F' || c == 'S'; }
 
   /** Add a column of the given type and name (can be nullptr), name
    * is external. Names are expectd to be unique, duplicates result
    * in undefined behavior. */
   void add_column(char typ, String *name) {
-    assert(typ != nullptr);
+    assert(typ != NULL);
     assert(type_check(typ));
     assert(!col_name_vec->contains(name));
     type_vec->append(typ);
@@ -89,34 +87,34 @@ public:
   /** Return name of row at idx; nullptr indicates no name. An idx >= width
    * is undefined. */
   String *row_name(size_t idx) {
-    assert(idx < row_name_vec.size_);
-    return row_name_vec.get(idx);
+    assert(idx < row_name_vec->size_);
+    return row_name_vec->get(idx);
   }
 
   /** Return name of column at idx; nullptr indicates no name given.
    *  An idx >= width is undefined.*/
   String *col_name(size_t idx) {
-    assert(idx < col_name_vec.size_);
-    return col_name_vec.get(idx);
+    assert(idx < col_name_vec->size_);
+    return col_name_vec->get(idx);
   }
 
   /** Return type of column at idx. An idx >= width is undefined. */
   char col_type(size_t idx) {
-    assert(idx < type_vec.size_);
-    return type_vec.get(idx);
+    assert(idx < type_vec->size_);
+    return type_vec->get(idx);
   }
 
   /** Given a column name return its index, or -1. */
-  int col_idx(const char *name) { return col_name_vec.indexAt(name); }
+  int col_idx(const char *name) { return col_name_vec->indexAt(new String(name)); }
 
   /** Given a row name return its index, or -1. */
-  int row_idx(const char *name) { return row_name_vec.indexAt(name); }
+  int row_idx(const char *name) { return row_name_vec->indexAt(new String(name)); }
 
   /** The number of columns */
-  size_t width() { return col_name_vec.size_; }
+  size_t width() { return col_name_vec->size_; }
 
   /** The number of rows */
-  size_t length() { return row_name_vec.size_; }
+  size_t length() { return row_name_vec->size_; }
 };
 
 /*****************************************************************************
