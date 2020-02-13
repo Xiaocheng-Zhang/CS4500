@@ -281,6 +281,119 @@ public:
   }
 };
 
+class Bvec : public Vec {
+public:
+  bool *list_;
+
+  Bvec() : Vec() { list_ = new bool[capacity_]; }
+
+  ~Bvec() { delete[] list_; }
+
+  void expand() {
+    if (size_ == capacity_) {
+      capacity_ *= 2;
+      bool *temp = new bool[capacity_];
+      for (size_t i = 0; i < size_; i++) {
+        temp[i] = list_[i];
+      }
+      delete[] list_;
+      list_ = temp;
+    }
+    assert(size_ < capacity_);
+  }
+
+  virtual void append(bool b) {
+    expand();
+    list_[size_] = b;
+    size_++;
+  }
+
+  virtual void set(size_t idx, bool b) {
+    expand();
+    list_[idx] = b;
+  }
+
+  virtual void insert(size_t idx, bool b) {
+    expand();
+    bool *temp = new bool[capacity_];
+    size_++;
+    for (size_t i = 0, j = idx; i < size_; i++) {
+      if (i < j) {
+        temp[i] = list_[i];
+      } else if (i == j) {
+        temp[i] = b;
+      } else {
+        temp[i] = list_[j];
+        j++;
+      }
+    }
+    delete[] list_;
+    list_ = temp;
+  }
+
+  virtual bool contains(bool b) {
+    for (size_t m = 0; m < size_; m++) {
+      if (list_[m] == b) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  virtual int indexAt(bool b) {
+    for (size_t m = 0; m < size_; m++) {
+      if (list_[m] == b) {
+        return m;
+      }
+    }
+    return -1;
+  }
+
+  virtual void del(size_t idx) {
+    bool *temp = new bool[capacity_];
+    for (size_t i = 0, j = idx; i < size_; i++) {
+      if (i < j) {
+        temp[i] = list_[i];
+      } else if (i > j) {
+        temp[j] = list_[i];
+        j++;
+      }
+    }
+    size_--;
+    delete[] list_;
+    list_ = temp;
+  }
+
+  virtual Vec *copy() {
+    Vec *temp = new Bvec();
+    for (size_t i = 0; i < size_; i++) {
+      temp->append(list_[i]);
+    }
+    return temp;
+  }
+  /**
+   * overrite hash_me to hash the code.
+   * @return return hash code.
+   */
+  virtual size_t hash_me() {
+    for (size_t i = 0; i < size_; i++) {
+      if (list_[i]) {
+        hash_ = hash_ * 67 + 13;
+      }
+      else {
+        hash_ = hash_ * 67 + 2;
+      }
+    }
+    return hash_;
+  }
+
+  virtual void print_self() {
+    for (size_t i = 0; i < size_; i++) {
+      printf("%d", list_[i]);
+    }
+  }
+};
+
 class Fvec : public Vec {
 public:
   float *list_;
