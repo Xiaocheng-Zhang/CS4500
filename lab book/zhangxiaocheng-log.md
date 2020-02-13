@@ -9,6 +9,56 @@
         social media acct (optional): ____________
 
 
+        assignment/project title: Assignment 4
+
+        time estimate: 25h
+
+
+        date/time: 2/11/2020
+
+        place: WVH Lab 102
+
+        goal: distribute works
+
+        finish implementing "vec.h"
+
+        duration: 6h
+
+        NEXT : 2/13/2020 WVH Lab102
+
+
+        date/time: 2/13/2020
+
+        place: WVH Lab 102
+
+        goal: finish dataframe.h
+
+        finish column.h
+
+        duration: 6h
+
+        NEXT : 2/13/2020 WVH Lab102
+
+
+        actual time needed: 28
+
+        outstanding issues: ______________________
+
+        __________________________________________
+
+&nbsp;
+
+        PARTNER INFORMATION
+
+        name: Tian Xia
+
+        cell: 8575071919
+
+        email address: xia.tia@husky.neu.edu
+
+        social media acct (optional): ____________
+
+
         assignment/project title: Assignment 3
 
         time estimate: 25h
@@ -51,7 +101,20 @@
         NEXT : 2/7/2020 WVH Lab102
 
 
-        actual time needed: 
+        date/time: 2/7/2020
+
+        place: WVH110
+
+        goal: 
+
+        finish part1 part2
+
+        duration: 6h
+
+        NEXT : 2/13/2020 WVH Lab102
+
+
+        actual time needed: 28
 
         outstanding issues: ______________________
 
