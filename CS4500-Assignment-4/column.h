@@ -214,7 +214,7 @@ class StringColumn : public Column {
     String* val;
     va_start(vl,n);
     for (int i = 0; i < n; i++) {
-      val=va_arg(vl,String);
+      val=va_arg(vl,String*);
       val_->append(val);
     }
     va_end(vl);
