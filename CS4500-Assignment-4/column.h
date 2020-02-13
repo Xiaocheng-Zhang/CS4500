@@ -13,8 +13,7 @@
  * one subclass per element type. Columns are mutable, equality is pointer
  * equality. */
 class Column : public Object {
- public:
- size_t size_;
+ public: 
   /** Type converters: Return same column under its actual type, or
    *  nullptr if of the wrong type.  */
   virtual IntColumn* as_int() {
@@ -51,7 +50,7 @@ class Column : public Object {
  
  /** Returns the number of elements in the column. */
   virtual size_t size() {
-    return size_;
+    return 0;
   }
  
   /** Return the type of this column as a char: 'S', 'B', 'I' and 'F'. */
@@ -66,15 +65,16 @@ class Column : public Object {
  */
 class IntColumn : public Column {
  public:
-  Int_Array *val_;
+  Ivec* val_;
 
   IntColumn() {
-    val_ = new Int_Array();
+    val_ = new Ivec();
   }
 
   IntColumn(int n, ...) {
-    val_ = new Int_Array();
+    val_ = new Ivec();
     va_list vl;
+    int val;
     va_start(vl,n);
     for (int i = 0; i < n; i++) {
       val=va_arg(vl,int);
@@ -92,8 +92,7 @@ class IntColumn : public Column {
   }
   /** Set value at idx. An out of bound idx is undefined.  */
   void set(size_t idx, int val) {
-    val_->remove(idx);
-    val_->insert(val, idx);
+    val_->set(idx, val);
   }
 
   size_t size() {
@@ -110,14 +109,15 @@ class IntColumn : public Column {
  */
 class BoolColumn : public Column {
  public:
-  Bool_Array val_;
+  Bvec* val_;
 
   BoolColumn() {
-    val_ = new Bool_Array();
+    val_ = new Bvec();
   }
   BoolColumn(int n, ...) {
-    val_ = new Bool_Array();
+    val_ = new Bvec();
     va_list vl;
+    bool val;
     va_start(vl,n);
     for (int i = 0; i < n; i++) {
       val=va_arg(vl,bool);
@@ -136,12 +136,11 @@ class BoolColumn : public Column {
   }
   /** Set value at idx. An out of bound idx is undefined.  */
   void set(size_t idx, bool val) {
-    val_->remove(idx);
-    val_->insert(val, idx);
+    val_->set(idx,val);
   }
 
   size_t size() {
-    return size;
+    return val_->size;
   }
   char get_type() {
     return 'B';
@@ -154,14 +153,15 @@ class BoolColumn : public Column {
  */
 class FloatColumn : public Column {
  public:
-  Float_Array val_;
+  Fvec* val_;
 
   FloatColumn() {
-    val_ = new Float_Array();
+    val_ = new Fvec();
   }
   FloatColumn(int n, ...) {
-    val_ = new Float_Array();
+    val_ = new Fvec();
     va_list vl;
+    float val;
     va_start(vl,n);
     for (int i = 0; i < n; i++) {
       val=va_arg(vl,float);
@@ -180,8 +180,7 @@ class FloatColumn : public Column {
 
   /** Set value at idx. An out of bound idx is undefined.  */
   void set(size_t idx, float val) {
-    val_->remove(idx);
-    val_->insert(val, idx);
+    val_->set(idx,val);
   }
 
   size_t size() {
@@ -204,14 +203,15 @@ class FloatColumn : public Column {
  */
 class StringColumn : public Column {
  public:
-  Array val_;
+  Svec* val_;
 
   StringColumn() {
-    val_ = new Array();
+    val_ = new Svec();
   }
   StringColumn(int n, ...) {
-    val_ = new Array();
+    val_ = new Svec();
     va_list vl;
+    String* val;
     va_start(vl,n);
     for (int i = 0; i < n; i++) {
       val=va_arg(vl,String);
@@ -232,8 +232,7 @@ class StringColumn : public Column {
 
   /** Out of bound idx is undefined. */
   void set(size_t idx, String* val) {
-    val_->remove(idx);
-    val_->insert(val,idx);
+    val_->set(idx, val);
   }
 
   size_t size() {
