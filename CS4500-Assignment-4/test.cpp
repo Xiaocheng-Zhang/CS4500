@@ -1,29 +1,45 @@
 #include "vec.h"
 
 void test1() {
-  vec *cvec_1 = new cvec();
-  cvec_1->append('I');
-  cvec_1->append(' ');
-  cvec_1->append('O');
-  cvec_1->append('V');
-  cvec_1->append('e');
+  Vec *cvec = new Cvec();
+  cvec->append('I');
+  cvec->append(' ');
+  cvec->append('O');
+  cvec->append('V');
+  cvec->append('e');
 
-  cvec_1->insert(2, 'L');
-  cvec_1->set(5, 'E');
-  cvec_1->print_self();
-}
+  cvec->insert(2, 'L');
+  cvec->set(5, 'E');
+  //cvec->print_self();
 
-void test2() {
   String *i = new String("I");
   String *love = new String("Love");
   String *china = new String("China");
-  vec *svec_1 = new svec();
-  svec_1->append(love);
-  svec_1->insert(0, i);
-  svec_1->append(i);
-  svec_1->set(2, china);
-  svec_1->print_self();
+  Vec *svec = new Svec();
+  svec->append(love);
+  svec->insert(0, i);
+  svec->append(i);
+  svec->set(2, china);
+  svec->print_self();
+  puts("");
+  Vec *vvec = new Vvec();
+  vvec->append(cvec);
+  vvec->append(svec);
+  vvec->insert(0, svec);
+  //vvec->print_self();
+  vvec->del(2);
+  china = new String("CHN");
+  svec->del(0);
+  svec->print_self();
+  puts("");
+  vvec->print_self();
+  //svec->print_self();
+  
 }
+
+void test2() {
+}
+
 
 int main(void) {
   test1();

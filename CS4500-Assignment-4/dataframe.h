@@ -1,3 +1,11 @@
+#include <iostream>
+#include <stdarg.h> 
+#include "vec.h"
+#include "object.h"
+#include "string.h"
+#include "array.h"
+#include "schema.h"
+
 /****************************************************************************
  * DataFrame::
  *
@@ -7,6 +15,9 @@
  */
 class DataFrame : public Object {
  public:
+  Schema schema_;
+  
+
  
   /** Create a data frame with the same columns as the given df but with no rows or rownmaes */
   DataFrame(DataFrame& df)
