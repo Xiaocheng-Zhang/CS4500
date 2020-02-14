@@ -216,7 +216,10 @@ public:
 
   /** Create a new dataframe, constructed from rows for which the given Rower
    * returned true from its accept method. */
-  DataFrame *filter(Rower &r);
+  DataFrame *filter(Rower &r) {
+    DataFrame *temp = new DataFrame(*schema_);
+    
+  }
 
   /** Print the dataframe in SoR format to standard output. */
   void print();
