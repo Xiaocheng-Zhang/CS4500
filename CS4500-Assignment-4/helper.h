@@ -115,7 +115,8 @@ public:
 /**
  * Helper method to print error message.
  */
-void abstract_error_print(char *filename, char *classname, char *errorname) {
+void abstract_error_print(const char *filename, const char *classname,
+                          const char *errorname) {
   printf("invalid function call in %s: %s is an abstract class\n"
          "crashed method: %s\n"),
       filename, classname, errorname;

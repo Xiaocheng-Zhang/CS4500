@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "column.h"
 #include "object.h"
 #include "string.h"
 
@@ -33,9 +32,9 @@ public:
   virtual void append(String *s) {
     abstract_error_print("vec.h", "Vec", "append(String c)");
   }
-  virtual void append(Column *col) {
-    abstract_error_print("vec.h", "Vec", "append(Column col)");
-  }
+  // virtual void append(Column *col) {
+  //   abstract_error_print("vec.h", "Vec", "append(Column col)");
+  // }
   virtual void set(size_t idx, char c) {
     abstract_error_print("vec.h", "Vec", "set(size_t idx, char c)");
   }
@@ -51,9 +50,9 @@ public:
   virtual void set(size_t idx, String *s) {
     abstract_error_print("vec.h", "Vec", "set(size_t idx, String *s)");
   }
-  virtual void set(size_t idx, Column *col) {
-    abstract_error_print("vec.h", "Vec", "set(size_t idx, Column *col)");
-  }
+  // virtual void set(size_t idx, Column *col) {
+  //   abstract_error_print("vec.h", "Vec", "set(size_t idx, Column *col)");
+  // }
   virtual void insert(size_t idx, char c) {
     abstract_error_print("vec.h", "Vec", "insert(size_t idx, char c)");
   }
@@ -69,9 +68,9 @@ public:
   virtual void insert(size_t idx, String *s) {
     abstract_error_print("vec.h", "Vec", "insert(size_t idx, String *s)");
   }
-  virtual void insert(size_t idx, Column *col) {
-    abstract_error_print("vec.h", "Vec", "insert(size_t idx, Column *col)");
-  }
+  // virtual void insert(size_t idx, Column *col) {
+  //   abstract_error_print("vec.h", "Vec", "insert(size_t idx, Column *col)");
+  // }
   virtual bool contains(char c) {
     abstract_error_print("vec.h", "Vec", "contains(char c)");
     return false;
@@ -92,10 +91,10 @@ public:
     abstract_error_print("vec.h", "Vec", "contains(String *s)");
     return false;
   }
-  virtual bool contains(Column *col) {
-    abstract_error_print("vec.h", "Vec", "contains(Column *col)");
-    return false;
-  }
+  // virtual bool contains(Column *col) {
+  //   abstract_error_print("vec.h", "Vec", "contains(Column *col)");
+  //   return false;
+  // }
   virtual int indexAt(char c) {
     abstract_error_print("vec.h", "Vec", "indexAt(char c)");
     return -1;
@@ -116,10 +115,10 @@ public:
     abstract_error_print("vec.h", "Vec", "indexAt(String *s)");
     return -1;
   }
-  virtual int indexAt(Column *col) {
-    abstract_error_print("vec.h", "Vec", "indexAt(Column *col)");
-    return -1;
-  }
+  // virtual int indexAt(Column *col) {
+  //   abstract_error_print("vec.h", "Vec", "indexAt(Column *col)");
+  //   return -1;
+  // }
   virtual void del(size_t idx) {
     abstract_error_print("vec.h", "Vec", "del(size_t idx)");
   }
@@ -147,14 +146,21 @@ public:
     abstract_error_print("vec.h", "Vec", "get_String(size_t idx)");
     return nullptr;
   }
-  virtual Column *get_Column(size_t idx) {
-    abstract_error_print("vec.h", "Vec", "get_Column(size_t idx)");
-    return nullptr;
-  }
+  // virtual Column *get_Column(size_t idx) {
+  //   abstract_error_print("vec.h", "Vec", "get_Column(size_t idx)");
+  //   return nullptr;
+  // }
   virtual size_t size() { return size_; }
   virtual void print_self() {
     puts(
         "invalid function call in vec.h: vec is an abstract class: print_self");
+  }
+
+  virtual bool equals(Object *object) {
+    if (hash() == object->hash()) {
+      return true;
+    }
+    return false;
   }
 };
 
@@ -267,6 +273,22 @@ public:
   virtual void print_self() {
     for (size_t i = 0; i < size_; i++) {
       printf("%c", list_[i]);
+    }
+  }
+
+  virtual bool equals(Object *object) {
+    if (hash() == object->hash()) {
+      return true;
+    }
+    Vec *temp = dynamic_cast<Vec *>(object);
+    if (!temp) {
+      return false;
+    } else {
+      for (size_t i = 0; i < size_; i++) {
+        if (temp->get_char(i) != list_[i]) {
+          return false;
+        }
+      }
     }
   }
 };
@@ -386,6 +408,22 @@ public:
       printf("%d", list_[i]);
     }
   }
+
+  virtual bool equals(Object *object) {
+    if (hash() == object->hash()) {
+      return true;
+    }
+    Vec *temp = dynamic_cast<Vec *>(object);
+    if (!temp) {
+      return false;
+    } else {
+      for (size_t i = 0; i < size_; i++) {
+        if (temp->get_bool(i) != list_[i]) {
+          return false;
+        }
+      }
+    }
+  }
 };
 
 class Fvec : public Vec {
@@ -496,6 +534,22 @@ public:
   virtual void print_self() {
     for (size_t i = 0; i < size_; i++) {
       printf("%f", list_[i]);
+    }
+  }
+
+  virtual bool equals(Object *object) {
+    if (hash() == object->hash()) {
+      return true;
+    }
+    Vec *temp = dynamic_cast<Vec *>(object);
+    if (!temp) {
+      return false;
+    } else {
+      for (size_t i = 0; i < size_; i++) {
+        if (temp->get_float(i) != list_[i]) {
+          return false;
+        }
+      }
     }
   }
 };
@@ -613,6 +667,22 @@ public:
   virtual void print_self() {
     for (size_t i = 0; i < size_; i++) {
       printf("%d", list_[i]);
+    }
+  }
+
+  virtual bool equals(Object *object) {
+    if (hash() == object->hash()) {
+      return true;
+    }
+    Vec *temp = dynamic_cast<Vec *>(object);
+    if (!temp) {
+      return false;
+    } else {
+      for (size_t i = 0; i < size_; i++) {
+        if (temp->get_int(i) != list_[i]) {
+          return false;
+        }
+      }
     }
   }
 };
@@ -737,132 +807,20 @@ public:
       }
     }
   }
-};
 
-class ColumnVec : public Vec {
-public:
-  Column **list_;
-
-  ColumnVec() : Vec() {
-    list_ = new Column *[capacity_];
-    initialize(0);
-  }
-
-  ~ColumnVec() { delete[] list_; }
-
-  void initialize(size_t idx) {
-    for (size_t i = idx; i < capacity_; i++) {
-      list_[i] = nullptr;
+  virtual bool equals(Object *object) {
+    if (hash() == object->hash()) {
+      return true;
     }
-  }
-
-  void expand() {
-    if (size_ == capacity_) {
-      capacity_ *= 2;
-      Column **temp = new Column *[capacity_];
+    Vec *temp = dynamic_cast<Vec *>(object);
+    if (!temp) {
+      return false;
+    } else {
       for (size_t i = 0; i < size_; i++) {
-        temp[i] = list_[i];
-      }
-      delete[] list_;
-      list_ = temp;
-      initialize(size_);
-    }
-    assert(size_ < capacity_);
-  }
-
-  virtual void append(Column *col) {
-    expand();
-    Column *colcpy = new Column();
-    colcpy->val_ = col->val_->copy();
-    list_[size_] = colcpy;
-    size_++;
-  }
-
-  virtual void set(size_t idx, Column *col) {
-    expand();
-    Column *colcpy = new Column();
-    colcpy->val_ = col->val_->copy();
-    list_[idx] = colcpy; // v->copy();
-  }
-
-  virtual void insert(size_t idx, Column *col) {
-    expand();
-    Column **temp = new Column *[capacity_];
-    size_++;
-    for (size_t i = 0, j = idx; i < size_; i++) {
-      if (i < j) {
-        temp[i] = list_[i];
-      } else if (i == j) {
-        Column *colcpy = new Column();
-        colcpy->val_ = col->val_->copy();
-        temp[i] = colcpy; // v->copy();
-      } else {
-        temp[i] = list_[j];
-        j++;
+        if (temp->get_String(i) != list_[i]) {
+          return false;
+        }
       }
     }
-    delete[] list_;
-    list_ = temp;
   }
-  virtual bool contains(Column *col) {
-    for (size_t m = 0; m < size_; m++) {
-      if (list_[m]->equals(col)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  virtual int indexAt(Column *col) {
-    for (size_t m = 0; m < size_; m++) {
-      if (list_[m]->equals(col)) {
-        return m;
-      }
-    }
-    return -1;
-  }
-  virtual void del(size_t idx) {
-    Column **temp = new Column *[capacity_];
-    for (size_t i = 0, j = idx; i < size_; i++) {
-      if (i < j) {
-        temp[i] = list_[i];
-      } else if (i > j) {
-        temp[j] = list_[i];
-        j++;
-      }
-    }
-    size_--;
-    delete[] list_;
-    list_ = temp;
-  }
-  virtual Vec *copy() {
-    ColumnVec *temp = new ColumnVec();
-    for (size_t i = 0; i < size_; i++) {
-      temp->append(list_[i]);
-    }
-    return temp;
-  }
-  /**
-   * overrite hash_me to hash the code.
-   * @return return hash code.
-   */
-  virtual size_t hash_me() {
-    for (size_t i = 0; i < size_; i++) {
-      hash_ = hash_ * 67 + list_[i]->hash() * 13;
-    }
-    return hash_;
-  }
-
-  virtual Column *get_Column(size_t index) {
-    assert(index < size_ && index >= 0);
-    return list_[index];
-  }
-  // virtual void print_self() {
-  //   for (size_t i = 0; i < size_; i++) {
-  //     if (list_[i]) {
-  //       list_[i]->print_self();
-  //       puts("");
-  //     }
-  //   }
-  // }
 };

@@ -1,17 +1,6 @@
-//#include "schema.h"
 #include "vec.h"
-//#include "schema.h"
+#include "column.h"
 
-void FAIL() { exit(1); }
-void OK(const char *m) { std::cout << m << "\n"; }
-void t_true(bool p) {
-  if (!p)
-    FAIL();
-}
-void t_false(bool p) {
-  if (p)
-    FAIL();
-}
 
 void FAIL() { exit(1); }
 void OK(const char *m) { std::cout << m << "\n"; }
@@ -46,34 +35,36 @@ void test1() {
   svec->set(2, china);
   svec->print_self();
   puts("");
-  Vec *colvec = new ColumnVec();
-  colvec->append(cvec);
-  colvec->append(svec);
-  colvec->insert(0, svec);
-  //vvec->print_self();
-  colvec->del(2);
   china = new String("CHN");
   svec->del(0);
   svec->print_self();
   puts("");
-  colvec->print_self();
+  // colvec->print_self();
   //svec->print_self();
-  
+  OK("test1");
 }
 
-// void testColumn() {
-//   Column* intcol = new IntColumn(3,1,2,3);
-//   t_true(intcol->get(0) == 1);
-// }
+void testColumn() {
+  ColumnVec *colvec = new ColumnVec();
+  colvec->append(cvec);
+  colvec->append(svec);
+  colvec->insert(0, svec);
+  // vvec->print_self();
+  colvec->del(2);
+  Column* col = new IntColumn(3,1,2,3);
+  IntColumn* intCol = col->as_int();
+  t_true(intCol->get(0) == 1);
+  OK("testColumn");
+}
 
 // void testSchema() {
 //   Schema* schema1 = new Schema();
 
 // }
 
-// void testSchema() { Schema *schema1 = new Schema(); }
+//void testSchema() { Schema *schema1 = new Schema(); }
 
 int main(void) {
   test1();
-  //testSchema();
+  testColumn();
 }
