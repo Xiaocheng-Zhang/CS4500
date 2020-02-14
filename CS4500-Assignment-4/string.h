@@ -86,9 +86,6 @@ public:
     return hash;
   }
 
-  bool operator==(const String &s) { return !strcmp(s.cstr_, cstr_); }
-
-  bool operator!=(const String &s) { return strcmp(s.cstr_, cstr_); }
 };
 
 /** A string buffer builds a string from various pieces.

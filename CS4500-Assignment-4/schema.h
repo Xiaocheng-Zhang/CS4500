@@ -2,6 +2,11 @@
 #include "vec.h"
 #include <assert.h>
 
+static const size_t INTEGER = 0;
+static const size_t FLOAT = 1;
+static const size_t BOOLEAN = 2;
+static const size_t STRING = 3;
+
 /*************************************************************************
  * Schema::
  * A schema is a description of the contents of a data frame, the schema
@@ -126,6 +131,76 @@ public:
   size_t length() { return row_name_vec->size_; }
 };
 
+/** cannot mutate value inside*/
+class Buffer : public Object {
+public:
+  size_t type_;
+  int int_ = 0;
+  float f_ = 0;
+  bool b_ = false;
+  String *s_ = nullptr;
+
+  Buffer(int i) : Object() {
+    type_ = INTEGER;
+    int_ = i;
+  }
+  Buffer(float f) : Object() {
+    type_ = FLOAT;
+    f_ = f;
+  }
+  Buffer(bool b) : Object() {
+    type_ = BOOLEAN;
+    b_ = b;
+  }
+  Buffer(String *s) : Object() {
+    type_ = STRING;
+    s_ = s;
+  }
+
+  size_t hash_me() { return type_; }
+
+  bool equals(Object *object) {
+    if (hash() == object->hash()) {
+      return true;
+    }
+    Buffer *buf = dynamic_cast<Buffer *>(object);
+    if (buf) {
+      if (buf->type_ == type_) {
+        switch (type_) {
+        case INTEGER:
+          return int_ == buf->int_;
+        case FLOAT:
+          return f_ == buf->f_;
+        case BOOLEAN:
+          return b_ == buf->b_;
+        case STRING:
+          return s_ == buf->s_;
+        default:
+          return false;
+        }
+      }
+    }
+    return false;
+  }
+
+  int get_int() {
+    assert(type_ == INTEGER);
+    return int_;
+  }
+  float get_float() {
+    assert(type_ == FLOAT);
+    return f_;
+  }
+  bool get_bool() {
+    assert(type_ == BOOLEAN);
+    return b_;
+  }
+  String* get_String() {
+    assert(type_ == STRING);
+    return new String(*s_);
+  }
+};
+
 /*****************************************************************************
  * Fielder::
  * A field vistor invoked by Row.
@@ -158,15 +233,40 @@ public:
 class Row : public Object {
 public:
   /** Build a row following a schema. */
-  Row(Schema &scm) {}
+  Vec *type_vec;
+  Buffer **buffer_array;
+  size_t size_;
+  Row(Schema &scm) { 
+    size_ == scm.type_vec->size();
+    type_vec = scm.type_vec; 
+    buffer_array = new Buffer*[size_];
+    initialize();
+    }
 
+  void initialize() {
+    for (size_t i = 0; i < size_; i++) {
+      buffer_array[i] = nullptr;
+    }
+  }
   /** Setters: set the given column with the given value. Setting a column
    * with a value of the wrong type is undefined. */
-  void set(size_t col, int val);
-  void set(size_t col, float val);
-  void set(size_t col, bool val);
+  void set(size_t col, int val) {
+    assert(type_vec->get_char(col) == 'I');
+    buffer_array[col] = new Buffer(val);
+  }
+  void set(size_t col, float val) {
+    assert(type_vec->get_char(col) == 'F');
+    buffer_array[col] = new Buffer(val);
+  }
+  void set(size_t col, bool val) {
+    assert(type_vec->get_char(col) == 'B');
+    buffer_array[col] = new Buffer(val);
+  }
   /** The string is external. */
-  void set(size_t col, String *val);
+  void set(size_t col, String *val) {
+    assert(type_vec->get_char(col) == 'S');
+    buffer_array[col] = new Buffer(val);
+  }
 
   /** Set/get the index of this row (ie. its position in the dataframe. This
    * is only used for informational purposes, unused otherwise */
