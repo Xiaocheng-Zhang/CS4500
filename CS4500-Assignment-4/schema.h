@@ -320,6 +320,7 @@ public:
    */
   void visit(size_t idx, Fielder &f) {
     assert(size_ > 0);
+    f.start(idx);
     for (size_t i = idx; i < size_; i++) {
       switch (buffer_array[i]->type_)
       {
@@ -339,6 +340,7 @@ public:
         break;
       }
     }
+    f.done;
   }
 };
 
@@ -354,11 +356,11 @@ public:
       should not be retained as it is likely going to be reused in the next
       call. The return value is used in filters to indicate that a row
       should be kept. */
-  virtual bool accept(Row &r);
+  virtual bool accept(Row &r) {}
 
   /** Once traversal of the data frame is complete the rowers that were
       split off will be joined.  There will be one join per split. The
       original object will be the last to be called join on. The join method
       is reponsible for cleaning up memory. */
-  void join_delete(Rower *other);
+  void join_delete(Rower *other) {}
 };
