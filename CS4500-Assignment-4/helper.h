@@ -121,3 +121,14 @@ void abstract_error_print(const char *filename, const char *classname,
          "crashed method: %s\n"),
       filename, classname, errorname;
 }
+
+void fail() { puts("failing"); }
+void OK(const char *m) { std::cout << m << "\n"; }
+void t_true(bool p) {
+  if (!p)
+    fail();
+}
+void t_false(bool p) {
+  if (p)
+    fail();
+}

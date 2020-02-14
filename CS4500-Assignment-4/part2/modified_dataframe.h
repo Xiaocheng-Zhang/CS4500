@@ -1,9 +1,10 @@
-#include "column.h"
-#include "object.h"
-#include "schema.h"
-#include "string.h"
-#include "vec.h"
+#include "../column.h"
+#include "../object.h"
+#include "../schema.h"
+#include "../string.h"
+#include "../vec.h"
 #include <iostream>
+#include <pthread.h>
 #include <stdarg.h>
 
 /****************************************************************************
@@ -255,5 +256,14 @@ public:
         }
       }
     }
+  }
+
+  void* helper() {
+    
+  }
+  /** This method clones the Rower and executes the map in parallel. Join is
+   * used at the end to merge the results. */
+  void pmap(Rower &r) {
+
   }
 };

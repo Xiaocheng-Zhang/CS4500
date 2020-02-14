@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/basic_example.dir/basic_example.cpp.o  -o basic_example lib/libgtest.a -lpthread 
