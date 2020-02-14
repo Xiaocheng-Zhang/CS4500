@@ -1,5 +1,17 @@
 #include "schema.h"
 #include "vec.h"
+#include "schema.h"
+
+void FAIL() { exit(1); }
+void OK(const char *m) { std::cout << m << "\n"; }
+void t_true(bool p) {
+  if (!p)
+    FAIL();
+}
+void t_false(bool p) {
+  if (p)
+    FAIL();
+}
 
 void FAIL() { exit(1); }
 void OK(const char *m) { std::cout << m << "\n"; }
@@ -38,20 +50,25 @@ void test1() {
   colvec->append(cvec);
   colvec->append(svec);
   colvec->insert(0, svec);
-  // vvec->print_self();
+  //vvec->print_self();
   colvec->del(2);
   china = new String("CHN");
   svec->del(0);
   svec->print_self();
   puts("");
   colvec->print_self();
-  // svec->print_self();
+  //svec->print_self();
+  
 }
 
 void testColumn() {
-  Column *intcol = new IntColumn(3, 1, 2, 3);
-  IntColumn *real_intcol = intcol->as_int();
+  Column* intcol = new IntColumn(3,1,2,3);
   t_true(intcol->get(0) == 1);
+}
+
+void testSchema() {
+  Schema* schema1 = new Schema();
+
 }
 
 void testSchema() { Schema *schema1 = new Schema(); }
