@@ -80,18 +80,26 @@ public:
    * is external. Names are expectd to be unique, duplicates result
    * in undefined behavior. */
   void add_column(char typ, String *name) {
-    assert(typ != NULL);
+    assert(typ);
     assert(type_check(typ));
-    assert(!col_name_vec->contains(name));
     type_vec->append(typ);
-    col_name_vec->append(name);
+    if (name != nullptr) {
+      assert(!col_name_vec->contains(name));
+      col_name_vec->append(name);
+    } else if (!name) {
+      col_name_vec->append(name);
+    }
   }
 
   /** Add a row with a name (possibly nullptr), name is external.  Names are
    *  expectd to be unique, duplicates result in undefined behavior. */
   void add_row(String *name) {
-    assert(!row_name_vec->contains(name));
-    row_name_vec->append(name);
+    if (name != nullptr) {
+      assert(!col_name_vec->contains(name));
+      row_name_vec->append(name);
+    } else if (!name) {
+      row_name_vec->append(name);
+    }
   }
 
   /** Return name of row at idx; nullptr indicates no name. An idx >= width
@@ -195,7 +203,7 @@ public:
     assert(type_ == BOOLEAN);
     return b_;
   }
-  String* get_String() {
+  String *get_String() {
     assert(type_ == STRING);
     return new String(*s_);
   }
@@ -236,12 +244,14 @@ public:
   Vec *type_vec;
   Buffer **buffer_array;
   size_t size_;
-  Row(Schema &scm) { 
+  size_t index_;
+  Row(Schema &scm) : Object() {
     size_ == scm.type_vec->size();
-    type_vec = scm.type_vec; 
-    buffer_array = new Buffer*[size_];
+    type_vec = scm.type_vec;
+    buffer_array = new Buffer *[size_];
+    index_ = 0;
     initialize();
-    }
+  }
 
   void initialize() {
     for (size_t i = 0; i < size_; i++) {
@@ -270,28 +280,66 @@ public:
 
   /** Set/get the index of this row (ie. its position in the dataframe. This
    * is only used for informational purposes, unused otherwise */
-  void set_idx(size_t idx);
-  size_t get_idx();
+  void set_idx(size_t idx) { index_ = idx; }
+  size_t get_idx() { return index_; }
 
   /** Getters: get the value at the given column. If the column is not
    * of the requested type, the result is undefined. */
-  int get_int(size_t col);
-  bool get_bool(size_t col);
-  float get_float(size_t col);
-  String *get_string(size_t col);
+  int get_int(size_t col) {
+    assert(buffer_array[col]->type_ == INTEGER);
+    return buffer_array[col]->get_int();
+  }
+  bool get_bool(size_t col) {
+    assert(buffer_array[col]->type_ == BOOLEAN);
+    return buffer_array[col]->get_bool();
+  }
+  float get_float(size_t col) {
+    assert(buffer_array[col]->type_ == FLOAT);
+    return buffer_array[col]->get_float();
+  }
+  String *get_string(size_t col) {
+    assert(buffer_array[col]->type_ == STRING);
+    return buffer_array[col]->get_String();
+  }
 
   /** Number of fields in the row. */
-  size_t width();
+  size_t width() {
+    return size_;
+  }
 
   /** Type of the field at the given position. An idx >= width is
      undefined. */
-  char col_type(size_t idx);
+  char col_type(size_t idx) {
+    assert(idx < size_ && idx >= 0);
+    return type_vec->get_char(idx);
+  }
 
   /** Given a Fielder, visit every field of this row. The first argument is
    * index of the row in the dataframe.
    * Calling this method before the row's fields have been set is undefined.
    */
-  void visit(size_t idx, Fielder &f);
+  void visit(size_t idx, Fielder &f) {
+    assert(size_ > 0);
+    for (size_t i = idx; i < size_; i++) {
+      switch (buffer_array[i]->type_)
+      {
+      case INTEGER:
+      f.accept(buffer_array[i]->get_int());
+        break;
+      case FLOAT:
+        f.accept(buffer_array[i]->get_float());
+        break;
+      case BOOLEAN:
+        f.accept(buffer_array[i]->get_bool());
+        break;
+      case STRING:
+        f.accept(buffer_array[i]->get_String());
+        break;
+      default: 
+        break;
+      }
+    }
+  }
 };
 
 /*******************************************************************************

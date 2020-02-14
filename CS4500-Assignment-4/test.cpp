@@ -142,6 +142,7 @@ void testSchema() {
     schema2->type_vec->get_char(1) == 'B' &&
     schema2->type_vec->get_char(2) == 'S' && 
     schema2->type_vec->get_char(3) == 'F');
+    
   // test adding a column with nullptr name
   schema2->add_column('I', nullptr);
   t_true(schema2->type_vec->get_char(4) == 'I');
@@ -177,6 +178,7 @@ void testSchema() {
   // test if it can be mutated
   schema2->add_column('F', new String("mutation"));
   t_false(schema3->width() == schema2->width());
+  OK("testSchema");
 }
 
 //void testSchema() { Schema *schema1 = new Schema(); }
@@ -186,4 +188,5 @@ int main(void) {
   testStringColumn();
   testBoolColumn();
   testIntColumn();
+  testSchema();
 }

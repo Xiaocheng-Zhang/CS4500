@@ -738,7 +738,9 @@ public:
 
   virtual void append(String *s) {
     expand();
-    list_[size_] = new String(*s);
+    if (s) {
+      list_[size_] = new String(*s);
+    }
     size_++;
   }
 
@@ -766,7 +768,9 @@ public:
   }
   virtual bool contains(String *s) {
     for (size_t m = 0; m < size_; m++) {
-      if (list_[m] == s) {
+      if (!s && !list_[m]) {
+        return true;
+      } else if (s && list_[m] && list_[m]->equals(s)) {
         return true;
       }
     }
@@ -775,7 +779,7 @@ public:
 
   virtual int indexAt(String *s) {
     for (size_t m = 0; m < size_; m++) {
-      if (list_[m] == s) {
+      if (list_[m] && s && list_[m]->equals(s)) {
         return m;
       }
     }
