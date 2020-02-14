@@ -106,25 +106,29 @@ public:
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(table_->get_Column(col)->get_type() == 'I');
-    table_->get_Column(col)->as_int()->set(row, val);
+    IntColumn *temp = dynamic_cast<IntColumn *>(table_->get_Column(col));
+    temp->set(row, val);
   }
   void set(size_t col, size_t row, bool val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(table_->get_Column(col)->get_type() == 'B');
-    table_->get_Column(col)->as_bool()->set(row, val);
+    BoolColumn *temp = dynamic_cast<BoolColumn *>(table_->get_Column(col));
+    temp->set(row, val);
   }
   void set(size_t col, size_t row, float val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(table_->get_Column(col)->get_type() == 'F');
-    table_->get_Column(col)->as_float()->set(row, val);
+    FloatColumn *temp = dynamic_cast<FloatColumn *>(table_->get_Column(col));
+    temp->set(row, val);
   }
   void set(size_t col, size_t row, String *val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(table_->get_Column(col)->get_type() == 'S');
-    table_->get_Column(col)->as_string()->set(row, val);
+    StringColumn *temp = dynamic_cast<StringColumn *>(table_->get_Column(col));
+    temp->set(row, val);
   }
 
   /** Set the fields of the given row object with values from the columns at
