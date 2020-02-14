@@ -3,7 +3,7 @@
 #include "vec.h"
 #include "object.h"
 #include "string.h"
-#include "array.h"
+#include "column.h"
 #include "schema.h"
 
 /****************************************************************************
@@ -34,7 +34,7 @@ class DataFrame : public Object {
     schema_->row_name_vec = schema.row_name_vec;
     table_ = new ColumnVec();
     for (int i = 0; i < schema_->type_vec->size_; i++) {
-      char curr = schema_->type_vec->get(i);
+      char curr = schema_->type_vec->get_char(i);
       if (curr == 'I') {
         table_->append(new IntColumn());
       }
@@ -46,6 +46,10 @@ class DataFrame : public Object {
       }
       else if (curr == 'F') {
         table_->append(new FloatColumn());
+      }
+      else {
+        std::cout << "The char other than I, B, S, F was detected, table cannot be built" << std::endl;
+        exit(0);
       }
     }
   }
@@ -61,34 +65,47 @@ class DataFrame : public Object {
     * name is optional and external. A nullptr colum is undefined. */
   void add_column(Column* col, String* name) {
     assert(col!=nullptr);
-    schema_->col_name_vec->append(name);
     char type = col->get_type();
-    if (type == 'I') {
-      schema
-    }
-    else if (type == 'S') {
-
-    }
-    else if (type == 'B') {
-      
-    }
-    else if (type == 'F') {
-
-    }
+    schema_->add_column(type, name);
+    table_->append(col);
   }
  
   /** Return the value at the given column and row. Accessing rows or
    *  columns out of bounds, or request the wrong type is undefined.*/
-  int get_int(size_t col, size_t row)
-  bool get_bool(size_t col, size_t row)
-  float get_float(size_t col, size_t row)
-  String*  get_string(size_t col, size_t row)
+  int get_int(size_t col, size_t row) {
+    assert(col >= 0 && col < schema_->width());
+    assert(row >=0 && row < schema_->length());
+    assert(table_->get_Column(col)->get_type() == 'I');
+    return table_->get_Column(col)->as_int()->get(row);
+  }
+  bool get_bool(size_t col, size_t row) {
+    assert(col >= 0 && col < schema_->width());
+    assert(row >=0 && row < schema_->length());
+    assert(table_->get_Column(col)->get_type() == 'B');
+    return table_->get_Column(col)->as_bool()->get(row);
+  }
+  float get_float(size_t col, size_t row) {
+    assert(col >= 0 && col < schema_->width());
+    assert(row >=0 && row < schema_->length());
+    assert(table_->get_Column(col)->get_type() == 'F');
+    return table_->get_Column(col)->as_float()->get(row);
+  }
+  String*  get_string(size_t col, size_t row) {
+    assert(col >= 0 && col < schema_->width());
+    assert(row >=0 && row < schema_->length());
+    assert(table_->get_Column(col)->get_type() == 'S');
+    return table_->get_Column(col)->as_string()->get(row);
+  }
  
   /** Return the offset of the given column name or -1 if no such col. */
-  int get_col(String& col)
+  int get_col(String& col) {
+    return schema_->col_idx(col.c_str());
+  }
  
   /** Return the offset of the given row name or -1 if no such row. */
-  int get_row(String& col)
+  int get_row(String& col) {
+    return schema_->row_idx(col.c_str());
+  }
  
   /** Set the value at the given column and row to the given value.
     * If the column is not  of the right type or the indices are out of
