@@ -29,9 +29,9 @@ class DataFrame : public Object {
     * empty. */
   DataFrame(Schema& schema) {
     schema_ = new Schema();
-    schema_->type_vec = schema.type_vec;
-    schema_->col_name_vec = schema.col_name_vec;
-    schema_->row_name_vec = schema.row_name_vec;
+    schema_->type_vec = schema.type_vec->copy();
+    schema_->col_name_vec = schema.col_name_vec->copy();
+    schema_->row_name_vec = schema.row_name_vec->copy();
     table_ = new ColumnVec();
     for (int i = 0; i < schema_->type_vec->size_; i++) {
       char curr = schema_->type_vec->get_char(i);
@@ -57,7 +57,7 @@ class DataFrame : public Object {
   /** Returns the dataframe's schema. Modifying the schema after a dataframe
     * has been created in undefined. */
   Schema& get_schema() {
-    return *schema_;
+    return *(new Schema(*schema_));
   }
  
   /** Adds a column this dataframe, updates the schema, the new column
