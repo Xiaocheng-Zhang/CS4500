@@ -237,32 +237,6 @@ public:
   virtual void done() { end_ = true; }
 };
 
-class TestFielder : public Fielder {
-public:
-  Vec *int_vec;
-  Vec *float_vec;
-  Vec *bool_vec;
-  Vec *String_vec;
-  TestFielder() : Fielder() {
-    start_ = 0;
-    int_vec = new Ivec();
-    float_vec = new Fvec();
-    bool_vec = new Bvec();
-    String_vec = new Svec();
-    end_ = false;
-  }
-  ~TestFielder() {}
-  virtual void accept(bool b) { bool_vec->append(b); }
-  virtual void accept(float f) { float_vec->append(f); }
-  virtual void accept(int i) { int_vec->append(i); }
-  virtual void accept(String *s) { String_vec->append(s); }
-  virtual void done() {
-    bool_vec->print_self();
-    int_vec->print_self();
-    float_vec->print_self();
-    String_vec->print_self();
-  }
-};
 
 /*************************************************************************
  * Row::
@@ -396,3 +370,41 @@ public:
       is reponsible for cleaning up memory. */
   void join_delete(Rower *other) {}
 };
+
+/** TestFielder used to help Rower to track all */
+class TestFielder : public Fielder {
+public:
+  Vec *int_vec;
+  Vec *float_vec;
+  Vec *bool_vec;
+  Vec *String_vec;
+  TestFielder() : Fielder() {
+    start_ = 0;
+    int_vec = new Ivec();
+    float_vec = new Fvec();
+    bool_vec = new Bvec();
+    String_vec = new Svec();
+    end_ = false;
+  }
+  ~TestFielder() {}
+  virtual void accept(bool b) { bool_vec->append(b); }
+  virtual void accept(float f) { float_vec->append(f); }
+  virtual void accept(int i) { int_vec->append(i); }
+  virtual void accept(String *s) { String_vec->append(s); }
+  virtual void done() {
+    bool_vec->print_self();
+    int_vec->print_self();
+    float_vec->print_self();
+    String_vec->print_self();
+  }
+};
+
+// /** Rower used to track all integers into a list.*/
+// class TestRower : public Rower {
+// public:
+//   Row *test_row;
+//   TestRower() : Rower() {
+//     test_row = nullptr;
+//   }
+
+// };
