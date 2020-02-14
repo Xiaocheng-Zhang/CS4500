@@ -106,7 +106,7 @@ public:
     bool val;
     va_start(vl, n);
     for (int i = 0; i < n; i++) {
-      val = va_arg(vl, bool);
+      val = va_arg(vl, int);
       val_->append(val);
     }
     va_end(vl);

@@ -283,12 +283,16 @@ public:
     Vec *temp = dynamic_cast<Vec *>(object);
     if (!temp) {
       return false;
+    }
+    if (size_ != temp->size()) {
+      return false;
     } else {
       for (size_t i = 0; i < size_; i++) {
         if (temp->get_char(i) != list_[i]) {
           return false;
         }
       }
+      return true;
     }
   }
 };
@@ -416,12 +420,16 @@ public:
     Vec *temp = dynamic_cast<Vec *>(object);
     if (!temp) {
       return false;
+    }
+    if (size_ != temp->size()) {
+      return false;
     } else {
       for (size_t i = 0; i < size_; i++) {
         if (temp->get_bool(i) != list_[i]) {
           return false;
         }
       }
+      return true;
     }
   }
 };
@@ -544,12 +552,16 @@ public:
     Vec *temp = dynamic_cast<Vec *>(object);
     if (!temp) {
       return false;
+    }
+    if (size_ != temp->size()) {
+      return false;
     } else {
       for (size_t i = 0; i < size_; i++) {
         if (temp->get_float(i) != list_[i]) {
           return false;
         }
       }
+      return true;
     }
   }
 };
@@ -677,12 +689,16 @@ public:
     Vec *temp = dynamic_cast<Vec *>(object);
     if (!temp) {
       return false;
+    }
+    if (size_ != temp->size()) {
+      return false;
     } else {
       for (size_t i = 0; i < size_; i++) {
         if (temp->get_int(i) != list_[i]) {
           return false;
         }
       }
+      return true;
     }
   }
 };
@@ -809,18 +825,19 @@ public:
   }
 
   virtual bool equals(Object *object) {
-    if (hash() == object->hash()) {
-      return true;
-    }
     Vec *temp = dynamic_cast<Vec *>(object);
     if (!temp) {
       return false;
+    }
+    if (size_ != temp->size()) {
+      return false;
     } else {
       for (size_t i = 0; i < size_; i++) {
-        if (temp->get_String(i) != list_[i]) {
+        if (!(temp->get_String(i)->equals(list_[i]))) {
           return false;
         }
       }
+      return true;
     }
   }
 };
