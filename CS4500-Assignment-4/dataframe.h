@@ -108,6 +108,7 @@ public:
     assert(table_->get_Column(col)->get_type() == 'I');
     IntColumn *temp = dynamic_cast<IntColumn *>(table_->get_Column(col));
     temp->set(row, val);
+    table_->set(col, temp);
   }
   void set(size_t col, size_t row, bool val) {
     assert(col >= 0 && col < schema_->width());
@@ -115,6 +116,7 @@ public:
     assert(table_->get_Column(col)->get_type() == 'B');
     BoolColumn *temp = dynamic_cast<BoolColumn *>(table_->get_Column(col));
     temp->set(row, val);
+    table_->set(col, temp);
   }
   void set(size_t col, size_t row, float val) {
     assert(col >= 0 && col < schema_->width());
@@ -122,6 +124,7 @@ public:
     assert(table_->get_Column(col)->get_type() == 'F');
     FloatColumn *temp = dynamic_cast<FloatColumn *>(table_->get_Column(col));
     temp->set(row, val);
+    table_->set(col, temp);
   }
   void set(size_t col, size_t row, String *val) {
     assert(col >= 0 && col < schema_->width());
@@ -129,6 +132,7 @@ public:
     assert(table_->get_Column(col)->get_type() == 'S');
     StringColumn *temp = dynamic_cast<StringColumn *>(table_->get_Column(col));
     temp->set(row, val);
+    table_->set(col, temp);
   }
 
   /** Set the fields of the given row object with values from the columns at
@@ -222,9 +226,19 @@ public:
    * returned true from its accept method. */
   DataFrame *filter(Rower &r) {
     DataFrame *temp = new DataFrame(*schema_);
-    
+    for (size_t i = 0; i < nrows(); i++) {
+      Row *temp_row = track_row(i);
+      if (r.accept(*temp_row)) {
+        temp->add_row(*temp_row);
+      }
+    }
+    return temp;
   }
 
   /** Print the dataframe in SoR format to standard output. */
-  void print();
+  void print() {
+    for (size_t i = 0; i < nrows(); i++) {
+      
+    }
+  }
 };
