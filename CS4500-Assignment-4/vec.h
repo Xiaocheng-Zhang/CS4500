@@ -409,6 +409,7 @@ public:
     for (size_t i = 0; i < size_; i++) {
       printf("%d", list_[i]);
     }
+    puts("");
   }
 
   virtual bool equals(Object *object) {

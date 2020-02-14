@@ -216,9 +216,7 @@ public:
   bool end_;
   /** Called before visiting a row, the argument is the row offset in the
     dataframe. */
-  virtual void start(size_t r) {
-    start_ = r;
-  }
+  virtual void start(size_t r) { start_ = r; }
 
   /** Called for fields of the argument's type with the value of the field.
    */
@@ -236,9 +234,7 @@ public:
   }
 
   /** Called when all fields have been seen. */
-  virtual void done() {
-    end_ = true;
-  }
+  virtual void done() { end_ = true; }
 };
 
 class TestFielder : public Fielder {
@@ -255,29 +251,16 @@ public:
     String_vec = new Svec();
     end_ = false;
   }
-  ~TestFielder() {
-  }
-  virtual void accept(bool b) {
-    bool_vec->append(b);
-  }
-  virtual void accept(float f) { 
-    float_vec->append(f);
-     }
-  virtual void accept(int i) {
-    int_vec->append(i);
-  }
-  virtual void accept(String *s) {
-    String_vec->append(s);
-  }
+  ~TestFielder() {}
+  virtual void accept(bool b) { bool_vec->append(b); }
+  virtual void accept(float f) { float_vec->append(f); }
+  virtual void accept(int i) { int_vec->append(i); }
+  virtual void accept(String *s) { String_vec->append(s); }
   virtual void done() {
-    int_vec->print_self();
-    puts("");
-    float_vec->print_self();
-    puts("");
     bool_vec->print_self();
-    puts("");
+    int_vec->print_self();
+    float_vec->print_self();
     String_vec->print_self();
-    puts("");
   }
 };
 
@@ -354,9 +337,7 @@ public:
   }
 
   /** Number of fields in the row. */
-  size_t width() {
-    return size_;
-  }
+  size_t width() { return size_; }
 
   /** Type of the field at the given position. An idx >= width is
      undefined. */
@@ -370,13 +351,15 @@ public:
    * Calling this method before the row's fields have been set is undefined.
    */
   void visit(size_t idx, Fielder &f) {
-    assert(size_ > 0);
+    assert(idx >= 0 && idx < size_);
     f.start(idx);
     for (size_t i = idx; i < size_; i++) {
-      switch (buffer_array[i]->type_)
-      {
+      if (!buffer_array[i]) {
+        continue;
+      }
+      switch (buffer_array[i]->type_) {
       case INTEGER:
-      f.accept(buffer_array[i]->get_int());
+        f.accept(buffer_array[i]->get_int());
         break;
       case FLOAT:
         f.accept(buffer_array[i]->get_float());
@@ -386,8 +369,6 @@ public:
         break;
       case STRING:
         f.accept(buffer_array[i]->get_String());
-        break;
-      default: 
         break;
       }
     }
@@ -407,9 +388,7 @@ public:
       should not be retained as it is likely going to be reused in the next
       call. The return value is used in filters to indicate that a row
       should be kept. */
-  virtual bool accept(Row &r) {
-    return false;
-  }
+  virtual bool accept(Row &r) { return false; }
 
   /** Once traversal of the data frame is complete the rowers that were
       split off will be joined.  There will be one join per split. The

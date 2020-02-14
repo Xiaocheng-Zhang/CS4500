@@ -242,6 +242,9 @@ void testRow() {
   t_true(row->width() == 5);
   // test col_type method
   t_true(row->col_type(4) == 'B');
+  Fielder *testFielder = new TestFielder();
+  row->type_vec->print_self();
+  row->visit(0, *testFielder);
   OK("testRow");
 }
 
