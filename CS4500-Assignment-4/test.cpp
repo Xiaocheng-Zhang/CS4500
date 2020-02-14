@@ -162,6 +162,21 @@ void testSchema() {
   t_true(schema2->col_name(5)->equals(new String("Tian")));
   // test col_type method
   t_true(schema2->col_type(5) == 'B');
+  // test col_idx method
+  t_true(schema2->col_idx("Tian") == 5);
+  t_true(schema2->col_idx("Xiaocheng") == -1);
+  // test row_idx method
+  t_true(schema2->row_idx("Xia") == 1);
+  t_true(schema2->col_idx("Zhang") == -1);
+  // test width and length method
+  t_true(schema2->width() == 6);
+  t_true(schema2->length() == 2);
+
+  // test copying constructor
+  Schema* schema3 = new Schema(*schema2);
+  // test if it can be mutated
+  schema2->add_column('F', new String("mutation"));
+  t_false(schema3->width() == schema2->width());
 }
 
 //void testSchema() { Schema *schema1 = new Schema(); }
