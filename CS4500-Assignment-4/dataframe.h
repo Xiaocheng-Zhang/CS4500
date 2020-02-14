@@ -237,8 +237,23 @@ public:
 
   /** Print the dataframe in SoR format to standard output. */
   void print() {
-    for (size_t i = 0; i < nrows(); i++) {
-      
+    schema_->col_name_vec->print_self();
+    for (size_t row = 0; row < nrows(); row++) {
+      for (size_t col = 0; col < ncols(); col++) {
+        char type = schema_->type_vec->get_char(col);
+        if (type == 'I') {
+          std::cout << this->get_int(col,row) << std::endl;
+        }
+        else if (type == 'B') {
+          std::cout << this->get_bool(col,row) << std::endl;
+        }
+        else if (type == 'F') {
+          std::cout << this->get_float(col,row) << std::endl;
+        }
+        else if (type == 'S') {
+          std::cout << this->get_string(col,row)->c_str() << std::endl;
+        }
+      }
     }
   }
 };
