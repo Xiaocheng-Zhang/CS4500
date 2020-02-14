@@ -110,34 +110,95 @@ class DataFrame : public Object {
   /** Set the value at the given column and row to the given value.
     * If the column is not  of the right type or the indices are out of
     * bound, the result is undefined. */
-  void set(size_t col, size_t row, int val)
-  void set(size_t col, size_t row, bool val)
-  void set(size_t col, size_t row, float val)
-  void set(size_t col, size_t row, String* val)
+  void set(size_t col, size_t row, int val) {
+    assert(col >= 0 && col < schema_->width());
+    assert(row >=0 && row < schema_->length());
+    assert(table_->get_Column(col)->get_type() == 'I');
+    table_->get_Column(col)->as_int()->set(row, val);
+  }
+  void set(size_t col, size_t row, bool val) {
+    assert(col >= 0 && col < schema_->width());
+    assert(row >=0 && row < schema_->length());
+    assert(table_->get_Column(col)->get_type() == 'B');
+    table_->get_Column(col)->as_bool()->set(row, val);
+  }
+  void set(size_t col, size_t row, float val) {
+    assert(col >= 0 && col < schema_->width());
+    assert(row >=0 && row < schema_->length());
+    assert(table_->get_Column(col)->get_type() == 'F');
+    table_->get_Column(col)->as_float()->set(row, val);
+  }
+  void set(size_t col, size_t row, String* val) {
+    assert(col >= 0 && col < schema_->width());
+    assert(row >=0 && row < schema_->length());
+    assert(table_->get_Column(col)->get_type() == 'S');
+    table_->get_Column(col)->as_string()->set(row, val);
+  }
  
   /** Set the fields of the given row object with values from the columns at
     * the given offset.  If the row is not form the same schema as the
     * dataframe, results are undefined.
     */
-  void fill_row(size_t idx, Row& row)
+  void fill_row(size_t idx, Row& row) {
+    assert(idx >= 0);
+    assert(row.type_vec->equals(schema_->type_vec));
+    for (size_t i = 0; i < schema_->width(); i++) {
+      Column* curCol = table_->get_Column(i);
+      char type = curCol->get_type();
+      if (type == 'I') {
+        curCol->as_int()->set(idx,row.get_int(i));
+      }
+      else if (type == 'B') {
+        curCol->as_bool()->set(idx,row.get_bool(i));
+      }
+      else if (type == 'F') {
+        curCol->as_float()->set(idx,row.get_float(i));
+      }
+      else if (type == 'S') {
+        curCol->as_string()->set(idx,row.get_string(i));
+      }
+    }
+  }
  
   /** Add a row at the end of this dataframe. The row is expected to have
    *  the right schema and be filled with values, otherwise undedined.  */
-  void add_row(Row& row)
+  void add_row(Row& row) {
+    assert(row.type_vec->equals(schema_->type_vec));
+    for (size_t i = 0; i < schema_->width(); i++) {
+      Column* curCol = table_->get_Column(i);
+      char type = curCol->get_type();
+      if (type == 'I') {
+        curCol->as_int()->push_back(row.get_int(i));
+      }
+      else if (type == 'B') {
+        curCol->as_bool()->push_back(row.get_bool(i));
+      }
+      else if (type == 'F') {
+        curCol->as_float()->push_back(row.get_float(i));
+      }
+      else if (type == 'S') {
+        curCol->as_string()->push_back(row.get_string(i));
+      }
+    }
+  }
  
   /** The number of rows in the dataframe. */
-  size_t nrows()
+  size_t nrows() {
+    return schema_->length();
+  }
  
   /** The number of columns in the dataframe.*/
-  size_t ncols()
+  size_t ncols() {
+    return schema_->width();
+  }
  
   /** Visit rows in order */
-  void map(Rower& r)
+  void map(Rower& r);
  
   /** Create a new dataframe, constructed from rows for which the given Rower
     * returned true from its accept method. */
-  DataFrame* filter(Rower& r)
+  DataFrame* filter(Rower& r);
  
   /** Print the dataframe in SoR format to standard output. */
-  void print()
+  void print();
 };
