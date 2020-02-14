@@ -77,16 +77,26 @@ public:
   void add_column(char typ, String *name) {
     assert(typ != NULL);
     assert(type_check(typ));
-    assert(!col_name_vec->contains(name));
     type_vec->append(typ);
-    col_name_vec->append(name);
+    if (name != nullptr) {
+      assert(!col_name_vec->contains(name));
+      col_name_vec->append(name);
+    }
+    else if (name == nullptr) {
+      col_name_vec->size_++;
+    }
   }
 
   /** Add a row with a name (possibly nullptr), name is external.  Names are
    *  expectd to be unique, duplicates result in undefined behavior. */
   void add_row(String *name) {
-    assert(!row_name_vec->contains(name));
-    row_name_vec->append(name);
+    if (name != nullptr) {
+      assert(!col_name_vec->contains(name));
+      row_name_vec->append(name);
+    }
+    else if (name == nullptr) {
+      row_name_vec->size_++;
+    }
   }
 
   /** Return name of row at idx; nullptr indicates no name. An idx >= width
@@ -158,7 +168,9 @@ public:
 class Row : public Object {
 public:
   /** Build a row following a schema. */
-  Row(Schema &scm) {}
+  Row(Schema &scm) {
+
+  }
 
   /** Setters: set the given column with the given value. Setting a column
    * with a value of the wrong type is undefined. */
