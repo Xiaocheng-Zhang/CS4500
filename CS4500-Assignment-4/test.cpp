@@ -181,7 +181,70 @@ void testSchema() {
   OK("testSchema");
 }
 
-//void testSchema() { Schema *schema1 = new Schema(); }
+
+void testBuffer() { 
+  // construct int buffer
+  Buffer *ib = new Buffer(1); 
+  t_true(ib->type_ == INTEGER);
+  t_true(ib->int_ == 1);
+  t_true(ib->f_ == 0 && ib->b_ == false && ib->s_ == nullptr);
+  Buffer *ib2 = new Buffer(2);
+  Buffer *ib3 = new Buffer(1);
+
+  // construct bool buffer
+  Buffer *bb = new Buffer(false);
+  t_true(bb->get_bool() == false);
+
+  // construct String buffer
+  Buffer *sb = new Buffer(new String("c"));
+  t_true(sb->get_String()->equals(new String("c")));
+
+  // test equality
+  t_false(bb->equals(ib));
+  t_false(ib->equals(ib2));
+  t_true(ib->equals(ib3));
+}
+
+void testRow() {
+  // construct a schema to be passeed into row
+  Schema* schema = new Schema("IBSF");
+  schema->add_column('B', new String("Tian"));
+
+  // test row constructor
+  Row* row = new Row(*schema);
+  t_true(row->size_ == 5);
+  t_true(row->index_ == 0);
+  t_true(row->type_vec->equals(schema->type_vec));
+  //t_true(sizeof(row->(buffer_array)) == 5);
+
+  // test if it will be mutated if the schema is changed
+  schema->add_column('F', new String("Xia"));
+  t_true(row->size_ == 5);
+  t_false(row->type_vec->equals(schema->type_vec));
+  //t_true(sizeof(row->(buffer_array)) == 5);
+
+  // test set and get method
+  // set initial value
+  row->set(0, 9);
+  row->set(1, false);
+  row->set(2, new String("Zhang"));
+  row->set(3, float(1.23));
+  t_true(row->get_int(0) == 9);
+  t_true(row->get_bool(1) == false);
+  t_true(row->get_string(2) == new String("Zhang"));
+  t_true(row->get_float(3) == float(1.23));
+  // change values
+  row->set(0,8);
+  t_true(row->get_int(0)== 8);
+
+  // test set idx and get idx methods
+  row->set_idx(4);
+  t_true(row->get_idx() == 4);
+  // test width method
+  t_true(row->width() == 5);
+  // test col_type method
+  t_true(row->col_type(5) == 'B');
+}
 
 int main(void) {
   //test1();
