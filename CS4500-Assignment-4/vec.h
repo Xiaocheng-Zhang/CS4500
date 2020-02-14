@@ -772,15 +772,17 @@ public:
 
   virtual void append(Column *col) {
     expand();
-    Column *temp = col; // v->copy();
-    list_[size_] = temp;
-    // memcpy(list_[size_], v, sizeof(v));
+    Column *colcpy = new Column();
+    colcpy->val_ = col->val_->copy();
+    list_[size_] = colcpy;
     size_++;
   }
 
   virtual void set(size_t idx, Column *col) {
     expand();
-    list_[idx] = col; // v->copy();
+    Column *colcpy = new Column();
+    colcpy->val_ = col->val_->copy();
+    list_[idx] = colcpy; // v->copy();
   }
 
   virtual void insert(size_t idx, Column *col) {
@@ -791,7 +793,9 @@ public:
       if (i < j) {
         temp[i] = list_[i];
       } else if (i == j) {
-        temp[i] = col; // v->copy();
+        Column *colcpy = new Column();
+        colcpy->val_ = col->val_->copy();
+        temp[i] = colcpy; // v->copy();
       } else {
         temp[i] = list_[j];
         j++;
@@ -832,9 +836,9 @@ public:
     list_ = temp;
   }
   virtual Vec *copy() {
-    Vec *temp = new ColumnVec();
+    ColumnVec *temp = new ColumnVec();
     for (size_t i = 0; i < size_; i++) {
-      // temp->append(list_[i]);
+      temp->append(list_[i]);
     }
     return temp;
   }
