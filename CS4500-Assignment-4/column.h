@@ -1,6 +1,5 @@
 #pragma once
 
-#include "array.h"
 #include "object.h"
 #include "string.h"
 #include "vec.h"

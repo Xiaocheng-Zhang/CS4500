@@ -168,9 +168,6 @@ public:
   size_t hash_me() { return type_; }
 
   bool equals(Object *object) {
-    if (hash() == object->hash()) {
-      return true;
-    }
     Buffer *buf = dynamic_cast<Buffer *>(object);
     if (buf) {
       if (buf->type_ == type_) {
@@ -215,19 +212,73 @@ public:
  */
 class Fielder : public Object {
 public:
+  size_t start_;
+  bool end_;
   /** Called before visiting a row, the argument is the row offset in the
     dataframe. */
-  virtual void start(size_t r) {}
+  virtual void start(size_t r) {
+    start_ = r;
+  }
 
   /** Called for fields of the argument's type with the value of the field.
    */
-  virtual void accept(bool b) {}
-  virtual void accept(float f) {}
-  virtual void accept(int i) {}
-  virtual void accept(String *s) {}
+  virtual void accept(bool b) {
+    abstract_error_print("schema.h", "Fielder", "accept(bool b)");
+  }
+  virtual void accept(float f) {
+    abstract_error_print("schema.h", "Fielder", "accept(float f)");
+  }
+  virtual void accept(int i) {
+    abstract_error_print("schema.h", "Fielder", "accept(int i)");
+  }
+  virtual void accept(String *s) {
+    abstract_error_print("schema.h", "Fielder", "accept(String *s)");
+  }
 
   /** Called when all fields have been seen. */
-  virtual void done() {}
+  virtual void done() {
+    end_ = true;
+  }
+};
+
+class TestFielder : public Fielder {
+public:
+  Vec *int_vec;
+  Vec *float_vec;
+  Vec *bool_vec;
+  Vec *String_vec;
+  TestFielder() : Fielder() {
+    start_ = 0;
+    int_vec = new Ivec();
+    float_vec = new Fvec();
+    bool_vec = new Bvec();
+    String_vec = new Svec();
+    end_ = false;
+  }
+  ~TestFielder() {
+  }
+  virtual void accept(bool b) {
+    bool_vec->append(b);
+  }
+  virtual void accept(float f) { 
+    float_vec->append(f);
+     }
+  virtual void accept(int i) {
+    int_vec->append(i);
+  }
+  virtual void accept(String *s) {
+    String_vec->append(s);
+  }
+  virtual void done() {
+    int_vec->print_self();
+    puts("");
+    float_vec->print_self();
+    puts("");
+    bool_vec->print_self();
+    puts("");
+    String_vec->print_self();
+    puts("");
+  }
 };
 
 /*************************************************************************
@@ -246,8 +297,8 @@ public:
   size_t size_;
   size_t index_;
   Row(Schema &scm) : Object() {
-    size_ == scm.type_vec->size();
-    type_vec = scm.type_vec;
+    size_ = scm.type_vec->size();
+    type_vec = scm.type_vec->copy();
     buffer_array = new Buffer *[size_];
     index_ = 0;
     initialize();
@@ -340,7 +391,7 @@ public:
         break;
       }
     }
-    f.done;
+    f.done();
   }
 };
 
@@ -356,7 +407,9 @@ public:
       should not be retained as it is likely going to be reused in the next
       call. The return value is used in filters to indicate that a row
       should be kept. */
-  virtual bool accept(Row &r) {}
+  virtual bool accept(Row &r) {
+    return false;
+  }
 
   /** Once traversal of the data frame is complete the rowers that were
       split off will be joined.  There will be one join per split. The

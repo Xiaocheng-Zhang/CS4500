@@ -1,6 +1,6 @@
-#include "vec.h"
 #include "column.h"
 #include "schema.h"
+#include "vec.h"
 
 void FAIL() { exit(1); }
 void OK(const char *m) { std::cout << m << "\n"; }
@@ -35,26 +35,26 @@ void test1() {
   svec->set(2, china);
   svec->print_self();
   puts("");
-  //vvec->print_self();
+  // vvec->print_self();
   china = new String("CHN");
   svec->del(0);
   svec->print_self();
   puts("");
-  //svec->print_self();
-  
+  // svec->print_self();
 }
 
 void testIntColumn() {
   // test empty constructor
-  Column* col_1 = new IntColumn();
-  IntColumn* intCol_1 = col_1->as_int();
+  Column *col_1 = new IntColumn();
+  IntColumn *intCol_1 = col_1->as_int();
   t_true(intCol_1->size() == 0);
-  
+
   // test variable argument constructor
-  Column* col_2 = new IntColumn(3,1,2,3);
-  IntColumn* intCol_2 = col_2->as_int();
+  Column *col_2 = new IntColumn(3, 1, 2, 3);
+  IntColumn *intCol_2 = col_2->as_int();
   // test get method
-  t_true(intCol_2->get(0) == 1 && intCol_2->get(1) == 2 && intCol_2->get(2) == 3);
+  t_true(intCol_2->get(0) == 1 && intCol_2->get(1) == 2 &&
+         intCol_2->get(2) == 3);
   // test size method
   t_true(intCol_2->size() == 3);
   // test get_type method
@@ -63,22 +63,23 @@ void testIntColumn() {
   intCol_2->set(0, 4);
   t_true(intCol_2->get(0) == 4);
   // test as_int method
-  IntColumn* copy = intCol_2->as_int();
+  IntColumn *copy = intCol_2->as_int();
   t_true(copy->val_->equals(intCol_2->val_));
   OK("testIntColumn");
 }
 
 void testBoolColumn() {
   // test empty constructor
-  Column* col_1 = new BoolColumn();
-  BoolColumn* boolCol_1 = col_1->as_bool();
+  Column *col_1 = new BoolColumn();
+  BoolColumn *boolCol_1 = col_1->as_bool();
   t_true(boolCol_1->size() == 0);
-  
+
   // test variable argument constructor
-  Column* col_2 = new BoolColumn(3,true,false,false);
-  BoolColumn* boolCol_2 = col_2->as_bool();
+  Column *col_2 = new BoolColumn(3, true, false, false);
+  BoolColumn *boolCol_2 = col_2->as_bool();
   // test get method
-  t_true(boolCol_2->get(0) == true && boolCol_2->get(1) == false && boolCol_2->get(2) == false);
+  t_true(boolCol_2->get(0) == true && boolCol_2->get(1) == false &&
+         boolCol_2->get(2) == false);
   // test size method
   t_true(boolCol_2->size() == 3);
   // test get_type method
@@ -87,24 +88,25 @@ void testBoolColumn() {
   boolCol_2->set(0, false);
   t_true(boolCol_2->get(0) == false);
   // test as_int method
-  BoolColumn* copy = boolCol_2->as_bool();
+  BoolColumn *copy = boolCol_2->as_bool();
   t_true(copy->val_->equals(boolCol_2->val_));
   OK("testBoolColumn");
 }
 
 void testStringColumn() {
   // test empty constructor
-  Column* col_1 = new StringColumn();
-  StringColumn* stringCol_1 = col_1->as_string();
+  Column *col_1 = new StringColumn();
+  StringColumn *stringCol_1 = col_1->as_string();
   t_true(stringCol_1->size() == 0);
-  
+
   // test variable argument constructor
-  Column* col_2 = new StringColumn(3,new String("Tian"),new String("Xia"),new String("Xiaocheng"));
-  StringColumn* stringCol_2 = col_2->as_string();
+  Column *col_2 = new StringColumn(3, new String("Tian"), new String("Xia"),
+                                   new String("Xiaocheng"));
+  StringColumn *stringCol_2 = col_2->as_string();
   // test get method
-  t_true(stringCol_2->get(0)->equals(new String("Tian")) && 
-    stringCol_2->get(1)->equals(new String("Xia")) && 
-    stringCol_2->get(2)->equals(new String("Xiaocheng")));
+  t_true(stringCol_2->get(0)->equals(new String("Tian")) &&
+         stringCol_2->get(1)->equals(new String("Xia")) &&
+         stringCol_2->get(2)->equals(new String("Xiaocheng")));
   // test size method
   t_true(stringCol_2->size() == 3);
   // test get_type method
@@ -113,7 +115,7 @@ void testStringColumn() {
   stringCol_2->set(0, new String("Zhang"));
   t_true(stringCol_2->get(0)->equals(new String("Zhang")));
   // test as_int method
-  StringColumn* copy = stringCol_2->as_string();
+  StringColumn *copy = stringCol_2->as_string();
   t_true(copy->val_->equals(stringCol_2->val_));
   Column *stringCol_3 = new StringColumn();
   stringCol_3->val_ = stringCol_2->val_->copy();
@@ -128,21 +130,20 @@ void testStringColumn() {
 void testSchema() {
   // test empty constructor
   Schema *schema1 = new Schema();
-  t_true(schema1->type_vec->size_ == 0 && 
-    schema1->col_name_vec->size_ == 0 && 
-    schema1->row_name_vec->size_ == 0);
+  t_true(schema1->type_vec->size_ == 0 && schema1->col_name_vec->size_ == 0 &&
+         schema1->row_name_vec->size_ == 0);
 
   // test type_check method
   t_true(schema1->type_check('I'));
   t_false(schema1->type_check('Q'));
-  
+
   // test char pointer constructor
-  Schema* schema2 = new Schema("IBSF");
-  t_true(schema2->type_vec->get_char(0) == 'I' && 
-    schema2->type_vec->get_char(1) == 'B' &&
-    schema2->type_vec->get_char(2) == 'S' && 
-    schema2->type_vec->get_char(3) == 'F');
-    
+  Schema *schema2 = new Schema("IBSF");
+  t_true(schema2->type_vec->get_char(0) == 'I' &&
+         schema2->type_vec->get_char(1) == 'B' &&
+         schema2->type_vec->get_char(2) == 'S' &&
+         schema2->type_vec->get_char(3) == 'F');
+
   // test adding a column with nullptr name
   schema2->add_column('I', nullptr);
   t_true(schema2->type_vec->get_char(4) == 'I');
@@ -174,23 +175,21 @@ void testSchema() {
   t_true(schema2->length() == 2);
 
   // test copying constructor
-  Schema* schema3 = new Schema(*schema2);
+  Schema *schema3 = new Schema(*schema2);
   // test if it can be mutated
   schema2->add_column('F', new String("mutation"));
   t_false(schema3->width() == schema2->width());
   OK("testSchema");
 }
 
-
-void testBuffer() { 
+void testBuffer() {
   // construct int buffer
-  Buffer *ib = new Buffer(1); 
+  Buffer *ib = new Buffer(1);
   t_true(ib->type_ == INTEGER);
   t_true(ib->int_ == 1);
   t_true(ib->f_ == 0 && ib->b_ == false && ib->s_ == nullptr);
   Buffer *ib2 = new Buffer(2);
   Buffer *ib3 = new Buffer(1);
-
   // construct bool buffer
   Buffer *bb = new Buffer(false);
   t_true(bb->get_bool() == false);
@@ -203,26 +202,25 @@ void testBuffer() {
   t_false(bb->equals(ib));
   t_false(ib->equals(ib2));
   t_true(ib->equals(ib3));
+  OK("testBuffer");
 }
 
 void testRow() {
   // construct a schema to be passeed into row
-  Schema* schema = new Schema("IBSF");
+  Schema *schema = new Schema("IBSF");
   schema->add_column('B', new String("Tian"));
-
   // test row constructor
-  Row* row = new Row(*schema);
+  Row *row = new Row(*schema);
   t_true(row->size_ == 5);
   t_true(row->index_ == 0);
   t_true(row->type_vec->equals(schema->type_vec));
-  //t_true(sizeof(row->(buffer_array)) == 5);
+  // t_true(sizeof(row->(buffer_array)) == 5);
 
   // test if it will be mutated if the schema is changed
   schema->add_column('F', new String("Xia"));
   t_true(row->size_ == 5);
   t_false(row->type_vec->equals(schema->type_vec));
-  //t_true(sizeof(row->(buffer_array)) == 5);
-
+  // t_true(sizeof(row->(buffer_array)) == 5);
   // test set and get method
   // set initial value
   row->set(0, 9);
@@ -231,11 +229,11 @@ void testRow() {
   row->set(3, float(1.23));
   t_true(row->get_int(0) == 9);
   t_true(row->get_bool(1) == false);
-  t_true(row->get_string(2) == new String("Zhang"));
+  t_true(row->get_string(2)->equals(new String("Zhang")));
   t_true(row->get_float(3) == float(1.23));
   // change values
-  row->set(0,8);
-  t_true(row->get_int(0)== 8);
+  row->set(0, 8);
+  t_true(row->get_int(0) == 8);
 
   // test set idx and get idx methods
   row->set_idx(4);
@@ -243,13 +241,16 @@ void testRow() {
   // test width method
   t_true(row->width() == 5);
   // test col_type method
-  t_true(row->col_type(5) == 'B');
+  t_true(row->col_type(4) == 'B');
+  OK("testRow");
 }
 
 int main(void) {
-  //test1();
+  // test1();
   testStringColumn();
   testBoolColumn();
   testIntColumn();
   testSchema();
+  testRow();
+  testBuffer();
 }
