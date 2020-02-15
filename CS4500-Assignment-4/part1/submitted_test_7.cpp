@@ -9,6 +9,7 @@ void testDataframe() {
   Schema *schema = new Schema("IBSF");
   // using non empty schema to construct df, check constructor
   DataFrame *df = new DataFrame(*schema);
+
   t_true(df->schema_->type_vec->equals(schema->type_vec) &&
          df->schema_->col_name_vec->equals(schema->col_name_vec) &&
          df->schema_->row_name_vec->equals(schema->row_name_vec));
@@ -21,7 +22,6 @@ void testDataframe() {
   t_false(df->schema_->type_vec->equals(schema->type_vec));
   // test get schema method
   t_false(df->get_schema().type_vec->equals(schema->type_vec));
-
   // using an empty schema to construct df, check constructor
   Schema *schema2 = new Schema();
   DataFrame *df2 = new DataFrame(*schema2);

@@ -231,7 +231,9 @@ public:
   virtual void append(Column *col) {
     expand();
     Column *colcpy = new Column();
-    colcpy->val_ = col->val_->copy();
+    puts("A");
+    colcpy->val_ = col->val_;
+    puts("A");
     list_[size_] = colcpy;
     size_++;
   }
