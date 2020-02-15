@@ -63,6 +63,9 @@ public:
     assert(col != nullptr);
     char type = col->get_type();
     schema_->add_column(type, name);
+    for (size_t i= 0; i < col->size(); i++) {
+      schema_->add_row(nullptr);
+    }
     table_->append(col);
   }
 
@@ -71,25 +74,27 @@ public:
   int get_int(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'I');
-    return table_->get_Column(col)->as_int()->get(row);
+    assert(schema_->col_type(col) == 'I');
+    Column *tmp = table_->get_Column(col);
+    IntColumn* tmp2 = tmp->as_int();
+    return tmp2->get(row);
   }
   bool get_bool(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'B');
+    assert(schema_->col_type(col) == 'B');
     return table_->get_Column(col)->as_bool()->get(row);
   }
   float get_float(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'F');
+    assert(schema_->col_type(col) == 'F');
     return table_->get_Column(col)->as_float()->get(row);
   }
   String *get_string(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'S');
+    assert(schema_->col_type(col) == 'S');
     return table_->get_Column(col)->as_string()->get(row);
   }
 
