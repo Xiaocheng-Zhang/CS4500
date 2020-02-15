@@ -10,13 +10,11 @@ void testDataframe() {
   // using non empty schema to construct df, check constructor
   DataFrame *df = new DataFrame(*schema);
 
-  t_true(df->schema_->type_vec->equals(schema->type_vec) &&
-         df->schema_->col_name_vec->equals(schema->col_name_vec) &&
-         df->schema_->row_name_vec->equals(schema->row_name_vec));
-  t_true(df->table_->get_Column(0)->get_type() == 'I' &&
-         df->table_->get_Column(1)->get_type() == 'B' &&
-         df->table_->get_Column(2)->get_type() == 'S' &&
-         df->table_->get_Column(3)->get_type() == 'F');
+ 
+  t_true(df->schema_->col_type(0) == 'I' &&
+         df->schema_->col_type(1) == 'B' &&
+         df->schema_->col_type(2) == 'S' &&
+         df->schema_->col_type(3) == 'F');
   // check the df schema wont be mutated
   schema->add_column('B', new String("Tian"));
   t_false(df->schema_->type_vec->equals(schema->type_vec));
@@ -33,9 +31,11 @@ void testDataframe() {
   df2->add_column(col2, new String("String one"));
   t_true(df2->schema_->col_name(0)->equals(new String("Integer one")));
   t_true(df2->schema_->col_name(1)->equals(new String("String one")));
-  // test get method
-  // t_true(df2->get_int(0, 1) == 2);
+  // // test get method
+  // //t_true(df2->get_int(0, 1) == 2);
+  // //puts("A");
   // t_true(df2->get_string(1, 1)->equals(new String("Xia")));
+  // puts("here");
   // // test get column method
   // t_true(df2->get_col(*(new String("Zhang"))) == 2);
   // t_true(df2->get_col(*(new String("Xiaocheng"))) == -1);
@@ -43,6 +43,7 @@ void testDataframe() {
   // df2->set(0, 1, 5);
   // df2->set(1, 1, new String("Xiaocheng"));
   // t_true(df2->get_int(0, 1) == 5);
+  // puts("here");
   // t_true(df2->get_string(1, 1)->equals(new String("Xiaocheng")));
 
   // // test fill row method
