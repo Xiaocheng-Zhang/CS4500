@@ -76,26 +76,36 @@ public:
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'I');
     Column *tmp = table_->get_Column(col);
-    IntColumn* tmp2 = tmp->as_int();
+    IntColumn* tmp2 = new IntColumn();
+    tmp2->val_ = tmp->val_->copy();
     return tmp2->get(row);
   }
   bool get_bool(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'B');
-    return table_->get_Column(col)->as_bool()->get(row);
+    Column *tmp = table_->get_Column(col);
+    BoolColumn *tmp2 = new BoolColumn();
+    tmp2->val_ = tmp->val_->copy();
+    return tmp2->get(row);
   }
   float get_float(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'F');
-    return table_->get_Column(col)->as_float()->get(row);
+    Column *tmp = table_->get_Column(col);
+    FloatColumn *tmp2 = new FloatColumn();
+    tmp2->val_ = tmp->val_->copy();
+    return tmp2->get(row);
   }
   String *get_string(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'S');
-    return table_->get_Column(col)->as_string()->get(row);
+    Column *tmp = table_->get_Column(col);
+    StringColumn *tmp2 = new StringColumn();
+    tmp2->val_ = tmp->val_->copy();
+    return tmp2->get(row);
   }
 
   /** Return the offset of the given column name or -1 if no such col. */
@@ -110,34 +120,25 @@ public:
   void set(size_t col, size_t row, int val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'I');
-    IntColumn *temp = dynamic_cast<IntColumn *>(table_->get_Column(col));
-    temp->set(row, val);
-    table_->set(col, temp);
+    assert(schema_->col_type(col) == 'I');
+    table_->list_[col]->val_->set(row, val);
   }
   void set(size_t col, size_t row, bool val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'B');
-    BoolColumn *temp = dynamic_cast<BoolColumn *>(table_->get_Column(col));
-    temp->set(row, val);
-    table_->set(col, temp);
+    assert(schema_->col_type(col) == 'B');
+    table_->list_[col]->val_->set(row, val);
   }
   void set(size_t col, size_t row, float val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'F');
-    FloatColumn *temp = dynamic_cast<FloatColumn *>(table_->get_Column(col));
-    temp->set(row, val);
-    table_->set(col, temp);
+    table_->list_[col]->val_->set(row, val);
   }
   void set(size_t col, size_t row, String *val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'S');
-    StringColumn *temp = dynamic_cast<StringColumn *>(table_->get_Column(col));
-    temp->set(row, val);
-    table_->set(col, temp);
+    assert(schema_->col_type(col) == 'S');
+    table_->list_[col]->val_->set(row, val);
   }
 
   /** Set the fields of the given row object with values from the columns at
@@ -150,22 +151,13 @@ public:
     for (size_t i = 0; i < schema_->width(); i++) {
       char type = schema_->col_type(i);
       if (type == 'I') {
-        IntColumn *temp = dynamic_cast<IntColumn *>(table_->get_Column(i));
-        temp->set(idx, row.get_int(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->set(idx, row.get_int(i));
       } else if (type == 'B') {
-        BoolColumn *temp = dynamic_cast<BoolColumn *>(table_->get_Column(i));
-        temp->set(idx, row.get_int(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->set(idx, row.get_bool(i));
       } else if (type == 'F') {
-        FloatColumn *temp = dynamic_cast<FloatColumn *>(table_->get_Column(i));
-        temp->set(idx, row.get_float(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->set(idx, row.get_float(i));
       } else if (type == 'S') {
-        StringColumn *temp =
-            dynamic_cast<StringColumn *>(table_->get_Column(i));
-        temp->set(idx, row.get_string(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->set(idx, row.get_string(i));
       }
     }
   }
@@ -173,6 +165,8 @@ public:
   /** Add a row at the end of this dataframe. The row is expected to have
    *  the right schema and be filled with values, otherwise undedined.  */
   void add_row(Row &row) {
+    row.type_vec->print_self();
+    schema_->type_vec->print_self();
     assert(row.type_vec->equals(schema_->type_vec));
     for (size_t i = 0; i < schema_->width(); i++) {
       char type = schema_->col_type(i);
