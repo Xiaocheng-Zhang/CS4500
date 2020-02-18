@@ -165,28 +165,17 @@ public:
   /** Add a row at the end of this dataframe. The row is expected to have
    *  the right schema and be filled with values, otherwise undedined.  */
   void add_row(Row &row) {
-    row.type_vec->print_self();
-    schema_->type_vec->print_self();
     assert(row.type_vec->equals(schema_->type_vec));
     for (size_t i = 0; i < schema_->width(); i++) {
       char type = schema_->col_type(i);
       if (type == 'I') {
-        IntColumn *temp = dynamic_cast<IntColumn *>(table_->get_Column(i));
-        temp->push_back(row.get_int(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->append(row.get_int(i));
       } else if (type == 'B') {
-        BoolColumn *temp = dynamic_cast<BoolColumn *>(table_->get_Column(i));
-        temp->push_back(row.get_bool(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->append(row.get_bool(i));
       } else if (type == 'F') {
-        FloatColumn *temp = dynamic_cast<FloatColumn *>(table_->get_Column(i));
-        temp->push_back(row.get_float(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->append(row.get_float(i));
       } else if (type == 'S') {
-        StringColumn *temp =
-            dynamic_cast<StringColumn *>(table_->get_Column(i));
-        temp->push_back(row.get_string(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->append(row.get_string(i));
       }
     }
   }

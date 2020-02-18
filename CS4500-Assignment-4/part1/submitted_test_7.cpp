@@ -51,16 +51,14 @@ void testDataframe() {
   Row *row = new Row(df2->get_schema());
   row->set(0, 4);
   row->set(1, new String("new"));
-  puts("here");
   df2->fill_row(1, *row);
-  puts("here");
   t_true(df2->get_int(0, 1) == 4);
   t_true(df2->get_string(1, 1)->equals(new String("new")));
   // change row one element to see if df will be mutated
   row->set(0, 9);
   t_true(df2->get_int(0, 1) == 4);
   // test add row method, the row now is (9, "new")
-  df->add_row(*row);
+  df2->add_row(*row);
   t_true(df2->get_int(0, 3) == 9);
   t_true(df2->get_string(1, 3)->equals(new String("new")));
   OK("testDataframe");
