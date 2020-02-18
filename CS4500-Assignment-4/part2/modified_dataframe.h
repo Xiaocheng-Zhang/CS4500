@@ -4,14 +4,33 @@
 #include "../string.h"
 #include "../vec.h"
 #include <iostream>
-#include <pthread.h>
+#include <thread>
 #include <stdarg.h>
+#include <mutex>
 
+class Compress : public Object {
+public:
+  Rower *r_;
+  Row *row_;
+  Compress(Row *row, Rower &r) : Object() {
+    *r_ = r;
+    row_ = row;
+  }
+};
+
+void *helper(void *temp) { 
+  Compress *c = (Compress*) temp;
+  if (!c) {
+    return 0;
+  }
+  
+  return nullptr; 
+  }
 /****************************************************************************
  * DataFrame::
  *
  * A DataFrame is table composed of columns of equal length. Each column
- * holds values of the same type (I, S, B, F). A dataframe has a schema that
+ * holds values of the same typ0e (I, S, B, F). A dataframe has a schema that
  * describes it.
  */
 class DataFrame : public Object {
@@ -30,9 +49,9 @@ public:
    * empty. */
   DataFrame(Schema &schema) {
     schema_ = new Schema();
-    schema_->type_vec = schema.type_vec;
-    schema_->col_name_vec = schema.col_name_vec;
-    schema_->row_name_vec = schema.row_name_vec;
+    schema_->type_vec = schema.type_vec->copy();
+    schema_->col_name_vec = schema.col_name_vec->copy();
+    schema_->row_name_vec = schema.row_name_vec->copy();
     table_ = new ColumnVec();
     for (int i = 0; i < schema_->type_vec->size_; i++) {
       char curr = schema_->type_vec->get_char(i);
@@ -64,6 +83,9 @@ public:
     assert(col != nullptr);
     char type = col->get_type();
     schema_->add_column(type, name);
+    for (size_t i = 0; i < col->size(); i++) {
+      schema_->add_row(nullptr);
+    }
     table_->append(col);
   }
 
@@ -72,25 +94,27 @@ public:
   int get_int(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'I');
-    return table_->get_Column(col)->as_int()->get(row);
+    assert(schema_->col_type(col) == 'I');
+    Column *tmp = table_->get_Column(col);
+    IntColumn *tmp2 = tmp->as_int();
+    return tmp2->get(row);
   }
   bool get_bool(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'B');
+    assert(schema_->col_type(col) == 'B');
     return table_->get_Column(col)->as_bool()->get(row);
   }
   float get_float(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'F');
+    assert(schema_->col_type(col) == 'F');
     return table_->get_Column(col)->as_float()->get(row);
   }
   String *get_string(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'S');
+    assert(schema_->col_type(col) == 'S');
     return table_->get_Column(col)->as_string()->get(row);
   }
 
@@ -243,27 +267,37 @@ public:
       for (size_t col = 0; col < ncols(); col++) {
         char type = schema_->type_vec->get_char(col);
         if (type == 'I') {
-          std::cout << this->get_int(col,row) << std::endl;
-        }
-        else if (type == 'B') {
-          std::cout << this->get_bool(col,row) << std::endl;
-        }
-        else if (type == 'F') {
-          std::cout << this->get_float(col,row) << std::endl;
-        }
-        else if (type == 'S') {
-          std::cout << this->get_string(col,row)->c_str() << std::endl;
+          std::cout << this->get_int(col, row) << std::endl;
+        } else if (type == 'B') {
+          std::cout << this->get_bool(col, row) << std::endl;
+        } else if (type == 'F') {
+          std::cout << this->get_float(col, row) << std::endl;
+        } else if (type == 'S') {
+          std::cout << this->get_string(col, row)->c_str() << std::endl;
         }
       }
     }
   }
 
-  void* helper() {
-    
-  }
   /** This method clones the Rower and executes the map in parallel. Join is
    * used at the end to merge the results. */
   void pmap(Rower &r) {
+    size_t thread_num = nrows();
+    Rower **rower_array = new Rower *[thread_num];
+    Rower *rower = new Rower();
+    rower = &r;
+    for (size_t i = 0; i < thread_num; i++) {
+      rower_array[i] = rower;
+    }
+    pthread_t threads[thread_num];
 
+    for (int i = 0; i < thread_num; ++i) {
+      void *c = (void *) new Compress(track_row(i), rower[i]);
+      pthread_create(&threads[i], 0, helper, c);
+    }
+    
+    for (int i = 0; i < thread_num; ++i) {
+      pthread_join(threads[i], 0);
+    }
   }
 };
