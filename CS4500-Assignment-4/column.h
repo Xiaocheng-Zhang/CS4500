@@ -71,11 +71,19 @@ public:
     va_end(vl);
   }
 
-  int get(size_t idx) { return val_->get_int(idx); }
+  int get(size_t idx) { 
+    if (val_) {
+      return val_->get_int(idx);
+    }
+    return 0; 
+    }
 
   IntColumn *as_int() {
     IntColumn *temp = new IntColumn();
-    temp->val_ = val_->copy();
+    if (val_) {
+      temp->val_ = val_->copy();
+    }
+    puts("null");
     return temp;
   }
   /** Set value at idx. An out of bound idx is undefined.  */
@@ -96,8 +104,6 @@ public:
  */
 class BoolColumn : public Column {
 public:
-  Bvec *val_;
-
   BoolColumn() : Column() { val_ = new Bvec(); }
   BoolColumn(int n, ...) : Column() {
     val_ = new Bvec();
@@ -113,7 +119,13 @@ public:
 
   bool get(size_t idx) { return val_->get_bool(idx); }
 
-  BoolColumn *as_bool() { return this; }
+  BoolColumn *as_bool() {
+    BoolColumn *temp = new BoolColumn();
+    if (val_) {
+      temp->val_ = val_->copy();
+    }
+    return temp;
+   }
   /** Set value at idx. An out of bound idx is undefined.  */
   void set(size_t idx, bool val) { val_->set(idx, val); }
 
@@ -143,7 +155,13 @@ public:
 
   float get(size_t idx) { return val_->get_float(idx); }
 
-  FloatColumn *as_float() { return this; }
+  FloatColumn *as_float() {
+    FloatColumn *temp = new FloatColumn();
+    if (val_) {
+      temp->val_ = val_->copy();
+    }
+    return temp;
+  }
 
   /** Set value at idx. An out of bound idx is undefined.  */
   void set(size_t idx, float val) { val_->set(idx, val); }
@@ -177,7 +195,13 @@ public:
     va_end(vl);
   }
 
-  StringColumn *as_string() { return this; }
+  StringColumn *as_string() {
+    StringColumn *temp = new StringColumn();
+    if (val_) {
+      temp->val_ = val_->copy();
+    }
+    return temp;
+  }
 
   /** Returns the string at idx; undefined on invalid idx.*/
   String *get(size_t idx) { return val_->get_String(idx); }
@@ -231,9 +255,7 @@ public:
   virtual void append(Column *col) {
     expand();
     Column *colcpy = new Column();
-    puts("A");
     colcpy->val_ = col->val_;
-    puts("A");
     list_[size_] = colcpy;
     size_++;
   }
@@ -312,17 +334,25 @@ public:
     }
     return hash_;
   }
-
   virtual Column *get_Column(size_t index) {
     assert(index < size_ && index >= 0);
     return list_[index];
   }
-  // virtual void print_self() {
-  //   for (size_t i = 0; i < size_; i++) {
-  //     if (list_[i]) {
-  //       list_[i]->print_self();
-  //       puts("");
-  //     }
-  //   }
-  // }
+
+  virtual IntColumn *get_IntColumn(size_t index) {
+    assert(index < size_ && index >= 0);
+    return list_[index]->as_int();
+  }
+  virtual BoolColumn *get_BoolColumn(size_t index) {
+    assert(index < size_ && index >= 0);
+    return list_[index]->as_bool();
+  }
+  virtual FloatColumn *get_FloatColumn(size_t index) {
+    assert(index < size_ && index >= 0);
+    return list_[index]->as_float();
+  }
+  virtual StringColumn *get_StringColumn(size_t index) {
+    assert(index < size_ && index >= 0);
+    return list_[index]->as_string();
+  }
 };

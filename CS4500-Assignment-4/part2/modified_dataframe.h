@@ -18,19 +18,19 @@ public:
   }
 };
 
-void *helper(void *temp) { 
+void *thread_method(void *temp) { 
   Compress *c = (Compress*) temp;
   if (!c) {
     return 0;
   }
-  
+  c->r_->accept(*(c->row_));
   return nullptr; 
-  }
+}
 /****************************************************************************
  * DataFrame::
  *
  * A DataFrame is table composed of columns of equal length. Each column
- * holds values of the same typ0e (I, S, B, F). A dataframe has a schema that
+ * holds values of the same type (I, S, B, F). A dataframe has a schema that
  * describes it.
  */
 class DataFrame : public Object {
@@ -96,26 +96,36 @@ public:
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'I');
     Column *tmp = table_->get_Column(col);
-    IntColumn *tmp2 = tmp->as_int();
+    IntColumn *tmp2 = new IntColumn();
+    tmp2->val_ = tmp->val_->copy();
     return tmp2->get(row);
   }
   bool get_bool(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'B');
-    return table_->get_Column(col)->as_bool()->get(row);
+    Column *tmp = table_->get_Column(col);
+    BoolColumn *tmp2 = new BoolColumn();
+    tmp2->val_ = tmp->val_->copy();
+    return tmp2->get(row);
   }
   float get_float(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'F');
-    return table_->get_Column(col)->as_float()->get(row);
+    Column *tmp = table_->get_Column(col);
+    FloatColumn *tmp2 = new FloatColumn();
+    tmp2->val_ = tmp->val_->copy();
+    return tmp2->get(row);
   }
   String *get_string(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'S');
-    return table_->get_Column(col)->as_string()->get(row);
+    Column *tmp = table_->get_Column(col);
+    StringColumn *tmp2 = new StringColumn();
+    tmp2->val_ = tmp->val_->copy();
+    return tmp2->get(row);
   }
 
   /** Return the offset of the given column name or -1 if no such col. */
@@ -130,34 +140,25 @@ public:
   void set(size_t col, size_t row, int val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'I');
-    IntColumn *temp = dynamic_cast<IntColumn *>(table_->get_Column(col));
-    temp->set(row, val);
-    table_->set(col, temp);
+    assert(schema_->col_type(col) == 'I');
+    table_->list_[col]->val_->set(row, val);
   }
   void set(size_t col, size_t row, bool val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'B');
-    BoolColumn *temp = dynamic_cast<BoolColumn *>(table_->get_Column(col));
-    temp->set(row, val);
-    table_->set(col, temp);
+    assert(schema_->col_type(col) == 'B');
+    table_->list_[col]->val_->set(row, val);
   }
   void set(size_t col, size_t row, float val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'F');
-    FloatColumn *temp = dynamic_cast<FloatColumn *>(table_->get_Column(col));
-    temp->set(row, val);
-    table_->set(col, temp);
+    table_->list_[col]->val_->set(row, val);
   }
   void set(size_t col, size_t row, String *val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
-    assert(table_->get_Column(col)->get_type() == 'S');
-    StringColumn *temp = dynamic_cast<StringColumn *>(table_->get_Column(col));
-    temp->set(row, val);
-    table_->set(col, temp);
+    assert(schema_->col_type(col) == 'S');
+    table_->list_[col]->val_->set(row, val);
   }
 
   /** Set the fields of the given row object with values from the columns at
@@ -170,22 +171,13 @@ public:
     for (size_t i = 0; i < schema_->width(); i++) {
       char type = schema_->col_type(i);
       if (type == 'I') {
-        IntColumn *temp = dynamic_cast<IntColumn *>(table_->get_Column(i));
-        temp->set(idx, row.get_int(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->set(idx, row.get_int(i));
       } else if (type == 'B') {
-        BoolColumn *temp = dynamic_cast<BoolColumn *>(table_->get_Column(i));
-        temp->set(idx, row.get_int(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->set(idx, row.get_bool(i));
       } else if (type == 'F') {
-        FloatColumn *temp = dynamic_cast<FloatColumn *>(table_->get_Column(i));
-        temp->set(idx, row.get_float(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->set(idx, row.get_float(i));
       } else if (type == 'S') {
-        StringColumn *temp =
-            dynamic_cast<StringColumn *>(table_->get_Column(i));
-        temp->set(idx, row.get_string(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->set(idx, row.get_string(i));
       }
     }
   }
@@ -197,22 +189,13 @@ public:
     for (size_t i = 0; i < schema_->width(); i++) {
       char type = schema_->col_type(i);
       if (type == 'I') {
-        IntColumn *temp = dynamic_cast<IntColumn *>(table_->get_Column(i));
-        temp->push_back(row.get_int(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->append(row.get_int(i));
       } else if (type == 'B') {
-        BoolColumn *temp = dynamic_cast<BoolColumn *>(table_->get_Column(i));
-        temp->push_back(row.get_bool(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->append(row.get_bool(i));
       } else if (type == 'F') {
-        FloatColumn *temp = dynamic_cast<FloatColumn *>(table_->get_Column(i));
-        temp->push_back(row.get_float(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->append(row.get_float(i));
       } else if (type == 'S') {
-        StringColumn *temp =
-            dynamic_cast<StringColumn *>(table_->get_Column(i));
-        temp->push_back(row.get_string(i));
-        table_->set(i, temp);
+        table_->list_[i]->val_->append(row.get_string(i));
       }
     }
   }
@@ -278,7 +261,6 @@ public:
       }
     }
   }
-
   /** This method clones the Rower and executes the map in parallel. Join is
    * used at the end to merge the results. */
   void pmap(Rower &r) {
@@ -293,7 +275,7 @@ public:
 
     for (int i = 0; i < thread_num; ++i) {
       void *c = (void *) new Compress(track_row(i), rower[i]);
-      pthread_create(&threads[i], 0, helper, c);
+      pthread_create(&threads[i], 0, thread_method, c);
     }
     
     for (int i = 0; i < thread_num; ++i) {
@@ -301,3 +283,4 @@ public:
     }
   }
 };
+

@@ -400,12 +400,14 @@ public:
   }
 };
 
-// /** Rower used to track all integers into a list.*/
-// class TestRower : public Rower {
-// public:
-//   Row *test_row;
-//   TestRower() : Rower() {
-//     test_row = nullptr;
-//   }
-
-// };
+/** Rower used to track all integers into a list.*/
+class TestRower : public Rower {
+public:
+  Row *test_row;
+  Fielder *fielder_;
+  TestRower(Fielder *fielder) : Rower() {
+    test_row = nullptr;
+    fielder_ = fielder;
+  }
+  
+};

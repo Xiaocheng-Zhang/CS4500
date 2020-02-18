@@ -272,7 +272,7 @@ public:
 
   virtual void print_self() {
     for (size_t i = 0; i < size_; i++) {
-      printf("%c", list_[i]);
+      printf("%c ", list_[i]);
     }
     puts("");
   }
@@ -407,7 +407,7 @@ public:
 
   virtual void print_self() {
     for (size_t i = 0; i < size_; i++) {
-      printf("%d", list_[i]);
+      printf("%d ", list_[i]);
     }
     puts("");
   }
@@ -537,7 +537,7 @@ public:
 
   virtual void print_self() {
     for (size_t i = 0; i < size_; i++) {
-      printf("%f", list_[i]);
+      printf("%f ", list_[i]);
     }
     puts("");
   }
@@ -672,7 +672,7 @@ public:
 
   virtual void print_self() {
     for (size_t i = 0; i < size_; i++) {
-      printf("%d", list_[i]);
+      printf("%d ", list_[i]);
     }
     puts("");
   }
