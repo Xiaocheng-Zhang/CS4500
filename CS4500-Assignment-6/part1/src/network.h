@@ -23,7 +23,7 @@ void client_speak(int core_fd) {
   while (1) {
     char buffer[4096];
     fgets(buffer, 4096, stdin);
-    puts("client_speak");
+    printf("client_speak: %s", buffer);
     send(core_fd, buffer, 4096, 0);
     if (!strcmp(buffer, "exit")) {
       exit(0);
@@ -50,29 +50,37 @@ void open_server(int core_fd, fd_set sockets, sockaddr_in address, int addrlen) 
   while (1) {
     // copy the set
     fd_set copy = sockets;
-    puts("waiting for selecting");
-    int socket_count = select(0, &copy, nullptr, nullptr, nullptr);
-    puts("finished selecting");
+    // puts("waiting for selecting");
+    int socket_count = select(FD_SETSIZE, &copy, nullptr, nullptr, nullptr);
     for (int i = 0; i < socket_count; i++) {
       int socket = copy.fds_bits[i];
       if (socket == core_fd) {
         int client =
             accept(socket, (sockaddr *)&address, (socklen_t *)&addrlen);
-
+        // std::cout << socket << " " << core_fd << " " << client;
+        // exit(0);
+        if (client == -1) {
+          perror("accept");
+          exit(EXIT_FAILURE);
+        }
         // add the client fd to the set.
         FD_SET(client, &sockets);
+        puts("pass");
         printf("client %d accept", client);
         char buffer[1024] = "Welcome to 我们的妙♂妙♂屋!\0";
         send(socket, buffer, 1024, 0);
-      } else {
+      }
+      else {
         char buffer[4096];
         int length = recv(socket, buffer, 4096, 0);
-        printf("read from buffer: ", buffer);
-        if (!strcmp(buffer, DEFAULT_IP) || !strcmp(buffer, "exit")) {
-          send(socket, "欢迎下次再来 我们的妙♂妙♂屋!\0", 20, 0);
-          shutdown(socket, SHUT_RDWR);
-          // delete this socekt from set.
-          FD_CLR(socket, &sockets);
+        if (length >= 0) {
+          printf("read from buffer: ", buffer);
+          if (!strcmp(buffer, DEFAULT_IP) || !strcmp(buffer, "exit")) {
+            send(socket, "欢迎下次再来 我们的妙♂妙♂屋!\0", 20, 0);
+            shutdown(socket, SHUT_RDWR);
+            // delete this socekt from set.
+            FD_CLR(socket, &sockets);
+          }
         } else {
           // broadcast to all clients
           for (int i = 0; i < socket_count; i++) {
@@ -172,7 +180,7 @@ public:
 class Client : public Core {
 public:
   Client() : Core() {
-    call_listen(DEFAULT_NUM);
+    //call_listen(DEFAULT_NUM);
     call_connect();
   }
 
