@@ -15,7 +15,7 @@ void *basic_deserialize(int type, String *s) {
     j++;
   }
   if (type == STRING) {
-      return new String(buffer);
+    return new String(buffer);
   }
   if (type == INTEGER) {
     int i = atoi(buffer);
@@ -50,21 +50,23 @@ public:
     int type = atoi(sa->c_str());
     void *output = basic_deserialize(type, sa);
     if (type == STRING) {
-      printf("Received: STRING %s", ((String *)output)->c_str());
+      printf("Deserialized: STRING %s", ((String *)output)->c_str());
     }
     if (type == INTEGER) {
-      printf("Received: INTEGER %d\n", *((int *)output));
+      printf("Deserialized: INTEGER %d\n", *((int *)output));
     }
     if (type == FLOAT) {
-      printf("Received: FLOAT %f\n", *((float *)output));
+      printf("Deserialized: FLOAT %f\n", *((float *)output));
     }
     if (type == DOUBLE) {
-      printf("Received: DOUBLE %lf\n", *((double *)output));
+      printf("Deserialized: DOUBLE %lf\n", *((double *)output));
     }
     if (type == BOOL) {
-      printf("Received: BOOL %d\n", *((bool *)output));
+      printf("Deserialized: BOOL %d\n", *((bool *)output));
     }
   }
+
+  virtual void deserialize(StringArray *sa) {}
 
   virtual void *read_data(char *filename) {
     FILE *fd = fopen(filename, "r");

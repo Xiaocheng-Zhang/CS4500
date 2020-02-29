@@ -16,6 +16,7 @@ public:
     char *buffer = new char[s->size() + 5];
     sprintf(buffer, SERIALIZE_FORMAT, STRING);
     strcat(buffer, s->cstr_);
+    printf("Serialize: String %s to %s\n", s->c_str(), buffer);
     return buffer;
   };
   virtual char *serialize(int i) {
@@ -24,6 +25,7 @@ public:
     char *src = new char[sizeof(int)];
     sprintf(src, "%d\0", i);
     strcat(buffer, src);
+    printf("Serialize: int %d to %s\n", i, buffer);
     return buffer;
   };
   virtual char *serialize(float f) {
@@ -32,6 +34,7 @@ public:
     char *src = new char[sizeof(int)];
     sprintf(src, "%f\0", f);
     strcat(buffer, src);
+    printf("Serialize: float %f to %s\n", f, buffer);
     return buffer;
   };
   virtual char *serialize(double f) {
@@ -40,6 +43,7 @@ public:
     char *src = new char[sizeof(int)];
     sprintf(src, "%lf\0", f);
     strcat(buffer, src);
+    printf("Serialize: double %lf to %s\n", f, buffer);
     return buffer;
   };
   virtual char *serialize(bool b) {
@@ -48,6 +52,7 @@ public:
     char *src = new char[sizeof(int)];
     sprintf(src, "%d\0", b);
     strcat(buffer, src);
+    printf("Serialize: bool %d to %s\n", b, buffer);
     return buffer;
   };
 };
@@ -55,9 +60,12 @@ public:
 class AdvanceSerializer : public Serializer {
 public:
   AdvanceSerializer() : Serializer() {}
-  
-  virtual char *serialize(StringArray *sa) {
-    // char *buffer = new char[sa->size_];
-    return nullptr;
-  }
+
+  virtual char *serialize(StringArray *sa) { return nullptr; }
+  virtual char *serialize(DoubleArray *da) { return nullptr; }
+  virtual char *serialize(Message *msg) { return nullptr; }
+  virtual char *serialize(Ack *ack) { return nullptr; }
+  virtual char *serialize(Status *st) { return nullptr; }
+  virtual char *serialize(Register *r) { return nullptr; }
+  virtual char *serialize(Directory *d) { return nullptr; }
 };
