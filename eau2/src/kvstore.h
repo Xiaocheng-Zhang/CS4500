@@ -11,14 +11,14 @@ class Key : public Object {
 private:
   const char *name_;
   size_t size_;
-  size_t id_;
+  size_t home_address;
 
 public:
   Key() : Object() {}
 
-  Key(const char *name, size_t id) : Object() {
+  Key(const char *name, size_t home_add) : Object() {
     name_ = strdup(name);
-    id_ = id;
+    home_address = home_add;
     size_ = strlen(name);
   }
 
@@ -35,23 +35,23 @@ public:
 
   virtual size_t get_position() { return hash(); }
 
-  virtual size_t get_id() { return id_; }
+  virtual size_t get_id() { return home_address; }
 };
 
 class CompactKey : public Key {
 private:
-  size_t id_;
+  size_t home_address;
   size_t position_;
 
 public:
   CompactKey(size_t id, size_t position) : Key() {
-    id_ = id;
+    home_address = id;
     position_ = position;
   }
 
   size_t get_position() { return position_; }
 
-  size_t get_id() { return id_; }
+  size_t get_id() { return home_address; }
 };
 
 class KeyList : public Object {
@@ -62,6 +62,8 @@ public:
   KeyList() : Object() {
     key_map = new unordered_map<const char *, CompactKey *>();
   }
+
+  ~KeyList() { delete key_map; }
   void add_key(Key *k) {
     key_map->insert(
         {k->get_name(), new CompactKey(k->get_id(), k->get_position())});
@@ -80,32 +82,19 @@ public:
 template <class T> class Node : public Object {
 private:
   // size_t is position
-  unordered_map<const char*, T> data_map;
-  //unordered_map<size_t, T> *data_map2;
-
+  unordered_map<const char *, T> data_map;
 
 public:
-  Node() : Object() {
-    // data_map2 = new unordered_map<size_t, T>();
-    // data_map = unordered_map<size_t, T>();
-    // data_map = new unordered_map<size_t, T>();
-  }
+  Node() : Object() {}
 
-  ~Node() {
-    //delete data_map;
-  }
+  ~Node() {}
 
-  void put(const char* name, T t) { 
-    puts("what");
-    // unordered_map<size_t, T> map;
-    // map.insert({position, t});
+  void put(const char *name, T t) {
+    // will stuck here
     data_map.insert({name, t});
-    // data_map2->insert({name, t});
-    puts("why");
-    //data_map->insert({position, t}); 
-    }
+  }
 
-  T get(const char* name) { return data_map.at(name); }
+  T get(const char *name) { return data_map.at(name); }
 };
 
 // template <class T> class NodeList : public Object {
@@ -148,16 +137,16 @@ template <class T> class KVStore : public Object {
 private:
   KeyList *keys_;
   Node<T> *node_;
-  size_t idx_;
+  size_t home_address;
 
 public:
   KVStore() : Object() {
-    idx_ = 0;
+    home_address = 0;
     keys_ = new KeyList();
     node_ = new Node<T>();
   }
   KVStore(size_t idx) : Object() {
-    idx_ = idx;
+    home_address = idx;
     keys_ = new KeyList();
     node_ = new Node<T>();
   }
@@ -171,15 +160,11 @@ public:
   // put value into the node which signed by Key.
   void put(Key *k, T t) {
     size_t id = k->get_id();
-    if (id == idx_) {
+    if (id == home_address) {
       keys_->add_key(k);
-      puts("put to node");
       node_->put(k->get_name(), t);
-      // node_->put_to_node(id, k->get_position(), t);
-      puts("end node");
-    }
-    else {
-      cout << "Skip the KVStore " << idx_ << "\n" ;
+    } else {
+      cout << "Skip the KVStore " << home_address << "\n";
     }
   }
 
@@ -190,6 +175,5 @@ public:
   T get(char *c) {
     CompactKey *tmp = keys_->get_CompactKey_from_name(c);
     return node_->get(tmp->get_name());
-    // return nodes_->get_from_node(tmp->get_id(), tmp->get_position());
   }
 };
