@@ -56,108 +56,140 @@ public:
 
 class KeyList : public Object {
 private:
-  unordered_map<const char *, CompactKey *> key_map;
+  unordered_map<const char *, CompactKey *> *key_map;
 
 public:
-  KeyList() : Object() { }
+  KeyList() : Object() {
+    key_map = new unordered_map<const char *, CompactKey *>();
+  }
   void add_key(Key *k) {
-    CompactKey *tmp = new CompactKey(k->get_id(), k->get_position());
-    key_map[k->get_name()] = tmp;
+    key_map->insert(
+        {k->get_name(), new CompactKey(k->get_id(), k->get_position())});
+    cout << key_map->at(k->get_name())->get_position() << "\n";
   }
 
-  CompactKey *get_CompactKey_from_name(char *c) {
-    if (key_map.find(c) == key_map.end()) {
+  CompactKey *get_CompactKey_from_name(const char *c) {
+    if (key_map->find(c) == key_map->end()) {
       cout << "can't find a key called " << c << " in this KeyList\n";
       exit(1);
     }
-    return key_map.at(c);
+    return key_map->at(c);
   }
 };
 
 template <class T> class Node : public Object {
 private:
   // size_t is position
-  unordered_map<size_t, T> data_map;
+  unordered_map<const char*, T> data_map;
+  //unordered_map<size_t, T> *data_map2;
+
 
 public:
-  Node() : Object() {}
-
-  void put(size_t position, T t) { data_map.insert({position, t}); }
-
-  T get(size_t position) { return data_map.at(position); }
-};
-
-template <class T> class NodeList : public Object {
-private:
-  // size_t is node id
-  unordered_map<size_t, Node<T> *> node_map;
-
-public:
-  NodeList() : Object() {}
-  void put_to_node(size_t id, size_t position, T t) {
-    auto it = node_map.find(id);
-    if (it == node_map.end()) {
-      Node<T> *temp = new Node<T>();
-      temp->put(position, t);
-      node_map.insert({id, temp});
-    } else {
-      node_map[id]->put(position, t);
-    }
+  Node() : Object() {
+    // data_map2 = new unordered_map<size_t, T>();
+    // data_map = unordered_map<size_t, T>();
+    // data_map = new unordered_map<size_t, T>();
   }
 
-  T get_from_node(size_t id, size_t position) {
-    /**
-     * key exist:
-     *
-     * not exist:
-     */
-    auto it = node_map.find(id);
-    if (it == node_map.end()) {
-      printf("Data not found in node_id %ld position %ld", id, position);
-      return nullptr;
-    }
-    return node_map.at(id)->get(position);
+  ~Node() {
+    //delete data_map;
   }
+
+  void put(const char* name, T t) { 
+    puts("what");
+    // unordered_map<size_t, T> map;
+    // map.insert({position, t});
+    data_map.insert({name, t});
+    // data_map2->insert({name, t});
+    puts("why");
+    //data_map->insert({position, t}); 
+    }
+
+  T get(const char* name) { return data_map.at(name); }
 };
+
+// template <class T> class NodeList : public Object {
+// private:
+//   // size_t is node id
+//   size_t start_idx;
+//   vector<Node<T> *> node_vec;
+
+// public:
+//   NodeList(size_t idx) : Object() { start_idx = idx; }
+//   void put_to_node(size_t id, size_t position, T t) {
+//     assert(id - start_idx >= 0);
+//     // auto it = node_map.find(id);
+//     // if (it == node_map.end()) {
+//     //   Node<T> temp;
+//     //   temp.put(position, t);
+//     //   puts("start");
+//     //   node_map.insert({id, temp});
+//     // } else {
+//     //   node_map[id].put(position, t);
+//     // }
+//   }
+
+//   T get_from_node(size_t id, size_t position) {
+//     /**
+//      * key exist:
+//      *
+//      * not exist:
+//      */
+//     // auto it = node_map.find(id);
+//     // if (it == node_map.end()) {
+//     //   printf("Data not found in node_id %ld position %ld", id, position);
+//     //   return nullptr;
+//     // }
+//     // return node_map.at(id).get(position);
+//   }
+// };
 
 template <class T> class KVStore : public Object {
 private:
   KeyList *keys_;
-  NodeList<T> *nodes_;
+  Node<T> *node_;
   size_t idx_;
 
 public:
   KVStore() : Object() {
     idx_ = 0;
     keys_ = new KeyList();
-    nodes_ = new NodeList<T>();
+    node_ = new Node<T>();
   }
   KVStore(size_t idx) : Object() {
     idx_ = idx;
     keys_ = new KeyList();
-    nodes_ = new NodeList<T>();
+    node_ = new Node<T>();
   }
 
   ~KVStore() {
     delete keys_;
-    delete nodes_;
+    delete node_;
   }
 
   // translate key into size_t which saved memory.
   // put value into the node which signed by Key.
   void put(Key *k, T t) {
     size_t id = k->get_id();
-    keys_->add_key(k);
-    puts("put to node");
-    nodes_->put_to_node(id, k->get_position(), t);
+    if (id == idx_) {
+      keys_->add_key(k);
+      puts("put to node");
+      node_->put(k->get_name(), t);
+      // node_->put_to_node(id, k->get_position(), t);
+      puts("end node");
+    }
+    else {
+      cout << "Skip the KVStore " << idx_ << "\n" ;
+    }
   }
 
   // get type T from Key's id.
-  T get(Key k) { return nodes_->get_from_node(k.get_id(), k.get_position()); }
+  T get(Key k) { return node_->get(k.get_name()); }
 
   // get type T without knowing node id.
   T get(char *c) {
     CompactKey *tmp = keys_->get_CompactKey_from_name(c);
-    return nodes_->get_from_node(tmp->get_id(), tmp->get_position());
+    return node_->get(tmp->get_name());
+    // return nodes_->get_from_node(tmp->get_id(), tmp->get_position());
   }
 };

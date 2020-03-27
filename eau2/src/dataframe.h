@@ -24,9 +24,7 @@ public:
 
   DataFrame(Schema &schema) {
     schema_ = new Schema(schema);
-    puts("end schema");
     for (int i = 0; i < schema_->width(); i++) {
-      puts("col_type");
       char curr = schema_->col_type(i);
       if (curr == INTEGER_C) {
         table_.push_back(new IntColumn());
@@ -43,7 +41,6 @@ public:
         exit(0);
       }
     }
-    puts("end constructor");
   }
 
   ~DataFrame() { delete schema_; }
@@ -294,17 +291,13 @@ public:
                               double *vals) {
     Schema *schema = new Schema();
     for (size_t i = 0; i < SZ; i++) {
-      puts("pass");
       schema->add_column('F', nullptr);
     }
     schema->add_row(nullptr);
 
     DataFrame *df = new DataFrame(*schema);
-    puts("start row");
     Row *r = new Row(*schema);
-    puts("end row");
     for (size_t i = 0; i < SZ; i++) {
-      puts("set");
       r->set(i, (float)vals[i]);
     }
     puts("add row");

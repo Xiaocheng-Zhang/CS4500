@@ -18,9 +18,7 @@ public:
   /** Copying constructor */
   Schema(Schema &from) {
     type_vec = from.clone_type();
-    puts("start col");
     col_name_vec = from.clone_col_name();
-    puts("start row");
     row_name_vec = from.clone_row_name();
   }
 
@@ -64,13 +62,6 @@ public:
     for (size_t i = 0; i < type_vec.size(); i++) {
       String *s = col_name_vec[i];
       tmp.push_back(s);
-      // try {
-      //   String *s = col_name_vec[i];
-      //   tmp.push_back(s);
-
-      // } catch (int x) {
-      //   cout << "column " << i << "not found\n";
-      // }
     }
     return tmp;
   }
