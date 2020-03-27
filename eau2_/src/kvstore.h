@@ -99,22 +99,15 @@ public:
 
 template <class T> class KVStore : public Object {
 private:
-  // KeyList *keys_;
-  // unordered_map<const char*, CompactKey*> key_map;
   unordered_map<const char *, T> node_map;
-  // Node<T> *node_;
   size_t home_address;
 
 public:
   KVStore() : Object() {
     home_address = 0;
-    // keys_ = new KeyList();
-    // node_ = new Node<T>();
   }
   KVStore(size_t idx) : Object() {
     home_address = idx;
-    // keys_ = new KeyList();
-    // node_ = new Node<T>();
   }
 
   ~KVStore() {}

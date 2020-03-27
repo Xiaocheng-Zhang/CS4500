@@ -82,7 +82,13 @@ public:
   void set(size_t idx, String *val) { vec[idx] = val; }
   size_t size() { return vec.size(); }
   char get_type() { return STRING_C; }
-  String *get_string(size_t idx) { return vec[idx]; }
+  String *get_string(size_t idx) {
+    if (!vec[idx]) {
+      return nullptr;
+    }
+    String *tmp = new String(vec[idx]->c_str());
+    return tmp;
+  }
   void print_self() {
     for (size_t i = 0; i < size(); i++) {
       cout << get_string(i)->c_str() << ' ';

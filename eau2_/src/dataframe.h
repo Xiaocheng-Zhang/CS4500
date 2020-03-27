@@ -20,8 +20,43 @@ private:
   vector<Column *> table_;
 
 public:
-  DataFrame(DataFrame &df) { schema_ = new Schema(df.get_schema()); 
-  // for () {}
+  DataFrame(DataFrame &df) {
+    schema_ = new Schema(df.get_schema());
+    for (size_t i = 0; i < schema_->width(); i++) {
+      puts("create empty column");
+      char curr = schema_->col_type(i);
+      if (curr == INTEGER_C) {
+        table_.push_back(new IntColumn());
+      } else if (curr == STRING_C) {
+        table_.push_back(new StringColumn());
+      } else if (curr == BOOL_C) {
+        table_.push_back(new BoolColumn());
+      } else if (curr == FLOAT_C) {
+        table_.push_back(new FloatColumn());
+      } else {
+        std::cout << "The char other than I, B, S, F was detected, table "
+                     "cannot be built"
+                  << std::endl;
+        exit(0);
+      }
+      for (size_t j = 0; j < schema_->length(); j++) {
+        puts("add element into column");
+        if (curr == INTEGER_C) {
+          set(i, j, df.get_int(i, j));
+        } else if (curr == STRING_C) {
+          set(i, j, df.get_string(i, j));
+        } else if (curr == BOOL_C) {
+          set(i, j, df.get_bool(i, j));
+        } else if (curr == FLOAT_C) {
+          set(i, j, df.get_double(i, j));
+        } else {
+          std::cout << "The char other than I, B, S, F was detected, table "
+                       "cannot be built"
+                    << std::endl;
+          exit(0);
+        }
+      }
+    }
   }
 
   DataFrame(Schema &schema) {
@@ -305,7 +340,7 @@ public:
     // cout << r->get_float(1) << "\n";
     df->add_row(*r);
     kv->put(key, df);
-    DataFrame *tmp = new DataFrame(*df);
-    return tmp;
+    //DataFrame *tmp = new DataFrame(*df);
+    return df;
   }
 };
