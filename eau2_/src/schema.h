@@ -10,12 +10,13 @@ using namespace std;
 
 class Schema : public Object {
 private:
-  vector<char> type_vec;
   vector<String *> col_name_vec;
   vector<String *> row_name_vec;
 
 public:
   /** Copying constructor */
+  vector<char> type_vec;
+
   Schema(Schema &from) {
     type_vec = from.clone_type();
     col_name_vec = from.clone_col_name();
@@ -67,16 +68,9 @@ public:
   }
   vector<String *> clone_row_name() {
     vector<String *> tmp;
-    for (size_t i = 0; i < type_vec.size(); i++) {
+    for (int i = 0; i < row_name_vec.size(); i++) {
       String *s = row_name_vec[i];
       tmp.push_back(s);
-      // try {
-      //   s = row_name_vec[i];
-      //   tmp.push_back(s);
-
-      // } catch (int x) {
-      //   cout << "Row " << i << "not found\n";
-      // }
     }
     return tmp;
   }

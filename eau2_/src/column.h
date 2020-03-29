@@ -39,7 +39,10 @@ public:
   IntColumn() : Column() {}
   ~IntColumn() {}
   void push_back(int val) { vec.push_back(val); }
-  void set(size_t idx, int val) { vec[idx] = val; }
+  void set(size_t idx, int val) {
+    auto index = vec.begin() + idx;
+    vec.insert(index, val);
+  }
   size_t size() { return vec.size(); }
   char get_type() { return INTEGER_C; }
   int get_int(size_t idx) { return vec[idx]; }
@@ -59,7 +62,10 @@ public:
   BoolColumn() : Column() {}
   ~BoolColumn() {}
   void push_back(bool val) { vec.push_back(val); }
-  void set(size_t idx, bool val) { vec[idx] = val; }
+  void set(size_t idx, bool val) {
+    auto index = vec.begin() + idx;
+    vec.insert(index, val);
+  }
   size_t size() { return vec.size(); }
   char get_type() { return BOOL_C; }
   bool get_bool(size_t idx) { return vec[idx]; }
@@ -79,7 +85,10 @@ public:
   StringColumn() : Column() {}
   ~StringColumn() {}
   void push_back(String *val) { vec.push_back(val); }
-  void set(size_t idx, String *val) { vec[idx] = val; }
+  void set(size_t idx, String *val) {
+    auto index = vec.begin() + idx;
+    vec.insert(index, val);
+  }
   size_t size() { return vec.size(); }
   char get_type() { return STRING_C; }
   String *get_string(size_t idx) {
@@ -105,10 +114,16 @@ public:
   FloatColumn() : Column() {}
   ~FloatColumn() {}
   void push_back(float val) { vec.push_back(val); }
-  void set(size_t idx, float val) { vec[idx] = val; }
+  void set(size_t idx, float val) {
+    auto index = vec.begin() + idx;
+    vec.insert(index, val);
+    // vec[idx] = val;
+  }
   size_t size() { return vec.size(); }
   char get_type() { return FLOAT_C; }
-  float get_float(size_t idx) { return vec[idx]; }
+  float get_float(size_t idx) {
+    return vec[idx];
+  }
   void print_self() {
     for (size_t i = 0; i < size(); i++) {
       cout << get_float(i) << ' ';

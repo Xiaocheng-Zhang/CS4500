@@ -67,16 +67,9 @@ public:
   }
   vector<String *> clone_row_name() {
     vector<String *> tmp;
-    for (size_t i = 0; i < type_vec.size(); i++) {
+    for (int i = 0; i < type_vec.size(); i++) {
       String *s = row_name_vec[i];
       tmp.push_back(s);
-      // try {
-      //   s = row_name_vec[i];
-      //   tmp.push_back(s);
-
-      // } catch (int x) {
-      //   cout << "Row " << i << "not found\n";
-      // }
     }
     return tmp;
   }

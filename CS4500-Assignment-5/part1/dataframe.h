@@ -99,6 +99,7 @@ public:
     tmp2->val_ = tmp->val_->copy();
     return tmp2->get(row);
   }
+
   bool get_bool(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
@@ -108,6 +109,7 @@ public:
     tmp2->val_ = tmp->val_->copy();
     return tmp2->get(row);
   }
+
   float get_float(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
@@ -117,6 +119,7 @@ public:
     tmp2->val_ = tmp->val_->copy();
     return tmp2->get(row);
   }
+
   String *get_string(size_t col, size_t row) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
@@ -142,17 +145,20 @@ public:
     assert(schema_->col_type(col) == 'I');
     table_->list_[col]->val_->set(row, val);
   }
+
   void set(size_t col, size_t row, bool val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'B');
     table_->list_[col]->val_->set(row, val);
   }
+
   void set(size_t col, size_t row, float val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     table_->list_[col]->val_->set(row, val);
   }
+  
   void set(size_t col, size_t row, String *val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());

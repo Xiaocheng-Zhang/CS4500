@@ -50,6 +50,9 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "thread": "cpp",
-        "typeinfo": "cpp"
-    }
+        "typeinfo": "cpp",
+        "list": "cpp",
+        "valarray": "cpp"
+    },
+    "python.pythonPath": "usr/bin/python3.7"
 }

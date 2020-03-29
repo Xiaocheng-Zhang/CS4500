@@ -20,10 +20,33 @@ private:
   vector<Column *> table_;
 
 public:
-  DataFrame(DataFrame &df) { schema_ = new Schema(df.get_schema()); }
+  DataFrame(DataFrame &df) {
+    schema_ = new Schema(df.get_schema());
+    set_up_by_schema();
+    for (size_t i = 0; i < schema_->width(); i++) {
+      char type = schema_->col_type(i);
+      for (size_t j = 0; j < schema_->length(); j++) {
+        if (type == INTEGER_C) {
+          set(i, j, df.get_int(j, i));
+        } else if (type == STRING_C) {
+          set(i, j, df.get_string(j, i));
+        } else if (type == BOOL_C) {
+          set(i, j, df.get_bool(j, i));
+        } else if (type == FLOAT_C) {
+          set(i, j, df.get_double(j, i));
+        }
+      }
+    }
+  }
 
   DataFrame(Schema &schema) {
     schema_ = new Schema(schema);
+    set_up_by_schema();
+  }
+
+  ~DataFrame() { delete schema_; }
+
+  void set_up_by_schema() {
     for (int i = 0; i < schema_->width(); i++) {
       char curr = schema_->col_type(i);
       if (curr == INTEGER_C) {
@@ -42,8 +65,6 @@ public:
       }
     }
   }
-
-  ~DataFrame() { delete schema_; }
 
   /** Returns the dataframe's schema. Modifying the schema after a dataframe
    * has been created in undefined. */
@@ -68,28 +89,28 @@ public:
 
   /** Return the value at the given column and row. Accessing rows or
    *  columns out of bounds, or request the wrong type is undefined.*/
-  int get_int(size_t col, size_t row) {
+  int get_int(size_t row, size_t col) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'I');
     return table_[col]->get_int(row);
   }
 
-  bool get_bool(size_t col, size_t row) {
+  bool get_bool(size_t row, size_t col) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'B');
     return table_[col]->get_bool(row);
   }
 
-  float get_double(size_t col, size_t row) {
+  float get_double(size_t row, size_t col) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'F');
     return table_[col]->get_float(row);
   }
 
-  String *get_string(size_t col, size_t row) {
+  String *get_string(size_t row, size_t col) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'S');
@@ -122,6 +143,7 @@ public:
   void set(size_t col, size_t row, float val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
+    assert(schema_->col_type(col) == 'F');
     table_[col]->set(row, val);
   }
 
@@ -300,11 +322,9 @@ public:
     for (size_t i = 0; i < SZ; i++) {
       r->set(i, (float)vals[i]);
     }
-    puts("add row");
     df->add_row(*r);
-    puts("put key");
     kv->put(key, df);
-    puts("end from array");
-    return df;
+    DataFrame *tmp = new DataFrame(*df);
+    return tmp;
   }
 };

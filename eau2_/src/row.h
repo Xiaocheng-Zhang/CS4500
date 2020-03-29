@@ -102,13 +102,11 @@ public:
   Row(Schema &scm) : Object() {
     size_ = scm.width();
     buffer_array = new RowBuffer *[size_];
-    type_vec = scm.clone_type();
+    type_vec = scm.type_vec;
     index_ = 0;
     initialize();
   }
-  // Row() {
 
-  // }
   ~Row() { delete[] buffer_array; }
 
   void initialize() {

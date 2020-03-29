@@ -38,65 +38,6 @@ public:
   virtual size_t get_id() { return home_address; }
 };
 
-class CompactKey : public Key {
-private:
-  size_t home_address;
-  size_t position_;
-
-public:
-  CompactKey(size_t id, size_t position) : Key() {
-    home_address = id;
-    position_ = position;
-  }
-
-  size_t get_position() { return position_; }
-
-  size_t get_id() { return home_address; }
-};
-
-// class KeyList : public Object {
-// private:
-//   unordered_map<const char *, CompactKey *> *key_map;
-
-// public:
-//   KeyList() : Object() {
-//     key_map = new unordered_map<const char *, CompactKey *>();
-//   }
-
-//   ~KeyList() { delete key_map; }
-//   void add_key(Key *k) {
-//     key_map->insert(
-//         {k->get_name(), new CompactKey(k->get_id(), k->get_position())});
-//     cout << key_map->at(k->get_name())->get_position() << "\n";
-//   }
-
-//   CompactKey *get_CompactKey_from_name(const char *c) {
-//     if (key_map->find(c) == key_map->end()) {
-//       cout << "can't find a key called " << c << " in this KeyList\n";
-//       exit(1);
-//     }
-//     return key_map->at(c);
-//   }
-// };
-
-// template <class T> class Node : public Object {
-// private:
-//   // size_t is position
-//   unordered_map<const char *, T> data_map;
-
-// public:
-//   Node() : Object() {}
-
-//   ~Node() {}
-
-//   void put(const char *name, T t) {
-//     // will stuck here
-//     data_map.insert({name, t});
-//   }
-
-//   T get(const char *name) { return data_map.at(name); }
-// };
-
 template <class T> class KVStore : public Object {
 private:
   unordered_map<const char *, T> node_map;
@@ -131,6 +72,8 @@ public:
       // do something serialize and network stuff
     }
   }
+
+  T wait_and_get(Key k) {}
 
   // get type T from Key's id.
   T get(Key k) { return node_map.at(k.get_name()); }

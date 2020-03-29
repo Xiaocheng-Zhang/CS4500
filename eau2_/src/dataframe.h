@@ -22,8 +22,7 @@ private:
 public:
   DataFrame(DataFrame &df) {
     schema_ = new Schema(df.get_schema());
-    for (size_t i = 0; i < schema_->width(); i++) {
-      puts("create empty column");
+    for (int i = 0; i < schema_->width(); i++) {
       char curr = schema_->col_type(i);
       if (curr == INTEGER_C) {
         table_.push_back(new IntColumn());
@@ -40,20 +39,14 @@ public:
         exit(0);
       }
       for (size_t j = 0; j < schema_->length(); j++) {
-        puts("add element into column");
         if (curr == INTEGER_C) {
-          set(i, j, df.get_int(i, j));
+          set(i, j, df.get_int(j, i));
         } else if (curr == STRING_C) {
-          set(i, j, df.get_string(i, j));
+          set(i, j, df.get_string(j, i));
         } else if (curr == BOOL_C) {
-          set(i, j, df.get_bool(i, j));
+          set(i, j, df.get_bool(j, i));
         } else if (curr == FLOAT_C) {
-          set(i, j, df.get_double(i, j));
-        } else {
-          std::cout << "The char other than I, B, S, F was detected, table "
-                       "cannot be built"
-                    << std::endl;
-          exit(0);
+          set(i, j, df.get_double(j, i));
         }
       }
     }
@@ -94,7 +87,7 @@ public:
     char type = col->get_type();
     schema_->add_column(type, name);
     size_t col_size = col->size();
-    size_t row_num = schema_->length();
+    size_t row_num = schema_->width();
     if (col_size > row_num) {
       for (size_t i = 0; i < col_size - row_num; i++) {
         schema_->add_row(nullptr);
@@ -105,14 +98,14 @@ public:
 
   /** Return the value at the given column and row. Accessing rows or
    *  columns out of bounds, or request the wrong type is undefined.*/
-  int get_int(size_t col, size_t row) {
+  int get_int(size_t row, size_t col) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'I');
     return table_[col]->get_int(row);
   }
 
-  bool get_bool(size_t col, size_t row) {
+  bool get_bool(size_t row, size_t col) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'B');
@@ -126,7 +119,7 @@ public:
     return table_[col]->get_float(row);
   }
 
-  String *get_string(size_t col, size_t row) {
+  String *get_string(size_t row, size_t col) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
     assert(schema_->col_type(col) == 'S');
@@ -159,6 +152,7 @@ public:
   void set(size_t col, size_t row, float val) {
     assert(col >= 0 && col < schema_->width());
     assert(row >= 0 && row < schema_->length());
+    assert(schema_->col_type(col) == 'F');
     table_[col]->set(row, val);
   }
 
@@ -330,17 +324,14 @@ public:
     for (size_t i = 0; i < SZ; i++) {
       schema->add_column('F', nullptr);
     }
-    schema->add_row(nullptr);
-
     DataFrame *df = new DataFrame(*schema);
     Row *r = new Row(*schema);
     for (size_t i = 0; i < SZ; i++) {
       r->set(i, (float)vals[i]);
     }
-    // cout << r->get_float(1) << "\n";
     df->add_row(*r);
-    kv->put(key, df);
-    //DataFrame *tmp = new DataFrame(*df);
+    DataFrame *tmp = new DataFrame(*df);
+    kv->put(key, tmp);
     return df;
   }
 };
