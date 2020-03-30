@@ -75,7 +75,6 @@ public:
   KVStore() : Object() {
     home_address = 0;
     request_check = false;
-    request_key = nullptr;
     request_value = nullptr;
   }
 
@@ -85,7 +84,6 @@ public:
   KVStore(size_t idx) : Object() {
     home_address = idx;
     request_check = false;
-    request_key = nullptr;
     request_value = nullptr;
   }
 

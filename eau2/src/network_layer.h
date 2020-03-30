@@ -28,7 +28,9 @@ public:
                 if (tmp.request_check) {
                     Key request_key = tmp.request_key;
                     for (size_t j = 0; j < vc->size(); j++) {
-                        
+                        if (request_key.get_home_address() == vc->at(j)->this_node()) {
+                            // haven't finish yet
+                        }
                     }
                 }
             }

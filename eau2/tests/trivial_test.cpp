@@ -13,7 +13,7 @@ public:
   Trivial(size_t idx) : Application(idx) {}
 
   void run_() {
-    size_t SZ = 1000;
+    size_t SZ = 1000 * 100;
     double *vals = new double[SZ];
     double sum = 0;
     for (size_t i = 0; i < SZ; ++i)

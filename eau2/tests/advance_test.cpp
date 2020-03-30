@@ -61,7 +61,7 @@ int main(void) {
   Demo demo_0(0);
   Demo demo_1(1);
   Demo demo_2(2);
-
+  // Cannot run because we are still working on that.
   cout << "Advance test passed\n";
   return 0;
 }
