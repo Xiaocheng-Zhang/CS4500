@@ -2,6 +2,7 @@
 #include <iostream>
 #include <type_traits>
 #include <vector>
+#include <stdarg.h>
 
 #include "object.h"
 #include "string.h"
@@ -61,6 +62,16 @@ private:
 
 public:
   IntColumn() : Column() {}
+  IntColumn(int n, ...) : Column() {
+    va_list vl;
+    int val;
+    va_start(vl, n);
+    for (int i = 0; i < n; i++) {
+      val = va_arg(vl, int);
+      vec.push_back(val);
+    }
+    va_end(vl);
+  }
   ~IntColumn() {}
   void push_back(int val) { vec.push_back(val); }
   void set(size_t idx, int val) {
@@ -88,6 +99,16 @@ private:
 
 public:
   BoolColumn() : Column() {}
+  BoolColumn(int n, ...) : Column() {
+    va_list vl;
+    bool val;
+    va_start(vl, n);
+    for (int i = 0; i < n; i++) {
+      val = va_arg(vl, int);
+      vec.push_back(val);
+    }
+    va_end(vl);
+  }
   ~BoolColumn() {}
   void push_back(bool val) { vec.push_back(val); }
   void set(size_t idx, bool val) {
@@ -116,6 +137,16 @@ private:
 
 public:
   StringColumn() : Column() {}
+  StringColumn(int n, ...) : Column() {
+    va_list vl;
+    String *val;
+    va_start(vl, n);
+    for (int i = 0; i < n; i++) {
+      val = va_arg(vl, String *);
+      vec.push_back(val);
+    }
+    va_end(vl);
+  }
   ~StringColumn() {}
   void push_back(String *val) { vec.push_back(val); }
   void set(size_t idx, String *val) {
@@ -149,6 +180,16 @@ private:
 
 public:
   FloatColumn() : Column() {}
+  FloatColumn(int n, ...) : Column() {
+    va_list vl;
+    float val;
+    va_start(vl, n);
+    for (int i = 0; i < n; i++) {
+      val = va_arg(vl, float);
+      vec.push_back(val);
+    }
+    va_end(vl);
+  }
   ~FloatColumn() {}
   void push_back(float val) { vec.push_back(val); }
   void set(size_t idx, float val) {
