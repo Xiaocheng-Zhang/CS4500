@@ -1,5 +1,5 @@
-#include "../src/schema.h"
 #include "../src/dataframe.h"
+#include "../src/schema.h"
 
 void initialize() {
   Schema *schema;

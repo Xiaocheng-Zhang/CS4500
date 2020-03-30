@@ -66,17 +66,30 @@ private:
   size_t home_address;
 
 public:
+  bool request_check;
+  Key request_key;
+  T request_value;
   /**
    * Default construtor without a input home address.
    */
-  KVStore() : Object() { home_address = 0; }
+  KVStore() : Object() {
+    home_address = 0;
+    request_check = false;
+    request_key = nullptr;
+    request_value = nullptr;
+  }
 
   /**
    * Default construtor with a input home address value.
    */
-  KVStore(size_t idx) : Object() { home_address = idx; }
+  KVStore(size_t idx) : Object() {
+    home_address = idx;
+    request_check = false;
+    request_key = nullptr;
+    request_value = nullptr;
+  }
 
-  ~KVStore() {}
+  ~KVStore() { delete request_value; }
 
   /**
    * Put the Key and type T value into the KVStore.

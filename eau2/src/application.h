@@ -32,4 +32,8 @@ public:
    * get the node home address which saved in both Application and the KVStore.
    */
   virtual size_t this_node() { return home_address; };
+
+  virtual KVStore<DataFrame*> get_kv() {
+    return kv;
+  }
 };
