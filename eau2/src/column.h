@@ -8,22 +8,42 @@
 #include "typedef.h"
 using namespace std;
 
+/**************************************************************************
+ * Column ::
+ * Represents one column of a data frame which holds values of a single type.
+ * This abstract class defines methods overriden in subclasses. There is
+ * one subclass per element type. Columns are mutable, equality is pointer
+ * equality. 
+ * 
+ * Reduced code duplication ::
+ * Our column has been refactored by using vector from c++ library. This helped
+ * us get rid of our self-created vector class. The setter and getter method has
+ * also been shortened. Type convert functions such as as_int, as_bool are also 
+ * removed.
+ * */
 class Column : public Object {
 public:
+
+  /** Type appropriate push_back methods. Calling the wrong method is
+   * undefined behavior. **/
   virtual void push_back(int val) {}
   virtual void push_back(bool val) {}
   virtual void push_back(float val) {}
   virtual void push_back(String *val) {}
 
+  /** Set the data in the corresponding column */
   virtual void set(size_t idx, int val) {}
   virtual void set(size_t idx, bool val) {}
   virtual void set(size_t idx, float val) {}
   virtual void set(size_t idx, String *val) {}
 
+  /** Returns the number of elements in the column. */
   virtual size_t size() = 0;
 
+  /** Return the type of this column as a char: 'S', 'B', 'I' and 'F'. */
   virtual char get_type() = 0;
 
+  /** Get the data in the corresponding column */
   virtual int get_int(size_t idx) { return 0; }
   virtual bool get_bool(size_t idx) { return 0; }
   virtual String *get_string(size_t idx) { return nullptr; }
@@ -31,6 +51,10 @@ public:
   virtual void print_self() {}
 };
 
+/*************************************************************************
+ * IntColumn::
+ * Holds int values.
+ */
 class IntColumn : public Column {
 private:
   vector<int> vec;
@@ -54,6 +78,10 @@ public:
   }
 };
 
+/*************************************************************************
+ * BoolColumn::
+ * Holds bool values.
+ */
 class BoolColumn : public Column {
 private:
   vector<bool> vec;
@@ -77,6 +105,11 @@ public:
   }
 };
 
+/*************************************************************************
+ * StringColumn::
+ * Holds string pointers. The strings are external.  Nullptr is a valid
+ * value.
+ */
 class StringColumn : public Column {
 private:
   vector<String *> vec;
@@ -106,6 +139,10 @@ public:
   }
 };
 
+/*************************************************************************
+ * FloatColumn::
+ * Holds float values.
+ */
 class FloatColumn : public Column {
 private:
   vector<float> vec;

@@ -13,12 +13,25 @@
 #include "string.h"
 
 using namespace std;
-
+ 
+/* DataFrame::
+ *
+ * A DataFrame is table composed of columns of equal length. Each column
+ * holds values of the same type (I, S, B, F). A dataframe has a schema that
+ * describes it.
+ * 
+ * Reduced code duplication::
+ * Our dataframe has been refactored by using vector from c++ library. This helped
+ * us smoothly create the table by using vector of Columns. The setter and getter method has
+ * also been shortened by using brackets. 
+ */
 class DataFrame : public Object {
 private:
   Schema schema_;
   vector<Column *> table_;
 
+/** Create a data frame with the same columns as the given df but with no rows
+   * or rownmaes */
 public:
   DataFrame(DataFrame &df) {
     schema_ = Schema(df.get_schema());
@@ -52,6 +65,8 @@ public:
     }
   }
 
+  /** Create a data frame from a schema and columns. All columns are created
+   * empty. */
   DataFrame(Schema &schema) {
     schema_ = Schema(schema);
     for (int i = 0; i < schema_.width(); i++) {
@@ -72,7 +87,8 @@ public:
       }
     }
   }
-
+  
+  /** Destructor */
   ~DataFrame() { }
 
   /** Returns the dataframe's schema_. Modifying the schema after a dataframe
@@ -317,7 +333,11 @@ public:
     }
     delete[] rower_array;
   }
-
+  
+  /**
+   * It creates a dataframe, with SZ values taken from vals, and puts it in 
+   * the kv store under key main. It returns the dataframe.
+   */
   static DataFrame *fromArray(Key *key, KVStore<DataFrame *> *kv, size_t SZ,
                               double *vals) {
     Schema schema;
@@ -335,6 +355,10 @@ public:
     return df;
   }
 
+  /**
+   * It creates a dataframe, from single double val, and puts it in 
+   * the kv store under key main. It returns the dataframe, which only has one column and row.
+   */
   static DataFrame *fromScalar(Key *key, KVStore<DataFrame *> *kv, double val) {
     Schema schema;
     schema.add_column('F', nullptr);
