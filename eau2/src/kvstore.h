@@ -75,7 +75,9 @@ public:
     }
   }
 
-  T waitAndGet(Key k) {}
+  T waitAndGet(Key k) {
+    
+  }
 
   // get type T from Key's id.
   T get(Key k) { return node_map.at(k.get_name()); }
