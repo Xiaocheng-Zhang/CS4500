@@ -16,23 +16,36 @@ using namespace std;
 
 class DataFrame : public Object {
 private:
-  Schema *schema_;
+  Schema schema_;
   vector<Column *> table_;
 
 public:
   DataFrame(DataFrame &df) {
-    schema_ = new Schema(df.get_schema());
-    set_up_by_schema();
-    for (size_t i = 0; i < schema_->width(); i++) {
-      char type = schema_->col_type(i);
-      for (size_t j = 0; j < schema_->length(); j++) {
-        if (type == INTEGER_C) {
+    schema_ = Schema(df.get_schema());
+    for (int i = 0; i < schema_.width(); i++) {
+      char curr = schema_.col_type(i);
+      if (curr == INTEGER_C) {
+        table_.push_back(new IntColumn());
+      } else if (curr == STRING_C) {
+        table_.push_back(new StringColumn());
+      } else if (curr == BOOL_C) {
+        table_.push_back(new BoolColumn());
+      } else if (curr == FLOAT_C) {
+        table_.push_back(new FloatColumn());
+      } else {
+        std::cout << "The char other than I, B, S, F was detected, table "
+                     "cannot be built"
+                  << std::endl;
+        exit(0);
+      }
+      for (size_t j = 0; j < schema_.length(); j++) {
+        if (curr == INTEGER_C) {
           set(i, j, df.get_int(j, i));
-        } else if (type == STRING_C) {
+        } else if (curr == STRING_C) {
           set(i, j, df.get_string(j, i));
-        } else if (type == BOOL_C) {
+        } else if (curr == BOOL_C) {
           set(i, j, df.get_bool(j, i));
-        } else if (type == FLOAT_C) {
+        } else if (curr == FLOAT_C) {
           set(i, j, df.get_double(j, i));
         }
       }
@@ -40,15 +53,9 @@ public:
   }
 
   DataFrame(Schema &schema) {
-    schema_ = new Schema(schema);
-    set_up_by_schema();
-  }
-
-  ~DataFrame() { delete schema_; }
-
-  void set_up_by_schema() {
-    for (int i = 0; i < schema_->width(); i++) {
-      char curr = schema_->col_type(i);
+    schema_ = Schema(schema);
+    for (int i = 0; i < schema_.width(); i++) {
+      char curr = schema_.col_type(i);
       if (curr == INTEGER_C) {
         table_.push_back(new IntColumn());
       } else if (curr == STRING_C) {
@@ -66,9 +73,11 @@ public:
     }
   }
 
-  /** Returns the dataframe's schema. Modifying the schema after a dataframe
+  ~DataFrame() { }
+
+  /** Returns the dataframe's schema_. Modifying the schema after a dataframe
    * has been created in undefined. */
-  Schema &get_schema() { return *schema_; }
+  Schema &get_schema() { return schema_; }
 
   /** Adds a column this dataframe, updates the schema, the new column
    * is external, and appears as the last column of the dataframe, the
@@ -76,12 +85,12 @@ public:
   void add_column(Column *col, String *name) {
     assert(col != nullptr);
     char type = col->get_type();
-    schema_->add_column(type, name);
+    schema_.add_column(type, name);
     size_t col_size = col->size();
-    size_t row_num = schema_->length();
+    size_t row_num = schema_.width();
     if (col_size > row_num) {
       for (size_t i = 0; i < col_size - row_num; i++) {
-        schema_->add_row(nullptr);
+        schema_.add_row(nullptr);
       }
     }
     table_.push_back(col);
@@ -90,75 +99,75 @@ public:
   /** Return the value at the given column and row. Accessing rows or
    *  columns out of bounds, or request the wrong type is undefined.*/
   int get_int(size_t row, size_t col) {
-    assert(col >= 0 && col < schema_->width());
-    assert(row >= 0 && row < schema_->length());
-    assert(schema_->col_type(col) == 'I');
+    assert(col >= 0 && col < schema_.width());
+    assert(row >= 0 && row < schema_.length());
+    assert(schema_.col_type(col) == 'I');
     return table_[col]->get_int(row);
   }
 
   bool get_bool(size_t row, size_t col) {
-    assert(col >= 0 && col < schema_->width());
-    assert(row >= 0 && row < schema_->length());
-    assert(schema_->col_type(col) == 'B');
+    assert(col >= 0 && col < schema_.width());
+    assert(row >= 0 && row < schema_.length());
+    assert(schema_.col_type(col) == 'B');
     return table_[col]->get_bool(row);
   }
 
   float get_double(size_t row, size_t col) {
-    assert(col >= 0 && col < schema_->width());
-    assert(row >= 0 && row < schema_->length());
-    assert(schema_->col_type(col) == 'F');
+    assert(col >= 0 && col < schema_.width());
+    assert(row >= 0 && row < schema_.length());
+    assert(schema_.col_type(col) == 'F');
     return table_[col]->get_float(row);
   }
 
   String *get_string(size_t row, size_t col) {
-    assert(col >= 0 && col < schema_->width());
-    assert(row >= 0 && row < schema_->length());
-    assert(schema_->col_type(col) == 'S');
+    assert(col >= 0 && col < schema_.width());
+    assert(row >= 0 && row < schema_.length());
+    assert(schema_.col_type(col) == 'S');
     return table_[col]->get_string(row);
   }
 
   /** Return the offset of the given column name or -1 if no such col. */
-  int get_col(String &col) { return schema_->col_idx(col.c_str()); }
+  int get_col(String &col) { return schema_.col_idx(col.c_str()); }
 
   /** Return the offset of the given row name or -1 if no such row. */
-  int get_row(String &col) { return schema_->row_idx(col.c_str()); }
+  int get_row(String &col) { return schema_.row_idx(col.c_str()); }
 
   /** Set the value at the given column and row to the given value.
    * If the column is not  of the right type or the indices are out of
    * bound, the result is undefined. */
   void set(size_t col, size_t row, int val) {
-    assert(col >= 0 && col < schema_->width());
-    assert(row >= 0 && row < schema_->length());
-    assert(schema_->col_type(col) == 'I');
+    assert(col >= 0 && col < schema_.width());
+    assert(row >= 0 && row < schema_.length());
+    assert(schema_.col_type(col) == 'I');
     table_[col]->set(row, val);
   }
 
   void set(size_t col, size_t row, bool val) {
-    assert(col >= 0 && col < schema_->width());
-    assert(row >= 0 && row < schema_->length());
-    assert(schema_->col_type(col) == 'B');
+    assert(col >= 0 && col < schema_.width());
+    assert(row >= 0 && row < schema_.length());
+    assert(schema_.col_type(col) == 'B');
     table_[col]->set(row, val);
   }
 
   void set(size_t col, size_t row, float val) {
-    assert(col >= 0 && col < schema_->width());
-    assert(row >= 0 && row < schema_->length());
-    assert(schema_->col_type(col) == 'F');
+    assert(col >= 0 && col < schema_.width());
+    assert(row >= 0 && row < schema_.length());
+    assert(schema_.col_type(col) == 'F');
     table_[col]->set(row, val);
   }
 
   void set(size_t col, size_t row, String *val) {
-    assert(col >= 0 && col < schema_->width());
-    assert(row >= 0 && row < schema_->length());
-    assert(schema_->col_type(col) == 'S');
+    assert(col >= 0 && col < schema_.width());
+    assert(row >= 0 && row < schema_.length());
+    assert(schema_.col_type(col) == 'S');
     table_[col]->set(row, val);
   }
 
   /** The number of rows in the dataframe. */
-  size_t nrows() { return schema_->length(); }
+  size_t nrows() { return schema_.length(); }
 
   /** The number of columns in the dataframe.*/
-  size_t ncols() { return schema_->width(); }
+  size_t ncols() { return schema_.width(); }
 
   /** Set the fields of the given row object with values from the columns at
    * the given offset.  If the row is not form the same schema as the
@@ -166,9 +175,9 @@ public:
    */
   void fill_row(size_t idx, Row &row) {
     assert(idx >= 0);
-    assert(row.check_schema(*schema_));
-    for (size_t i = 0; i < schema_->width(); i++) {
-      char type = schema_->col_type(i);
+    assert(row.check_schema(schema_));
+    for (size_t i = 0; i < schema_.width(); i++) {
+      char type = schema_.col_type(i);
       if (type == INTEGER_C) {
         table_[i]->set(idx, row.get_int(i));
       } else if (type == BOOL_C) {
@@ -179,15 +188,15 @@ public:
         table_[i]->set(idx, row.get_string(i));
       }
     }
-    schema_->add_row(nullptr);
+    schema_.add_row(nullptr);
   }
 
   Row *track_row(size_t idx) {
-    // schema_->type_vec->print_self();
-    Row *temp = new Row(*schema_);
+    // schema_.type_vec->print_self();
+    Row *temp = new Row(schema_);
     // std::cout<<idx<<"\n";
     for (size_t col = 0; col < ncols(); col++) {
-      char type = schema_->col_type(col);
+      char type = schema_.col_type(col);
 
       if (type == INTEGER_C) {
         temp->set(col, table_[col]->get_int(idx));
@@ -205,9 +214,9 @@ public:
   /** Add a row at the end of this dataframe. The row is expected to have
    *  the right schema and be filled with values, otherwise undedined.  */
   void add_row(Row &row) {
-    assert(row.check_schema(*schema_));
-    for (size_t i = 0; i < schema_->width(); i++) {
-      char type = schema_->col_type(i);
+    assert(row.check_schema(schema_));
+    for (size_t i = 0; i < schema_.width(); i++) {
+      char type = schema_.col_type(i);
       if (type == INTEGER_C) {
         table_[i]->push_back(row.get_int(i));
       } else if (type == BOOL_C) {
@@ -218,7 +227,7 @@ public:
         table_[i]->push_back(row.get_string(i));
       }
     }
-    schema_->add_row(nullptr);
+    schema_.add_row(nullptr);
   }
 
   /** Visit rows in order */
@@ -231,7 +240,7 @@ public:
   /** Create a new dataframe, constructed from rows for which the given Rower
    * returned true from its accept method. */
   DataFrame *filter(Rower &r) {
-    DataFrame *temp = new DataFrame(*schema_);
+    DataFrame *temp = new DataFrame(schema_);
     for (size_t i = 0; i < nrows(); i++) {
       Row *temp_row = track_row(i);
       if (r.accept(*temp_row)) {
@@ -241,13 +250,13 @@ public:
     return temp;
   }
 
-  static Row *track_row_static(Schema *schema, vector<Column *> table,
+  static Row *track_row_static(Schema schema, vector<Column *> table,
                                size_t idx) {
-    // schema_->type_vec->print_self();
-    Row *temp = new Row(*schema);
+    // schema_.type_vec->print_self();
+    Row *temp = new Row(schema);
     // std::cout<<idx<<"\n";
-    for (size_t col = 0; col < schema->width(); col++) {
-      char type = schema->col_type(col);
+    for (size_t col = 0; col < schema.width(); col++) {
+      char type = schema.col_type(col);
       if (type == INTEGER_C) {
         temp->set(col, table[col]->get_int(idx));
       } else if (type == BOOL_C) {
@@ -264,7 +273,7 @@ public:
   static void thread_method(Rower *r, vector<Column *> table, Schema *schema,
                             size_t start_idx, size_t end_idx) {
     for (size_t i = start_idx; i <= end_idx; i++) {
-      r->accept(*(track_row_static(schema, table, i)));
+      r->accept(*(track_row_static(*schema, table, i)));
     }
   }
 
@@ -298,7 +307,7 @@ public:
       }
 
       rower_array[i] = dynamic_cast<Rower *>(r.clone());
-      threads[i] = thread(thread_method, rower_array[i], table_, schema_,
+      threads[i] = thread(thread_method, rower_array[i], table_, &schema_,
                           start_idx, end_idx);
     }
 
@@ -311,20 +320,30 @@ public:
 
   static DataFrame *fromArray(Key *key, KVStore<DataFrame *> *kv, size_t SZ,
                               double *vals) {
-    Schema *schema = new Schema();
+    Schema schema;
     for (size_t i = 0; i < SZ; i++) {
-      schema->add_column('F', nullptr);
+      schema.add_column('F', nullptr);
     }
-    schema->add_row(nullptr);
-
-    DataFrame *df = new DataFrame(*schema);
-    Row *r = new Row(*schema);
+    DataFrame *df = new DataFrame(schema);
+    Row r(schema);
     for (size_t i = 0; i < SZ; i++) {
-      r->set(i, (float)vals[i]);
+      r.set(i, (float)vals[i]);
     }
-    df->add_row(*r);
-    kv->put(key, df);
+    df->add_row(r);
     DataFrame *tmp = new DataFrame(*df);
-    return tmp;
+    kv->put(key, tmp);
+    return df;
+  }
+
+  static DataFrame *fromScalar(Key *key, KVStore<DataFrame *> *kv, double val) {
+    Schema schema;
+    schema.add_column('F', nullptr);
+    DataFrame *df = new DataFrame(schema);
+    Row row(schema);
+    row.set(0, (float)val);
+    df->add_row(row);
+    DataFrame *tmp = new DataFrame(*df);
+    kv->put(key, tmp);
+    return df;
   }
 };

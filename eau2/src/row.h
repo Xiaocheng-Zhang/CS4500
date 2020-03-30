@@ -16,7 +16,7 @@ private:
   int int_;
   float f_;
   bool b_;
-  String *s_;
+  String *s_ = nullptr;
 
 public:
   RowBuffer(int i) : Object() {
@@ -34,6 +34,10 @@ public:
   RowBuffer(String *s) : Object() {
     type_ = STRING;
     s_ = s;
+  }
+
+  ~RowBuffer() {
+    delete s_;
   }
 
   int get_type() { return type_; }
@@ -104,18 +108,9 @@ public:
     buffer_array = new RowBuffer *[size_];
     type_vec = scm.clone_type();
     index_ = 0;
-    initialize();
   }
-  // Row() {
 
-  // }
   ~Row() { delete[] buffer_array; }
-
-  void initialize() {
-    for (size_t i = 0; i < size_; i++) {
-      buffer_array[i] = nullptr;
-    }
-  }
 
   /** Setters: set the given column with the given value. Setting a column
    * with a value of the wrong type is undefined. */

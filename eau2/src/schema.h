@@ -16,6 +16,7 @@ private:
 
 public:
   /** Copying constructor */
+
   Schema(Schema &from) {
     type_vec = from.clone_type();
     col_name_vec = from.clone_col_name();
@@ -23,7 +24,7 @@ public:
   }
 
   /** Create an empty schema **/
-  Schema() {}
+  Schema() {  }
 
   /** Create a schema from a string of types. A string that contains
    * characters other than those identifying the four type results in
@@ -67,7 +68,7 @@ public:
   }
   vector<String *> clone_row_name() {
     vector<String *> tmp;
-    for (int i = 0; i < type_vec.size(); i++) {
+    for (int i = 0; i < row_name_vec.size(); i++) {
       String *s = row_name_vec[i];
       tmp.push_back(s);
     }

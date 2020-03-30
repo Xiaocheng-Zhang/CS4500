@@ -9,7 +9,7 @@ using namespace std;
 
 class Key : public Object {
 private:
-  const char *name_;
+  char *name_;
   size_t size_;
   size_t home_address;
 
@@ -17,14 +17,16 @@ public:
   Key() : Object() {}
 
   Key(const char *name, size_t home_add) : Object() {
-    name_ = strdup(name);
+    name_ = (char*) name;
     home_address = home_add;
     size_ = strlen(name);
   }
 
-  ~Key() { delete[] name_; }
+  ~Key() {
+    //delete name_;
+   }
 
-  const char *get_name() { return name_; }
+  char *get_name() { return name_; }
 
   size_t hash_me() {
     size_t hash = 0;
@@ -38,25 +40,9 @@ public:
   virtual size_t get_id() { return home_address; }
 };
 
-class CompactKey : public Key {
-private:
-  size_t home_address;
-  size_t position_;
-
-public:
-  CompactKey(size_t id, size_t position) : Key() {
-    home_address = id;
-    position_ = position;
-  }
-
-  size_t get_position() { return position_; }
-
-  size_t get_id() { return home_address; }
-};
-
 template <class T> class KVStore : public Object {
 private:
-  unordered_map<const char *, T> node_map;
+  unordered_map<char *, T> node_map;
   size_t home_address;
 
 public:
@@ -75,7 +61,7 @@ public:
     size_t id = k->get_id();
     if (id == home_address) {
       // check if the key exist
-      const char *k_name = k->get_name();
+      char *k_name = k->get_name();
       auto it = node_map.find(k_name);
       if (it == node_map.end()) {
         // not exist
@@ -88,6 +74,8 @@ public:
       // do something serialize and network stuff
     }
   }
+
+  T waitAndGet(Key k) {}
 
   // get type T from Key's id.
   T get(Key k) { return node_map.at(k.get_name()); }
