@@ -7,6 +7,14 @@
 
 using namespace std;
 
+/**
+ * Key is type that used to represent the value's name and other information.
+ * Each Key contains a char* name which is the key's name.
+ * a size_t size which represent the length of key's name.
+ * Not use a String because we tried to avoid code duplication.
+ * Home address that used to check whether the key should be saved in this
+ * current application.
+ */
 class Key : public Object {
 private:
   char *name_;
@@ -14,20 +22,27 @@ private:
   size_t home_address;
 
 public:
+  /**
+   * Default Key constructor. Do nothing. Should never be used.
+   */
   Key() : Object() {}
 
+  /** Key constructor that save the input char* as the name of the key, size_t
+   * as the id of application.*/
   Key(const char *name, size_t home_add) : Object() {
-    name_ = (char*) name;
+    name_ = (char *)name;
     home_address = home_add;
     size_ = strlen(name);
   }
 
-  ~Key() {
-    //delete name_;
-   }
+  /** Remains empty since name is from a const char* type.*/
+  ~Key() {}
 
+  /**
+   * A Simple getter method that used to get the name of key.*/
   char *get_name() { return name_; }
 
+  /** hash_me method from the Object class.*/
   size_t hash_me() {
     size_t hash = 0;
     for (size_t i = 0; i < size_; ++i)
@@ -35,30 +50,40 @@ public:
     return hash;
   }
 
-  virtual size_t get_position() { return hash(); }
-
-  virtual size_t get_id() { return home_address; }
+  /**
+   * Get the home address of current key.
+   */
+  virtual size_t get_home_address() { return home_address; }
 };
 
+/**
+ * Key Value Store class. Allowed Application to save the data and get data from
+ * other opend Application.
+ */
 template <class T> class KVStore : public Object {
 private:
   unordered_map<char *, T> node_map;
   size_t home_address;
 
 public:
-  KVStore() : Object() {
-    home_address = 0;
-  }
-  KVStore(size_t idx) : Object() {
-    home_address = idx;
-  }
+  /**
+   * Default construtor without a input home address.
+   */
+  KVStore() : Object() { home_address = 0; }
+
+  /**
+   * Default construtor with a input home address value.
+   */
+  KVStore(size_t idx) : Object() { home_address = idx; }
 
   ~KVStore() {}
 
-  // translate key into size_t which saved memory.
-  // put value into the node which signed by Key.
+  /**
+   * Put the Key and type T value into the KVStore.
+   * used unordered map to save data.
+   */
   void put(Key *k, T t) {
-    size_t id = k->get_id();
+    size_t id = k->get_home_address();
     if (id == home_address) {
       // check if the key exist
       char *k_name = k->get_name();
@@ -66,7 +91,6 @@ public:
       if (it == node_map.end()) {
         // not exist
         node_map.insert({k_name, t});
-        
       }
       // if exist, do nothing since we mustn't mutation
     } else {
@@ -75,13 +99,18 @@ public:
     }
   }
 
-  T waitAndGet(Key k) {
-    
-  }
+  /**
+   * get the Key from other connected KVStore ran by other Application.
+   */
+  T waitAndGet(Key k) {}
 
-  // get type T from Key's id.
+  /**
+   * get the type T value from this current Node.
+   */
   T get(Key k) { return node_map.at(k.get_name()); }
 
-  // get type T without knowing node id.
+  /**
+   * get the type T value from this current Node.
+   */
   T get(char *c) { return node_map.at(c); }
 };
