@@ -92,8 +92,8 @@ void testStringColumn() {
 void testSchema() {
   // test empty constructor
   Schema *schema1 = new Schema();
-  t_true(schema1->clone_type()->size_ == 0 && schema1->clone_type->size_ == 0 &&
-         schema1->row_name_vec->size_ == 0);
+  t_true(schema1->clone_type().size() == 0 && schema1->clone_col_name().size() == 0 &&
+         schema1->clone_row_name().size() == 0);
 
   // test type_check method
   t_true(schema1->type_check('I'));
@@ -101,25 +101,25 @@ void testSchema() {
 
   // test char pointer constructor
   Schema *schema2 = new Schema("IBSF");
-  t_true(schema2->type_vec->get_char(0) == 'I' &&
-         schema2->type_vec->get_char(1) == 'B' &&
-         schema2->type_vec->get_char(2) == 'S' &&
-         schema2->type_vec->get_char(3) == 'F');
+  t_true(schema2->clone_type()[0] == 'I' &&
+         schema2->clone_type()[1] == 'B' &&
+         schema2->clone_type()[2] == 'S' &&
+         schema2->clone_type()[3] == 'F');
 
   // test adding a column with nullptr name
   schema2->add_column('I', nullptr);
-  t_true(schema2->type_vec->get_char(4) == 'I');
-  t_true(schema2->col_name_vec->get_String(4) == nullptr);
+  t_true(schema2->clone_type()[4] == 'I');
+  t_true(schema2->clone_col_name[4] == nullptr);
   // test adding a column with a non nullptr name
   schema2->add_column('B', new String("Tian"));
-  t_true(schema2->type_vec->get_char(5) == 'B');
-  t_true(schema2->col_name_vec->get_String(5)->equals(new String("Tian")));
+  t_true(schema2->clone_type()[5] == 'B');
+  t_true(schema2->clone_col_name[5]->equals(new String("Tian")));
   // test adding a row with nullptr name
   schema2->add_row(nullptr);
-  t_true(schema2->row_name_vec->get_String(0) == nullptr);
+  t_true(schema2->clone_row_name[0] == nullptr);
   // test adding a row with a non nullptr name
   schema2->add_row(new String("Xia"));
-  t_true(schema2->row_name_vec->get_String(1)->equals(new String("Xia")));
+  t_true(schema2->clone_row_name()[1]->equals(new String("Xia")));
   // test row_name method
   t_true(schema2->row_name(1)->equals(new String("Xia")));
   // test col_name method
