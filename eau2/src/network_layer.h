@@ -24,8 +24,12 @@ public:
     static void request_check(vector<Application*> *vc) {
         while(1) {
             for (size_t i = 0; i < vc->size(); i++) {
-                if (vc->at(i)->get_kv().request_check) {
-                    
+                KVStore tmp = vc->at(i)->get_kv();
+                if (tmp.request_check) {
+                    Key request_key = tmp.request_key;
+                    for (size_t j = 0; j < vc->size(); j++) {
+                        
+                    }
                 }
             }
         }
