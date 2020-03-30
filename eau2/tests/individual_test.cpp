@@ -91,8 +91,8 @@ void testStringColumn() {
 void testSchema() {
   // test empty constructor
   Schema *schema1 = new Schema();
-  t_true(schema1->clone_type()->size_ == 0 && schema1->clone_type->size_ == 0 &&
-         schema1->row_name_vec->size_ == 0);
+  t_true(schema1->clone_type().size() == 0 && schema1->clone_type().size() == 0 &&
+         schema1->clone_row_name().size() == 0);
 
   // test type_check method
   t_true(schema1->type_check('I'));

@@ -113,7 +113,17 @@ public:
   /**
    * get the Key from other connected KVStore ran by other Application.
    */
-  T waitAndGet(Key k) {}
+  T waitAndGet(Key k) {
+    request_check = true;
+    request_key = k;
+    while (1)
+    {
+      if (request_value != nullptr) {
+        return request_value;
+      }
+    }
+    
+  }
 
   /**
    * get the type T value from this current Node.
