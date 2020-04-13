@@ -27,12 +27,17 @@ void initialize() {
   puts("=======dataframe initialized 100,000 rows =======");
 }
 
-void testIntColumn() {
+void testIntColumnConstructor() {
   // test empty constructor
   Column *col_1 = new IntColumn();
   t_true(col_1->size() == 0);
 
   // test variable argument constructor
+  Column *col_2 = new IntColumn(3, 1, 2, 3);
+  OK("testIntColumnConstructor");
+}
+
+void testIntColumnGetterAndSetter() {
   Column *col_2 = new IntColumn(3, 1, 2, 3);
   // test get method
   t_true(col_2->get_int(0) == 1 && col_2->get_int(1) == 2 &&
@@ -44,15 +49,20 @@ void testIntColumn() {
   // test set method
   col_2->set(0, 4);
   t_true(col_2->get_int(0) == 4);
-  OK("testIntColumn");
+  OK("testIntColumnGetterAndSetter");
 }
 
-void testBoolColumn() {
+void testBoolColumnConstructor() {
   // test empty constructor
   Column *col_1 = new BoolColumn();
   t_true(col_1->size() == 0);
 
   // test variable argument constructor
+  Column *col_2 = new BoolColumn(3, true, false, false);
+  OK("testBoolColumnConstructor");
+}
+
+void testBoolColumnSetterAndGetter() {
   Column *col_2 = new BoolColumn(3, true, false, false);
   // test get method
   t_true(col_2->get_bool(0) == true && col_2->get_bool(1) == false &&
@@ -64,15 +74,21 @@ void testBoolColumn() {
   // test set method
   col_2->set(0, false);
   t_true(col_2->get_bool(0) == false);
-  OK("testBoolColumn");
+  OK("testBoolColumnSetterAndGetter");
 }
 
-void testStringColumn() {
+void testStringColumnConstructor() {
   // test empty constructor
   Column *col_1 = new StringColumn();
   t_true(col_1->size() == 0);
 
   // test variable argument constructor
+  Column *col_2 = new StringColumn(3, new String("Tian"), new String("Xia"),
+                                   new String("Xiaocheng"));
+  OK("testStringColumnConstructor");
+}
+
+void testStringColumnGetterAndSetter() {
   Column *col_2 = new StringColumn(3, new String("Tian"), new String("Xia"),
                                    new String("Xiaocheng"));
   // test get method
@@ -86,10 +102,10 @@ void testStringColumn() {
   // test set method
   col_2->set(0, new String("Zhang"));
   t_true(col_2->get_string(0)->equals(new String("Zhang")));
-  OK("testStringColumn");
+  OK("testStringColumnGetterAndSetter");
 }
 
-void testSchema() {
+void testSchema1() {
   // test empty constructor
   Schema *schema1 = new Schema();
   t_true(schema1->clone_type().size() == 0 && schema1->clone_col_name().size() == 0 &&
@@ -99,6 +115,10 @@ void testSchema() {
   t_true(schema1->type_check('I'));
   t_false(schema1->type_check('Q'));
 
+  OK("testSchema1");
+}
+
+void testSchema2() {
   // test char pointer constructor
   Schema *schema2 = new Schema("IBSF");
   t_true(schema2->clone_type()[0] == 'I' &&
@@ -135,19 +155,16 @@ void testSchema() {
   // test width and length method
   t_true(schema2->width() == 6);
   t_true(schema2->length() == 2);
+  OK("testSchema2");
+}
 
+void testSchema3() {
+  Schema *schema2 = new Schema("IBSF");
   // test copying constructor
   Schema *schema3 = new Schema(*schema2);
   // test if it can be mutated
   schema2->add_column('F', new String("mutation"));
   t_false(schema3->width() == schema2->width());
-  OK("testSchema");
+  OK("testSchema3");
 }
 
-int main(void) {
-  testIntColumn();
-  testBoolColumn();
-  testStringColumn();
-
-  testSchema();
-}
