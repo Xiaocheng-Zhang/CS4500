@@ -1,6 +1,7 @@
 build:
 	g++ trivial_test.cpp -g -std=c++11 -o trivial_test -lpthread
 	g++ individual_test.cpp -g -std=c++11 -o individual_test -lpthread
+	g++ advance_test.cpp -g -std=c++11 -o advance_test -lpthread
 
 clean:
 	rm -f trivial_test

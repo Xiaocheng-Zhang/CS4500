@@ -25,7 +25,7 @@ public:
         int count = 0;
         while(1) {
             for (size_t i = 0; i < vc->size(); i++) {
-                KVStore tmp = vc->at(i)->get_kv();
+                KVStore<DataFrame*> tmp = vc->at(i)->get_kv();
                 if (tmp.request_check) {
                     Key request_key = tmp.request_key;
                     for (size_t j = 0; j < vc->size(); j++) {
@@ -48,6 +48,6 @@ public:
     void tracking() {
         thread run_thread(request_check, &app_vec);
 
-        run_thread.join();
+        run_thread.detach();
     }
 };

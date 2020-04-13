@@ -31,7 +31,7 @@ public:
   }
 
   void producer() {
-    size_t SZ = 100 * 1000;
+    size_t SZ = 1000;
     double *vals = new double[SZ];
     double sum = 0;
     for (size_t i = 0; i < SZ; ++i)
@@ -43,7 +43,7 @@ public:
   void counter() {
     DataFrame *v = kv.waitAndGet(main);
     size_t sum = 0;
-    for (size_t i = 0; i < 100 * 1000; ++i)
+    for (size_t i = 0; i < 1000; ++i)
       sum += v->get_double(0, i);
     p("The sum is  ").pln(sum);
     DataFrame::fromScalar(&verify, &kv, sum);
@@ -61,6 +61,14 @@ int main(void) {
   Demo demo_0(0);
   Demo demo_1(1);
   Demo demo_2(2);
+  NetworkLayer *n = new NetworkLayer();
+  n->add(&demo_0);
+  n->add(&demo_1);
+  n->add(&demo_2);
+  n->tracking();
+  demo_0.run_();
+  demo_1.run_();
+  demo_2.run_();
   // Cannot run because we are still working on that.
   cout << "Advance test passed\n";
   return 0;
