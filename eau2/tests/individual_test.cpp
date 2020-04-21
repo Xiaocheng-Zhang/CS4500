@@ -1,7 +1,7 @@
+#include "../src/schema.h"
 #include "../src/dataframe.h"
 #include "../src/column.h"
 #include "../src/helper.h"
-#include "../src/row.h"
 
 void initialize() {
   Schema *schema;
@@ -168,3 +168,136 @@ void testSchema3() {
   OK("testSchema3");
 }
 
+void testRow() {
+  // construct a schema to be passeed into row
+  Schema *schema = new Schema("IBSF");
+  schema->add_column('B', new String("Tian"));
+  // test row constructor
+  Row *row = new Row(*schema);
+  t_true(row->width() == 5);
+  t_true(row->get_idx() == 0);
+  //t_true(row->type_vec->equals(schema->type_vec));
+  // t_true(sizeof(row->(buffer_array)) == 5);
+
+  // test if it will be mutated if the schema is changed
+  // schema->add_column('F', new String("Xia"));
+  // t_true(row->width() == 5);
+  // t_false(row->type_vec->equals(schema->type_vec));
+  // t_true(sizeof(row->(buffer_array)) == 5);
+  // test set and get method
+  // set initial value
+  row->set(0, 9);
+  row->set(1, false);
+  row->set(2, new String("Zhang"));
+  row->set(3, float(1.23));
+  t_true(row->get_int(0) == 9);
+  t_true(row->get_bool(1) == false);
+  t_true(row->get_string(2)->equals(new String("Zhang")));
+  t_true(row->get_float(3) == float(1.23));
+  // change values
+  row->set(0, 8);
+  t_true(row->get_int(0) == 8);
+
+  // test set idx and get idx methods
+  row->set_idx(4);
+  t_true(row->get_idx() == 4);
+  // test width method
+  t_true(row->width() == 5);
+  // test col_type method
+  t_true(row->col_type(4) == 'B');
+  OK("testRow");
+}
+
+void testDataframe1() {
+  // prepare schema for df
+  Schema *schema = new Schema("IBSF");
+  // using non empty schema to construct df, check constructor
+  DataFrame *df = new DataFrame(*schema);
+
+ 
+  t_true(df->get_schema().col_type(0) == 'I' &&
+         df->get_schema().col_type(1) == 'B' &&
+         df->get_schema().col_type(2) == 'S' &&
+         df->get_schema().col_type(3) == 'F');
+  OK("testDataframe1");
+}
+
+void testDataframe2() {
+  // using an empty schema to construct df, check constructor
+  Schema *schema2 = new Schema();
+  DataFrame *df2 = new DataFrame(*schema2);
+  // test add column method
+  Column *col1 = new IntColumn(3, 1, 2, 3);
+  Column *col2 = new StringColumn(3, new String("Tian"), new String("Xia"),
+                                  new String("Zhang"));
+  df2->add_column(col1, new String("Integer one"));
+  df2->add_column(col2, new String("String one"));
+  t_true(df2->get_schema().col_name(0)->equals(new String("Integer one")));
+  t_true(df2->get_schema().col_name(1)->equals(new String("String one")));
+  // test get method
+  //df2->get_schema()->type_vec->print_self();
+  // df2->table_->get_Column(0)->val_->print_self();
+  // df2->table_->get_Column(1)->val_->print_self();
+  t_true(df2->get_int(1, 0) == 2);
+  t_true(df2->get_string(1, 1)->equals(new String("Xia")));
+  // test get column method
+  t_true(df2->get_col(*(new String("String one"))) == 1);
+  t_true(df2->get_col(*(new String("Xiaocheng"))) == -1);
+  // test set method
+  df2->set(0, 1, 5);
+  df2->set(1, 1, new String("Xiaocheng"));
+  t_true(df2->get_int(1, 0) == 5);
+  t_true(df2->get_string(1, 1)->equals(new String("Xiaocheng")));
+  OK("testDataframe2");
+}
+
+void testDataframe3() {
+  Schema *schema2 = new Schema();
+  DataFrame *df2 = new DataFrame(*schema2);
+  // test add column method
+  Column *col1 = new IntColumn(3, 1, 2, 3);
+  Column *col2 = new StringColumn(3, new String("Tian"), new String("Xia"),
+                                  new String("Zhang"));
+  df2->add_column(col1, new String("Integer one"));
+  df2->add_column(col2, new String("String one"));
+  df2->set(0, 1, 5);
+  df2->set(1, 1, new String("Xiaocheng"));
+
+  // test fill row method
+  Row *row = new Row(df2->get_schema());
+  row->set(0, 4);
+  row->set(1, new String("new"));
+  df2->fill_row(1, *row);
+  t_true(df2->get_int(1, 0) == 4);
+  t_true(df2->get_string(1, 1)->equals(new String("new")));
+  // change row one element to see if df will be mutated
+  row->set(0, 9);
+  t_true(df2->get_int(1, 0) == 4);
+  // test add row method, the row now is (9, "new")
+  df2->add_row(*row);
+  t_true(df2->get_int(3, 0) == 9);
+  t_true(df2->get_string(3, 1)->equals(new String("new")));
+  OK("testDataframe3");
+}
+
+int main(void) {
+  // test different data type columns
+  testIntColumnConstructor();
+  testIntColumnGetterAndSetter();
+  testBoolColumnConstructor();
+  testBoolColumnSetterAndGetter();
+  testStringColumnConstructor();
+  testStringColumnGetterAndSetter();
+
+  // test schema constructor and methods
+  testSchema1();
+  testSchema2();
+  testSchema3();
+
+  // test row constructor and methods
+  testRow();
+  // test data frame constructor and methods
+  testDataframe1();
+  testDataframe2();
+  testDataframe3();
+}
