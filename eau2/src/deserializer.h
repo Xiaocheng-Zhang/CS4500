@@ -15,43 +15,56 @@ using namespace std;
 
 class Deserializer : public Object {
 public:
+
+  Deserializer() : Object() {}
+
   DataFrame *deserialize(vector<char *> v) {
     Schema *schema = new Schema();
-    DataFrame *output = new DataFrame(*schema);
-    for (size_t i = 0; i < v.size(); i++) {
-      int type = atoi(v[i]);
-      char *buffer = new char[strlen(v[i]) - 5];
-      for (size_t j = TYPE_OFFSET, j = 0; j < strlen(v[i]); j++) {
-        buffer[j] = v[i][j];
-        j++;
+    // deserialize the width of dataframe
+    char *buffer = new char[strlen(v[0]) - 5];
+    for (size_t k = TYPE_OFFSET, j = 0; k < strlen(v[0]); k++) {
+      buffer[j] = v[0][k];
+      j++;
+    }
+    size_t size = atoi(buffer);
+
+    // deserialize types and colnames
+    for (size_t i = 1; i < size; i++) {
+      char type = v[i][0];
+      char col_name[strlen(v[i]) - 1];
+      for (size_t k = 1, j = 0; k < strlen(v[i]); k++, j++) {
+        col_name[j] = v[i][k];
       }
-      if (type == STRING) {
-        //output->add_column(, nullptr);
-      }
-      if (type == INTEGER) {
-        // schema->add_column('I', nullptr);
-        // int i = atoi(buffer);
-        // void *out = &i;
-        // return out;
-      }
-      if (type == DOUBLE) {
-        // schema->add_column('D', nullptr);
-        // float f = atof(buffer);
-        // void *out = &f;
-        // return out;
-      }
-      if (type == FLOAT) {
-        // schema->add_column('F', nullptr);
-        // float f = atof(buffer);
-        // void *out = &f;
-        // return out;
-      }
-      if (type == BOOL) {
-        // schema->add_column('B', nullptr);
-        // bool b = atoi(buffer);
-        // void *out = &b;
-        // return out;
+      if (strlen(col_name) != 0) {
+        schema->add_column(type, new String(col_name));
+      } else {
+        schema->add_column(type, nullptr);
       }
     }
+    // deserialize elements
+    DataFrame *out = new DataFrame(*schema);
+    for (size_t i = size, j = 0; i < v.size(); i++) {
+      int type = atoi(v[i]);
+      char *buffer = new char[strlen(v[i]) - 5];
+      for (size_t k = TYPE_OFFSET, j = 0; k < strlen(v[i]); k++) {
+        buffer[j] = v[i][k];
+        j++;
+      }
+      Row *r = new Row(*schema);
+      if (type == STRING) {
+        r->set(j, new String(buffer));
+      } else if (type == INTEGER) {
+        r->set(j, atoi(buffer));
+      } else if (type == DOUBLE) {
+        r->set(j, (float) atof(buffer));
+      } else if (type == BOOL) {
+        r->set(j, atoi(buffer));
+      }
+      j++;
+      if (j == size) {
+        j = 0;
+      }
+    }
+    return out;
   }
 };

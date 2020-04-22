@@ -18,7 +18,7 @@ private:
   vector<char *> data;
 
 public:
-  Serializer() {}
+  Serializer() : Object() {}
 
   char *serialize_int(int i) {
     char *buffer = new char[64];
@@ -64,6 +64,19 @@ public:
   }
 
   void serialize(DataFrame *element) {
+    // serialize ncols
+    int ncols = element->ncols();
+    data.push_back(serialize_int(ncols));
+    Schema schema = element->get_schema();
+    // serialize column type
+    for (size_t i = 0; i < ncols; i++) {
+      String* col_name = schema.col_name(i);
+      char buf[1 + col_name->size() + 1];
+      buf[0] = schema.col_type(i);
+      strcat(buf, col_name->c_str());
+      data.push_back(buf);
+    }
+    // serialize dataframe schema
     for (size_t i = 0; i < element->nrows(); i++) {
       Row* r = element->track_row(i);
       for (size_t j = 0; j < r->width(); j++) {

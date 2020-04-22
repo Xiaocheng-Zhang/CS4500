@@ -16,12 +16,11 @@ using namespace std;
  * current application.
  */
 class Key : public Object {
-private:
+public:
   char *name_;
   size_t size_;
   size_t home_address;
 
-public:
   /**
    * Default Key constructor. Do nothing. Should never be used.
    */
@@ -66,16 +65,11 @@ private:
   size_t home_address;
 
 public:
-  bool request_check;
-  Key request_key;
-  T request_value;
   /**
    * Default construtor without a input home address.
    */
   KVStore() : Object() {
     home_address = 0;
-    request_check = false;
-    request_value = nullptr;
   }
 
   /**
@@ -83,11 +77,9 @@ public:
    */
   KVStore(size_t idx) : Object() {
     home_address = idx;
-    request_check = false;
-    request_value = nullptr;
   }
 
-  ~KVStore() { delete request_value; }
+  ~KVStore() {}
 
   /**
    * Put the Key and type T value into the KVStore.
@@ -114,15 +106,6 @@ public:
    * get the Key from other connected KVStore ran by other Application.
    */
   T waitAndGet(Key k) {
-    request_check = true;
-    request_key = k;
-    while (1)
-    {
-      if (request_value != nullptr) {
-        return request_value;
-      }
-    }
-    
   }
 
   /**
